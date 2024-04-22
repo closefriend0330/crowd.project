@@ -3,26 +3,47 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "concurrently pnpm:dev:*",
+    "dev:next": "sst dev \"next dev --experimental-https\"",
+    "db": "concurrently pnpm:dev:db:*",
+    "dev:db:turso": "turso dev --db-file ./db/dev.db",
+    "dev:db:studio": "pnpm run db:studio",
+    "pbs": "pnpm run build && pnpm run start",
     "build": "next build",
-    "dev": "next dev",
+    "build:local": "dotenv -e .env -- next build",
+    "start": "next start",
+    "start:local": "concurrently pnpm:start pnpm:db:*",
     "lint": "next lint",
-    "start": "next start"
+    "deploy": "dotenv -e .env.preview -- sst deploy --stage preview",
+    "deploy:prod": "dotenv -e .env.production -- sst deploy --stage production",
+    "db:push": "drizzle-kit push:sqlite",
+    "db:push:prod": "dotenv -e .env.production -- drizzle-kit push:sqlite",
+    "db:push:preview": "dotenv -e .env.preview -- drizzle-kit push:sqlite",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.0.0",
+    "@fontsource/space-grotesk": "^5.0.18",
+    "@libsql/client": "^0.6.0",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.9",
     "next": "14.2.2",
-    "react": "^18",
-    "react-dom": "^18",
+    "next-auth": "5.0.0-beta.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sst": "ion"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "concurrently": "^8.2.2",
+    "drizzle-kit": "^0.20.17",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
   },
   "packageManager": "pnpm@8.15.6+sha256.01c01eeb990e379b31ef19c03e9d06a14afa5250b82e81303f88721c99ff2e6f"
 }

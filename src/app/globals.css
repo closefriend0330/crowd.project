@@ -7,3 +7,9 @@
     text-wrap: balance;
   }
 }
+
+@layer base {
+  a {
+    @apply text-primary underline
+  }
+}
