@@ -6,5 +6,8 @@ import { db } from './db/db';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
-  providers: [Twitch, Discord],
+  providers: [
+    Twitch({ allowDangerousEmailAccountLinking: true }),
+    Discord({ allowDangerousEmailAccountLinking: true }),
+  ],
 });

@@ -22,7 +22,7 @@ export default function User() {
 
   return session?.user ? (
     <>
-      <Tooltip tooltip={`${session.user.name} (${session.user.email})}`}>
+      <Tooltip tooltip={`${session.user.name} (${session.user.email})`}>
         <Avatar className='size-8 sm:size-10 border-white border-[1px]'>
           <AvatarImage src={session.user.image || undefined} />
           <AvatarFallback className='text-black text-sm sm:text-base'>
