@@ -10,13 +10,13 @@ export default function Footer() {
       <div className='grow'>
         <FooterMessage />
       </div>
-      <a href='https://threads.net/@joostschuur'>
+      <a href='https://threads.net/@joostschuur' target='_blank'>
         <IconBrandThreads className='size-4 sm:size-5 text-black transition hover:scale-125 ease-in-out' />
       </a>
-      <a href='https://twitter.com/joostschuur'>
+      <a href='https://twitter.com/joostschuur' target='_blank'>
         <IconBrandTwitter className='size-4 sm:size-5 text-blue-400 transition hover:scale-125 ease-in-out' />
       </a>
-      <a href='https://github.com/jschuur'>
+      <a href='https://github.com/jschuur' target='_blank'>
         <IconBrandGithub className='size-4 sm:size-5 text-purple-700 transition hover:scale-125 ease-in-out' />
       </a>
     </footer>
