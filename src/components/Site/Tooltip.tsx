@@ -11,7 +11,7 @@ type Props = {
 export default function Tooltip({ children, tooltip, delayDuration = 700 }: Props) {
   return (
     <TooltipRoot delayDuration={delayDuration}>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipTrigger>{children}</TooltipTrigger>
       <TooltipContent className='z-10'>
         <p>{tooltip}</p>
       </TooltipContent>

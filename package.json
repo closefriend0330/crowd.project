@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "concurrently pnpm:dev:*",
     "dev:next": "sst dev \"next dev --experimental-https\"",
+    "dev:partykit": "partykit dev --live",
     "db": "concurrently pnpm:dev:db:*",
     "dev:db:turso": "turso dev --db-file ./db/dev.db",
     "dev:db:studio": "pnpm run db:studio",
@@ -31,11 +32,13 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tabler/icons-react": "^3.2.0",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
+    "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.9",
+    "jotai": "^2.8.0",
     "next": "14.2.2",
     "next-auth": "5.0.0-beta.16",
+    "partysocket": "1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sst": "ion",
@@ -50,9 +53,15 @@
     "drizzle-kit": "^0.20.17",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
+    "partykit": "0.0.104",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
-  "packageManager": "pnpm@8.15.6+sha256.01c01eeb990e379b31ef19c03e9d06a14afa5250b82e81303f88721c99ff2e6f"
+  "packageManager": "pnpm@9.0.4+sha256.caa915eaae9d9aefccf50ee8aeda25a2f8684d8f9d5c6e367eaf176d97c1f89e",
+  "cspell": {
+    "ignorePaths": [
+      "pnpm-lock.yaml"
+    ]
+  }
 }
