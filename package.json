@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently pnpm:dev:*",
-    "dev:next": "sst dev \"next dev --experimental-https\"",
+    "dev:next": "sst dev next dev",
     "dev:partykit": "partykit dev --live",
     "db": "concurrently pnpm:dev:db:*",
     "dev:db:turso": "turso dev --db-file ./db/dev.db",
@@ -41,6 +41,7 @@
     "partysocket": "1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sonner": "^1.4.41",
     "sst": "ion",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"

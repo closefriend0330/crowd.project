@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react';
 import usePartySocket from 'partysocket/react';
 import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 import useUserList from '@/hooks/useUserList';
 
@@ -12,9 +13,6 @@ export default function usePartyKit() {
     host: process.env.NEXT_PUBLIC_PARTYKIT_URL,
     room: 'main',
 
-    onOpen() {
-      console.log('connected');
-    },
     onMessage(e) {
       console.log('message', e.data);
 
@@ -30,10 +28,14 @@ export default function usePartyKit() {
       }
     },
     onClose() {
-      console.log('closed');
+      console.log('connection closed');
+      toast.info(`Connection closed`);
     },
     onError(e) {
-      console.log('error');
+      const errors = JSON.stringify(e);
+
+      console.error(`connection error ${errors}`);
+      toast.error(`Connection error: ${errors}`);
     },
   });
 
