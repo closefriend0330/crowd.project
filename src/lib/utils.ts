@@ -10,3 +10,7 @@ export function getErrorMessage(error: unknown) {
 
   return String(error);
 }
+
+export function debug(...message: unknown[]) {
+  if (process.env.DEBUG || process.env.NEXT_PUBLIC_DEBUG) console.log(...message);
+}

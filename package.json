@@ -42,6 +42,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.9",
     "jotai": "^2.8.0",
+    "lodash": "^4.17.21",
     "next": "14.2.2",
     "next-auth": "5.0.0-beta.16",
     "partysocket": "1.0.1",
@@ -53,6 +54,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",

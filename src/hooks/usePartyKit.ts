@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import useUserList from '@/hooks/useUserList';
+import { debug } from '@/lib/utils';
 
 export default function usePartyKit() {
   const { data: session } = useSession();
@@ -16,14 +17,14 @@ export default function usePartyKit() {
 
     onOpen() {
       setIsConnected(true);
+      debug('connection opened');
     },
     onMessage(e) {
-      console.log('message', e.data);
+      debug('message', e.data);
 
       try {
         const msg = JSON.parse(e.data);
 
-        console.log('parsed message', msg);
         if (msg.type === 'list') {
           setUserList(msg.users);
         }
@@ -33,7 +34,7 @@ export default function usePartyKit() {
     },
     onClose() {
       setIsConnected(false);
-      toast.info(`Connection closed`);
+      debug('connection closed');
     },
     onError(e) {
       const errors = JSON.stringify(e);
