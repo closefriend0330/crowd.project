@@ -6,12 +6,13 @@ type Props = {
   tooltip: string;
   delayDuration?: number;
   children: ReactNode;
+  asChild?: boolean;
 };
 
-export default function Tooltip({ children, tooltip, delayDuration = 700 }: Props) {
+export default function Tooltip({ children, tooltip, delayDuration = 700, asChild }: Props) {
   return (
     <TooltipRoot delayDuration={delayDuration}>
-      <TooltipTrigger>{children}</TooltipTrigger>
+      <TooltipTrigger asChild={asChild}>{children}</TooltipTrigger>
       <TooltipContent className='z-10'>
         <p>{tooltip}</p>
       </TooltipContent>
