@@ -41,6 +41,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.9",
+    "humanize-duration": "^3.32.0",
     "jotai": "^2.8.0",
     "lodash": "^4.17.21",
     "next": "14.2.2",
@@ -54,6 +55,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/humanize-duration": "^3.27.4",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",

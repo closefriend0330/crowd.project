@@ -9,8 +9,8 @@ export default function UserList() {
 
   return userList?.length > 0 ? (
     <>
-      <h2 className='text-lg sm:text-xl font-header font-bold border-b-2 pb-1 border-black'>
-        Active Users ({userList.length})
+      <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-1 border-black text-right'>
+        Online ({userList.length})
       </h2>
       <div>
         {userList.map((user) => (

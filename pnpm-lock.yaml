@@ -47,6 +47,9 @@ importers:
       drizzle-orm:
         specifier: ^0.30.9
         version: 0.30.9(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.2.79)(react@18.2.0)
+      humanize-duration:
+        specifier: ^3.32.0
+        version: 3.32.0
       jotai:
         specifier: ^2.8.0
         version: 2.8.0(@types/react@18.2.79)(react@18.2.0)
@@ -81,6 +84,9 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
     devDependencies:
+      '@types/humanize-duration':
+        specifier: ^3.27.4
+        version: 3.27.4
       '@types/lodash':
         specifier: ^4.17.0
         version: 4.17.0
@@ -1441,6 +1447,9 @@ packages:
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
+  '@types/humanize-duration@3.27.4':
+    resolution: {integrity: sha512-yaf7kan2Sq0goxpbcwTQ+8E9RP6HutFBPv74T/IA/ojcHKhuKVlk2YFYyHhWZeLvZPzzLE3aatuQB4h0iqyyUA==}
+
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
@@ -2323,6 +2332,9 @@ packages:
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
+
+  humanize-duration@3.32.0:
+    resolution: {integrity: sha512-6WsXYTHJr7hXKqoqf5zoWza/lANRAqGlbnZnm0cjDykbXuez1JVXOQGmq0EPB45pXYAJyueRA3S3hfhmMbrMEQ==}
 
   ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
@@ -4869,6 +4881,8 @@ snapshots:
 
   '@types/cookie@0.6.0': {}
 
+  '@types/humanize-duration@3.27.4': {}
+
   '@types/json5@0.0.29': {}
 
   '@types/lodash@4.17.0': {}
@@ -5974,6 +5988,8 @@ snapshots:
   hono@4.2.5: {}
 
   human-signals@5.0.0: {}
+
+  humanize-duration@3.32.0: {}
 
   ignore@5.3.1: {}
 
