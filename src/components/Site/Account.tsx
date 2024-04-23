@@ -1,9 +1,9 @@
 'use client';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 import Avatar from '@/components/Presence/Avatar';
-import Tooltip from '@/components/Site/Tooltip';
+import AccountMenu from '@/components/Site/AccountMenu';
 import { Button } from '@/components/ui/button';
 
 export default function User() {
@@ -11,18 +11,9 @@ export default function User() {
   const user = session?.user;
 
   return user ? (
-    <>
-      <Tooltip tooltip={`${user.name} (${user.email})`}>
-        <Avatar user={user} />
-      </Tooltip>
-      <Button
-        variant='outline'
-        className='text-sm sm:text-base bg-transparent h-8 sm:h-10 px-2 sm:px-4 hover:bg-purple-300'
-        onClick={() => signOut()}
-      >
-        Logout
-      </Button>
-    </>
+    <AccountMenu user={user}>
+      <Avatar user={user} />
+    </AccountMenu>
   ) : (
     <Button
       variant='secondary'

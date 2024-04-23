@@ -30,7 +30,7 @@ export default function Avatar({ user, className, status }: Props) {
         </AvatarFallback>
       </AvatarRoot>
       {status === 'online' && (
-        <IconPointFilled className=' absolute -bottom-[6px] -right-[6px] text-green-500' />
+        <IconPointFilled className='absolute -bottom-[6px] -right-[6px] text-green-500' />
       )}
     </div>
   );
