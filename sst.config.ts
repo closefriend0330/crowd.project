@@ -40,6 +40,7 @@ export default $config({
         AUTH_TWITCH_ID: process.env.AUTH_TWITCH_ID || '',
         AUTH_TWITCH_SECRET: process.env.AUTH_TWITCH_SECRET || '',
         NEXT_PUBLIC_PARTYKIT_PROJECT: process.env.NEXT_PUBLIC_PARTYKIT_URL,
+        NEXT_PUBLIC_SITENAME: process.env.NEXT_PUBLIC_SITENAME || 'Coworking World',
       },
     });
   },

@@ -17,7 +17,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'Coworking World',
+  title: process.env.NEXT_PUBLIC_SITENAME || 'Coworking World',
   description: "On the Internet, you're never working alone.",
 };
 
