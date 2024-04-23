@@ -10,6 +10,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Twitch({ allowDangerousEmailAccountLinking: true }),
     Discord({ allowDangerousEmailAccountLinking: true }),
   ],
+  trustHost: true,
   callbacks: {
     async session({ user, session }) {
       session.user.id = user.id;
