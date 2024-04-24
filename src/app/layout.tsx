@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import '@fontsource/space-grotesk/400.css'; // Specify weight
 import '@fontsource/space-grotesk/600.css'; // Specify weight
 import type { Metadata } from 'next';
@@ -27,6 +28,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const googleAnalyticsId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
+
   return (
     <html lang='en'>
       <body className={cn('font-sans antialiased bg-purple-100', fontSans.variable)}>
@@ -35,6 +38,7 @@ export default function RootLayout({
             <Header />
             <div className='flex-grow justify-center items-center max-w-xl mx-auto'>{children}</div>
             <Footer />
+            {googleAnalyticsId && <GoogleAnalytics gaId={googleAnalyticsId} />}
           </div>
         </Providers>
       </body>

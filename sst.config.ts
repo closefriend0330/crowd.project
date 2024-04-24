@@ -31,6 +31,14 @@ export default $config({
       throw new Error('Missing Twitch credentials: https://dev.twitch.tv/console/apps');
     }
 
+    if (!process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && !$dev) {
+      console.warn('Warning; NEXT_PUBLIC_GOOGLE_ANALYTICS_ID is not set for non dev environment');
+    }
+
+    if (!process.env.NEXT_PUBLIC_SENTRY_DSN && !$dev) {
+      console.warn('Warning; NEXT_PUBLIC_SENTRY_DSN is not set for non dev environment');
+    }
+
     new sst.aws.Nextjs('Site', {
       openNextVersion: '3.0.0-rc.16',
       domain: $dev ? undefined : process.env.SITE_DOMAIN,
@@ -49,6 +57,7 @@ export default $config({
         NEXT_PUBLIC_DEBUG: process.env.DEBUG || '',
         DEBUG: process.env.DEBUG || '',
         NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN || '',
+        NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '',
       },
     });
   },
