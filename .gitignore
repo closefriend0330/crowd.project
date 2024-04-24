@@ -47,3 +47,6 @@ certificates
 db/dev.db*
 
 .partykit
+
+# sentry
+.sentryclirc

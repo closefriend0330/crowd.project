@@ -35,6 +35,8 @@ export default $config({
       openNextVersion: '3.0.0-rc.16',
       domain: $dev ? undefined : process.env.SITE_DOMAIN,
       environment: {
+        SST_STAGE: $app.stage,
+        NEXT_PUBLIC_SST_STAGE: $app.stage,
         DATABASE_URL: process.env.DATABASE_URL!,
         DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN!,
         AUTH_SECRET: process.env.AUTH_SECRET,
@@ -46,6 +48,7 @@ export default $config({
         NEXT_PUBLIC_SITENAME: process.env.NEXT_PUBLIC_SITENAME || DEFAULT_SITENAME,
         NEXT_PUBLIC_DEBUG: process.env.DEBUG || '',
         DEBUG: process.env.DEBUG || '',
+        NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN || '',
       },
     });
   },
