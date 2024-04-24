@@ -1,9 +1,11 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
+import { DEFAULT_SITENAME } from './src/config';
+
 export default $config({
   app(input) {
     return {
-      name: 'coworking-world',
+      name: 'coworking-party',
       removal: input?.stage === 'production' ? 'retain' : 'remove',
       home: 'aws',
     };
@@ -31,6 +33,7 @@ export default $config({
 
     new sst.aws.Nextjs('Site', {
       openNextVersion: '3.0.0-rc.16',
+      domain: $dev ? undefined : process.env.SITE_DOMAIN,
       environment: {
         DATABASE_URL: process.env.DATABASE_URL!,
         DATABASE_AUTH_TOKEN: process.env.DATABASE_AUTH_TOKEN!,
@@ -40,7 +43,7 @@ export default $config({
         AUTH_TWITCH_ID: process.env.AUTH_TWITCH_ID || '',
         AUTH_TWITCH_SECRET: process.env.AUTH_TWITCH_SECRET || '',
         NEXT_PUBLIC_PARTYKIT_PROJECT: process.env.NEXT_PUBLIC_PARTYKIT_URL,
-        NEXT_PUBLIC_SITENAME: process.env.NEXT_PUBLIC_SITENAME || 'Coworking World',
+        NEXT_PUBLIC_SITENAME: process.env.NEXT_PUBLIC_SITENAME || DEFAULT_SITENAME,
         NEXT_PUBLIC_DEBUG: process.env.DEBUG || '',
         DEBUG: process.env.DEBUG || '',
       },

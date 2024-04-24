@@ -9,6 +9,7 @@ import Providers from '@/components/Providers';
 import Footer from '@/components/Site/Footer';
 import Header from '@/components/Site/Header';
 
+import { DEFAULT_SITENAME } from '@/config';
 import { cn } from '@/lib/utils';
 
 const fontSans = FontSans({
@@ -17,8 +18,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_SITENAME || 'Coworking World',
-  description: "On the Internet, you're never working alone.",
+  title: process.env.NEXT_PUBLIC_SITENAME || DEFAULT_SITENAME,
+  description: 'Have fun getting stuff done.',
 };
 
 export default function RootLayout({
