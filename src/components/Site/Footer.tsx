@@ -16,7 +16,7 @@ export default function Footer() {
       <a href='https://twitter.com/joostschuur' target='_blank'>
         <IconBrandTwitter className='size-4 sm:size-5 text-blue-400 transition hover:scale-125 ease-in-out' />
       </a>
-      <a href='https://github.com/jschuur' target='_blank'>
+      <a href='https://github.com/jschuur/coworking.party' target='_blank'>
         <IconBrandGithub className='size-4 sm:size-5 text-purple-700 transition hover:scale-125 ease-in-out' />
       </a>
     </footer>
