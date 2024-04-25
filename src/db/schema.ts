@@ -65,3 +65,21 @@ export const verificationTokens = sqliteTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export const userData = sqliteTable(
+  'userData',
+  {
+    userId: text('userId')
+      .notNull()
+      .primaryKey()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    data: text('data', { mode: 'json' }),
+    apiKey: text('apiKey')
+      .notNull()
+      .unique()
+      .$defaultFn(() => randomUUID()),
+  },
+  (ud) => ({
+    userIdIdx: index('UserData_userId_index').on(ud.userId),
+  })
+);

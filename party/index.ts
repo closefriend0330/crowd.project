@@ -1,7 +1,8 @@
 import { omit } from 'lodash';
 import type * as Party from 'partykit/server';
 
-import { debug } from '@/lib/utils';
+import { debug, getErrorMessage } from '@/lib/utils';
+import { taglineUpdate } from './api';
 
 import { ConnectedUser } from '@/lib/types';
 
@@ -94,12 +95,25 @@ export default class Server implements Party.Server {
     debug('Current users:', this.users);
   }
 
-  onRequest(request: Party.Request) {
-    if (request.method === 'GET') {
-      return new Response(JSON.stringify(this.users));
-    }
+  async onRequest(request: Party.Request) {
+    try {
+      const { method, url } = request;
+      const path = new URL(url).pathname.replace('/party/main', '');
 
-    return new Response(null, { status: 405 });
+      if (method === 'GET') {
+        return new Response(JSON.stringify({ users: this.users }));
+      }
+
+      if (method === 'POST' && path === '/tagline') {
+        return await taglineUpdate.call(this, request);
+      }
+
+      return new Response(null, { status: 405 });
+    } catch (err) {
+      return new Response(JSON.stringify({ status: 'error', message: getErrorMessage(err) }), {
+        status: 500,
+      });
+    }
   }
 }
 

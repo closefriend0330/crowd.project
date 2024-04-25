@@ -17,15 +17,18 @@
     "lint": "next lint",
     "deploy": "pnpm run deploy:preview",
     "deploy:preview": "pnpm run deploy:preview:partykit && pnpm run deploy:preview:site",
-    "deploy:preview:partykit": "dotenv -e .env.preview -- partykit deploy --preview preview",
+    "deploy:preview:partykit": "cp .env .env.bak; cp .env.preview .env; partykit deploy --preview preview --with-vars; cp .env.preview.bak .env; rm .env.bak",
     "deploy:preview:site": "dotenv -e .env.preview -- sst deploy --stage preview",
     "deploy:prod": "pnpm run deploy:prod:partykit && pnpm run deploy:prod:site",
-    "deploy:prod:partykit": "dotenv -e .env.production -- partykit deploy",
+    "deploy:prod:partykit": "cp .env .env.bak; cp .env.production .env; partykit deploy --with-vars; cp .env.production.bak .env; rm .env.bak",
     "deploy:prod:site": "dotenv -e .env.production -- sst deploy --stage production",
     "db:push": "drizzle-kit push:sqlite",
     "db:push:prod": "dotenv -e .env.production -- drizzle-kit push:sqlite",
     "db:push:preview": "dotenv -e .env.preview -- drizzle-kit push:sqlite",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:shell": "turso db shell http://127.0.0.1:8080",
+    "db:shell:preview": "turso db shell coworking-party-preview",
+    "db:shell:prod": "turso db shell coworking-party"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.0.0",
@@ -58,7 +61,8 @@
     "sst": "ion",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.4"
+    "zod": "^3.23.4",
+    "zod-validation-error": "^3.2.0"
   },
   "devDependencies": {
     "@types/humanize-duration": "^3.27.4",
