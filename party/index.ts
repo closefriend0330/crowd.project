@@ -1,5 +1,4 @@
 import { omit } from 'lodash';
-import { User } from 'next-auth';
 import type * as Party from 'partykit/server';
 
 import { debug } from '@/lib/utils';
@@ -18,13 +17,14 @@ export default class Server implements Party.Server {
     else this.room.broadcast(JSON.stringify({ type: 'list', users }));
   }
 
-  _addUser(user: User, connectionId: string) {
+  _addUser(user: ConnectedUser, connectionId: string) {
     const connectedUser = this.users.find((u) => u.id === user.id);
 
     if (connectedUser) {
       connectedUser.connections = [...new Set([...connectedUser.connections, connectionId])];
       connectedUser.lastConnected = Date.now();
-      debug('User reconnected:', connectedUser.id, connectedUser.connections);
+      connectedUser.data = user.data;
+      debug('User reconnected or updated:', connectedUser.id, connectedUser.connections);
     } else {
       this.users.push({
         ...user,
@@ -33,9 +33,9 @@ export default class Server implements Party.Server {
         firstConnected: Date.now(),
       });
       debug('User connected:', user.id, connectionId);
-
-      this._sendUserList();
     }
+
+    this._sendUserList();
   }
 
   _removeUser(connectionId: string) {

@@ -1,15 +1,17 @@
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import usePartySocket from 'partysocket/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import useUserList from '@/hooks/useUserList';
 import { debug } from '@/lib/utils';
+import { userDataAtom, userListAtom } from '@/store';
 
 export default function usePartyKit() {
   const { data: session } = useSession();
-  const { setUserList } = useUserList();
+  const setUserList = useSetAtom(userListAtom);
   const [isConnected, setIsConnected] = useState(false);
+  const userData = useAtomValue(userDataAtom);
 
   const ws = usePartySocket({
     host: process.env.NEXT_PUBLIC_PARTYKIT_URL,
@@ -49,12 +51,17 @@ export default function usePartyKit() {
       ws.send(
         JSON.stringify({
           type: 'presence',
-          user: { id: session?.user?.id, name: session?.user?.name, image: session?.user?.image },
+          user: {
+            id: session?.user?.id,
+            name: session?.user?.name,
+            image: session?.user?.image,
+            data: userData,
+          },
           status: 'online',
         })
       );
     }
-  }, [session, ws]);
+  }, [session, ws, userData]);
 
   return { ws, isConnected };
 }

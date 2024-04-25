@@ -1,11 +1,13 @@
 'use client';
 
+import { useAtomValue } from 'jotai';
+
 import UserListEntry from '@/components/Presence/UserListEntry';
 
-import useUserList from '@/hooks/useUserList';
+import { userListAtom } from '@/store';
 
 export default function UserList() {
-  const { userList } = useUserList();
+  const userList = useAtomValue(userListAtom);
 
   return userList?.length > 0 ? (
     <>
