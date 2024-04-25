@@ -24,7 +24,7 @@ export default function Avatar({ user, className, status }: Props) {
   return (
     <div className='relative'>
       <AvatarRoot className={cn('size-8 sm:size-10 border-white border-[1px]', className)}>
-        <AvatarImage src={user.image || undefined} />
+        <AvatarImage className='select-none  pointer-events-none' src={user.image || undefined} />
         <AvatarFallback className='text-black text-sm sm:text-base'>
           {initials || <IconUser className='size-4 sm:size-5' />}
         </AvatarFallback>
