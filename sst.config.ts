@@ -42,6 +42,7 @@ export default $config({
     new sst.aws.Nextjs('Site', {
       openNextVersion: '3.0.0-rc.16',
       domain: $dev ? undefined : process.env.SITE_DOMAIN,
+      warm: parseInt(process.env.WARM || '0') || undefined,
       environment: {
         SST_STAGE: $app.stage,
         NEXT_PUBLIC_SST_STAGE: $app.stage,
