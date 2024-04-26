@@ -21,6 +21,6 @@ export default function UserList() {
       </div>
     </>
   ) : (
-    <div>No active users</div>
+    <div className='italic'>No active users right now. Come join the party!</div>
   );
 }

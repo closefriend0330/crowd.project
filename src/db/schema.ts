@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 
@@ -7,7 +7,7 @@ import { UserData } from '@/lib/types';
 export const users = sqliteTable('user', {
   id: text('id')
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => uuidv4()),
   name: text('name'),
   email: text('email').notNull().unique(),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
@@ -44,7 +44,7 @@ export const sessions = sqliteTable(
   {
     id: text('id')
       .primaryKey()
-      .$defaultFn(() => randomUUID()),
+      .$defaultFn(() => uuidv4()),
     sessionToken: text('sessionToken').notNull().unique(),
     userId: text('userId')
       .notNull()
@@ -79,7 +79,7 @@ export const userData = sqliteTable(
     apiKey: text('apiKey')
       .notNull()
       .unique()
-      .$defaultFn(() => randomUUID()),
+      .$defaultFn(() => uuidv4()),
   },
   (ud) => ({
     userIdIdx: index('UserData_userId_index').on(ud.userId),

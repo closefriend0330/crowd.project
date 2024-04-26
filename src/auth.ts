@@ -7,6 +7,7 @@ import { db } from '@/db/db';
 import { getUserDataByUserId, setUserData } from '@/db/queries';
 
 import { UserData } from '@/lib/types';
+import { getErrorMessage } from '@/lib/utils';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -17,20 +18,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   callbacks: {
     async session({ user, session }) {
-      if (!session.user.data) {
-        let userData: UserData = await getUserDataByUserId(user.id);
+      try {
+        if (!session.user.data) {
+          let userData: UserData = await getUserDataByUserId(user.id);
 
-        if (!userData) {
-          userData = { tagline: null };
+          if (!userData) {
+            userData = { tagline: null };
 
-          try {
             await setUserData(user.id, userData);
-          } catch (e) {
-            console.error('Error setting user data:', e);
           }
-        }
 
-        session.user.data = userData;
+          session.user.data = userData;
+        }
+      } catch (err) {
+        console.error('Error during session callback:', getErrorMessage(err));
       }
 
       session.user.id = user.id;
