@@ -48,6 +48,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.9",
+    "framer-motion": "^11.1.7",
     "humanize-duration": "^3.32.0",
     "jotai": "^2.8.0",
     "lodash": "^4.17.21",
