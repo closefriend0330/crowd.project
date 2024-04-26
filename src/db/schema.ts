@@ -2,6 +2,8 @@ import { randomUUID } from 'crypto';
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 
+import { UserData } from '@/lib/types';
+
 export const users = sqliteTable('user', {
   id: text('id')
     .primaryKey()
@@ -73,7 +75,7 @@ export const userData = sqliteTable(
       .notNull()
       .primaryKey()
       .references(() => users.id, { onDelete: 'cascade' }),
-    data: text('data', { mode: 'json' }),
+    data: text('data', { mode: 'json' }).$type<UserData>().notNull(),
     apiKey: text('apiKey')
       .notNull()
       .unique()
