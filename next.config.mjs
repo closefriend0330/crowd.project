@@ -14,8 +14,7 @@ export default withSentryConfig(
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
     widenClientFileUpload: true,
     transpileClientSDK: false,
-
-    tunnelRoute: '/monitoring',
+    tunnelRoute: '/monitoring-tunnel',
     hideSourceMaps: true,
     disableLogger: true,
     automaticVercelMonitors: false,
