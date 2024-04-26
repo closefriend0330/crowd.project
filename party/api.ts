@@ -1,3 +1,4 @@
+import humanizeDuration from 'humanize-duration';
 import type * as Party from 'partykit/server';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
@@ -12,6 +13,8 @@ const taglineUpdateSchema = z.object({
   apiKey: z.string().min(1),
   tagline: z.string().min(1).max(120),
 });
+
+const startTime = Date.now();
 
 export async function taglineUpdate(this: Server, request: Party.Request) {
   try {
@@ -52,4 +55,15 @@ export async function taglineUpdate(this: Server, request: Party.Request) {
       { status: 500 }
     );
   }
+}
+
+export function debugInfo(this: Server) {
+  const debugData = {
+    dbUrl: process.env.DATABASE_URL?.slice(0, 15) + '...',
+    dbAuth: '...' + process.env.DATABASE_AUTH_TOKEN?.slice(-5),
+    uptime: humanizeDuration(Date.now() - startTime, { round: true }),
+    startTime: new Date(startTime).toISOString(),
+  };
+
+  return new Response(JSON.stringify(debugData, null, 2), { status: 200 });
 }

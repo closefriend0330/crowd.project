@@ -2,7 +2,7 @@ import { omit } from 'lodash';
 import type * as Party from 'partykit/server';
 
 import { debug, getErrorMessage } from '@/lib/utils';
-import { taglineUpdate } from './api';
+import { debugInfo, taglineUpdate } from './api';
 
 import { ConnectedUser } from '@/lib/types';
 
@@ -100,12 +100,16 @@ export default class Server implements Party.Server {
       const { method, url } = request;
       const path = new URL(url).pathname.replace('/party/main', '');
 
-      if (method === 'GET') {
+      if (method === 'GET' && path === '/') {
         return new Response(JSON.stringify({ users: this.users }));
       }
 
       if (method === 'POST' && path === '/tagline') {
         return await taglineUpdate.call(this, request);
+      }
+
+      if (method === 'GET' && path === '/debug') {
+        return debugInfo.call(this);
       }
 
       return new Response(null, { status: 405 });
