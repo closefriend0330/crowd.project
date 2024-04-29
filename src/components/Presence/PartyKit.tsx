@@ -1,3 +1,5 @@
+'use client';
+
 import { useSetAtom } from 'jotai';
 import { useSession } from 'next-auth/react';
 import usePartySocket from 'partysocket/react';
