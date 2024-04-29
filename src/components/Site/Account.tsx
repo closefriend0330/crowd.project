@@ -22,6 +22,7 @@ import {
 
 import Avatar from '@/components/Presence/Avatar';
 import AccountMenu from '@/components/Site/AccountMenu';
+import posthog from 'posthog-js';
 
 export default function User() {
   const { data: session, status } = useSession();
@@ -57,6 +58,7 @@ export default function User() {
         <DropdownMenuItem
           onClick={() => {
             setIsLoggingIn(true);
+            posthog.capture('twitch login attempt');
             signIn('twitch');
           }}
           className='flex gap-2 items-center'
@@ -67,6 +69,7 @@ export default function User() {
         <DropdownMenuItem
           onClick={() => {
             setIsLoggingIn(true);
+            posthog.capture('discord login attempt');
             signIn('discord');
           }}
           className='flex gap-2 items-center'

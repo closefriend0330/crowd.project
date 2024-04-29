@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import posthog from 'posthog-js';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -26,6 +27,7 @@ export default function TagLine() {
 
   const onSubmit = ({ tagline }: z.infer<typeof formSchema>) => {
     updateUserData({ tagline });
+    posthog.capture('tagline update', { length: tagline.length });
 
     form.reset();
   };
