@@ -18,12 +18,15 @@ export async function getUserDataByUserId(userId: string): Promise<UserData> {
 export function setUserData(userId: string, data: UserDataInsert) {
   return db
     .insert(userData)
-    .values({ userId, ...data })
+    .values({ userId, ...data, updatedAt: new Date() })
     .returning();
 }
 
 export function updateUserData(userId: string, data: Partial<UserData>) {
-  return db.update(userData).set(data).where(eq(userData.userId, userId));
+  return db
+    .update(userData)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(userData.userId, userId));
 }
 
 export function getUser(userId: string) {

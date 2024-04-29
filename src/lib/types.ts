@@ -2,23 +2,18 @@ import { userData } from '@/db/schema';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-// Fixed, standardized list of statuses. Custom statuses go into a tagline.
+const userDataSchemaOptions = {
+  sessionStartedAt: z.coerce.date(),
+  lastConnectedAt: z.coerce.date(),
+  lastSessionEndedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  connections: z.array(z.string()).default([]),
+};
 
-export const userDataSchema = createSelectSchema(userData, {
-  sessionStartedAt: z.coerce.date(),
-  lastConnectedAt: z.coerce.date(),
-  lastSessionEndedAt: z.coerce.date(),
-  createdAt: z.coerce.date(),
-  connections: z.array(z.string()).default([]),
-});
+export const userDataSchema = createSelectSchema(userData, userDataSchemaOptions);
 export type UserData = z.infer<typeof userDataSchema>;
-export const userDataInsertSchema = createInsertSchema(userData, {
-  sessionStartedAt: z.coerce.date(),
-  lastConnectedAt: z.coerce.date(),
-  lastSessionEndedAt: z.coerce.date(),
-  createdAt: z.coerce.date(),
-  connections: z.array(z.string()).default([]),
-});
+export const userDataInsertSchema = createInsertSchema(userData, userDataSchemaOptions);
 export type UserDataInsert = z.infer<typeof userDataInsertSchema>;
 
 export const userPublicDataSchema = userDataSchema.omit({
