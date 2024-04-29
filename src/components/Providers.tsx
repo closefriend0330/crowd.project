@@ -1,5 +1,6 @@
 'use client';
 
+import { Provider as JotaiProvider } from 'jotai';
 import { SessionProvider } from 'next-auth/react';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
@@ -22,8 +23,10 @@ export default function Providers({ children }: Props) {
   return (
     <PostHogProvider client={posthog}>
       <SessionProvider>
-        <Toaster richColors position='bottom-center' offset='40px' />
-        <TooltipProvider>{children}</TooltipProvider>
+        <JotaiProvider>
+          <Toaster richColors position='bottom-center' offset='40px' />
+          <TooltipProvider>{children}</TooltipProvider>
+        </JotaiProvider>
       </SessionProvider>
     </PostHogProvider>
   );
