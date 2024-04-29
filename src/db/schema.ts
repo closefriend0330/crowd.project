@@ -80,10 +80,10 @@ export const userData = sqliteTable(
     image: text('image'),
     tagline: text('tagline'),
     status: text('status', { enum: userStatusOptions }).notNull().default('offline'),
-    createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
-    sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp' }),
-    lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp' }),
-    lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp' }),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
+    sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp_ms' }),
+    lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp_ms' }),
+    lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp_ms' }),
     // private data
     apiKey: text('apiKey')
       .notNull()
