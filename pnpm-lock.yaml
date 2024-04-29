@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@auth/drizzle-adapter':
-        specifier: ^1.0.0
-        version: 1.0.1
+        specifier: 1.0.0
+        version: 1.0.0
       '@fontsource/space-grotesk':
         specifier: ^5.0.18
         version: 5.0.18
@@ -198,8 +198,8 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/drizzle-adapter@1.0.1':
-    resolution: {integrity: sha512-E4np2F48p930q+YeQ5ipZPv/L+9gmQcB7g6NQQyux2wtanRNOXNW4TG8wMjSRfTzccNq161YZ8Fm5le/5snkGQ==}
+  '@auth/drizzle-adapter@1.0.0':
+    resolution: {integrity: sha512-fEIIgseW8NAG12FI680uJRV4urHTWwOoEFasMqB7svHpfuz/yC3760MO3Sehg35epiw5FDlSDzZQqEnQceNjyw==}
 
   '@aws-crypto/crc32@3.0.0':
     resolution: {integrity: sha512-IzSgsrxUcsrejQbPVilIKy16kAT52EwB6zSaI+M3xxIhKh5+aldEyvI+z6erM7TCLB2BJsFrtHjp6/4/sr+3dA==}
@@ -3746,7 +3746,7 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/drizzle-adapter@1.0.1':
+  '@auth/drizzle-adapter@1.0.0':
     dependencies:
       '@auth/core': 0.30.0
     transitivePeerDependencies:

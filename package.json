@@ -32,7 +32,7 @@
     "db:shell:prod": "turso db shell coworking-party"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.0.0",
+    "@auth/drizzle-adapter": "1.0.0",
     "@fontsource/space-grotesk": "^5.0.18",
     "@hookform/resolvers": "^3.3.4",
     "@libsql/client": "^0.6.0",
