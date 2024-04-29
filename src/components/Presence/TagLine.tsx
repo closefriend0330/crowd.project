@@ -1,14 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSetAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { userDataAtom } from '@/store';
+import useUserData from '@/hooks/useUserData';
 
 const formSchema = z.object({
   tagline: z.string().min(1, { message: 'Min tagline length is 1 character' }).max(120, {
@@ -23,10 +22,10 @@ export default function TagLine() {
       tagline: '',
     },
   });
-  const setUserData = useSetAtom(userDataAtom);
+  const { updateUserData } = useUserData();
 
   const onSubmit = ({ tagline }: z.infer<typeof formSchema>) => {
-    setUserData((prev) => ({ ...prev, tagline }));
+    updateUserData({ tagline });
 
     form.reset();
   };

@@ -1,22 +1,20 @@
 'use client';
 
-import { useAtomValue } from 'jotai';
-
 import UserListEntry from '@/components/Presence/UserListEntry';
 
-import { userListAtom } from '@/store';
+import useUserListStore from '@/hooks/useUserListStore';
 
 export default function UserList() {
-  const userList = useAtomValue(userListAtom);
+  const { users } = useUserListStore();
 
-  return userList?.length > 0 ? (
+  return users?.length > 0 ? (
     <>
       <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-1 border-black text-right'>
-        Online ({userList.length})
+        Online ({users.length})
       </h2>
       <div>
-        {userList.map((user) => (
-          <UserListEntry key={user.id} user={user} />
+        {users.map((user) => (
+          <UserListEntry key={user.userId} user={user} />
         ))}
       </div>
     </>

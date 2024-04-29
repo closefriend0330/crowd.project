@@ -1,8 +1,9 @@
-import { v4 as uuidv4 } from 'uuid';
+import { sql } from 'drizzle-orm';
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from 'next-auth/adapters';
+import { v4 as uuidv4 } from 'uuid';
 
-import { UserData } from '@/lib/types';
+import { userStatusOptions } from '@/config';
 
 export const users = sqliteTable('user', {
   id: text('id')
@@ -61,7 +62,7 @@ export const verificationTokens = sqliteTable(
   {
     identifier: text('identifier').notNull(),
     token: text('token').notNull(),
-    expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
+    expires: integer('expires', { mode: 'timestamp' }).notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
@@ -72,14 +73,27 @@ export const userData = sqliteTable(
   'userData',
   {
     userId: text('userId')
-      .notNull()
       .primaryKey()
+      .$defaultFn(() => uuidv4())
       .references(() => users.id, { onDelete: 'cascade' }),
-    data: text('data', { mode: 'json' }).$type<UserData>().notNull(),
+    name: text('name'),
+    image: text('image'),
+    tagline: text('tagline'),
+    status: text('status', { enum: userStatusOptions }).notNull().default('offline'),
+    createdAt: integer('createdAt', { mode: 'timestamp' }).notNull(),
+    sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp' }),
+    lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp' }),
+    lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp' }),
+    // private data
     apiKey: text('apiKey')
       .notNull()
       .unique()
       .$defaultFn(() => uuidv4()),
+    connections: text('connections', { mode: 'json' })
+      .$type<string[]>()
+      .notNull()
+      .default(sql`[]`),
+    email: text('email').unique(),
   },
   (ud) => ({
     userIdIdx: index('UserData_userId_index').on(ud.userId),

@@ -1,10 +1,10 @@
 import Avatar from '@/components/Presence/Avatar';
 import TimeAgo from '@/components/Presence/TimeAgo';
 
-import { ConnectedUser } from '@/lib/types';
+import { UserPublicData } from '@/lib/types';
 
 type Props = {
-  user: ConnectedUser;
+  user: UserPublicData;
 };
 
 export default function UserListEntry({ user }: Props) {
@@ -16,8 +16,10 @@ export default function UserListEntry({ user }: Props) {
         </div>
         <div className='flex flex-col min-w-64 max-w-72'>
           <div className='text-lg'>{user.name}</div>
-          <div className='text-sm text-slate-500 min-h-[1.4em]'>{user?.data?.tagline || ''}</div>
-          <TimeAgo className='text-xs text-slate-700 self-end' date={user.firstConnected} />
+          <div className='text-sm text-slate-500 min-h-[1.4em]'>{user.tagline || ''}</div>
+          {user.sessionStartedAt && (
+            <TimeAgo className='text-xs text-slate-700 self-end' date={user.sessionStartedAt} />
+          )}
         </div>
       </div>
     </div>

@@ -1,15 +1,15 @@
 'use client';
 
 import { IconPointFilled } from '@tabler/icons-react';
-
-import usePartyKit from '@/hooks/usePartyKit';
+import { useAtomValue } from 'jotai';
 
 import Tooltip from '@/components/Site/Tooltip';
 
 import { cn } from '@/lib/utils';
+import { connectedAtom } from '@/store';
 
 export default function Footer() {
-  const { isConnected } = usePartyKit();
+  const isConnected = useAtomValue(connectedAtom);
 
   return (
     <Tooltip tooltip={`Status: ${isConnected ? 'connected' : 'disconnected'}`} delayDuration={0}>

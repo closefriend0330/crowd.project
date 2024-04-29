@@ -33,21 +33,22 @@ const humanize = (date: number) => {
 const UPDATE_INTERVAL = 60000;
 
 type Props = {
-  date: number;
+  date: Date;
   className?: string;
   updateInterval?: number;
 };
 
 export default function TimeAgo({ date, className, updateInterval = UPDATE_INTERVAL }: Props) {
-  const [timeAgo, setTimeAgo] = useState<string>(humanize(date));
+  const dateTime = new Date(date).getTime();
+  const [timeAgo, setTimeAgo] = useState<string>(humanize(dateTime));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeAgo(humanize(date));
+      setTimeAgo(humanize(dateTime));
     }, updateInterval);
 
     return () => clearInterval(interval);
-  }, [date, updateInterval]);
+  }, [dateTime, updateInterval]);
 
   return (
     <Tooltip tooltip={`connected ${new Date(date).toLocaleString()}`} asChild>
