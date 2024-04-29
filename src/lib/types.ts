@@ -16,6 +16,14 @@ export type UserData = z.infer<typeof userDataSchema>;
 export const userDataInsertSchema = createInsertSchema(userData, userDataSchemaOptions);
 export type UserDataInsert = z.infer<typeof userDataInsertSchema>;
 
+type ConfettiShootParams = {
+  delay?: number;
+  source?: string;
+};
+export type Confetti = {
+  shoot: (params?: ConfettiShootParams) => void;
+};
+
 export const userPublicDataSchema = userDataSchema.omit({
   apiKey: true,
   connections: true,

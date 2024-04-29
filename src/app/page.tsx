@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 
+import Confetti from '@/components/Confetti';
 import PartyKit from '@/components/Presence/PartyKit';
 import TagLine from '@/components/Presence/TagLine';
 import UserList from '@/components/Presence/UserList';
@@ -12,6 +13,8 @@ export default function Home() {
 
   return (
     <main className='px-4'>
+      <Confetti />
+
       {user ? (
         <>
           <PartyKit />
