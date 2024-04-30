@@ -1,5 +1,6 @@
 import humanizeDuration from 'humanize-duration';
 import type * as Party from 'partykit/server';
+import posthog from 'posthog-js';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 
@@ -23,7 +24,11 @@ export async function parseApiRequest({ request, users }: parseApiRequestParams)
     const { method, url } = request;
     const path = new URL(url).pathname.replace('/party/main', '');
 
+    posthog.capture('api request', { method, path });
+
     if (method === 'GET' && path === '/users') {
+      posthog.capture('api request', { type: 'users api request' });
+
       return new Response(
         JSON.stringify({ users: users.list.map((user) => userPublicDataSchema.parse(user)) })
       );
@@ -55,7 +60,9 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
   try {
     const result = taglineUpdateSchema.safeParse(await request.json());
 
-    if (!result.success)
+    if (!result.success) {
+      posthog.capture('tagline api request error', { type: 'invalid request' });
+
       return new Response(
         JSON.stringify({
           status: 'error',
@@ -65,9 +72,12 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
           status: 400,
         }
       );
+    }
 
     const [user] = await getUserDataByApiKey(result.data.apiKey);
     if (!user) {
+      posthog.capture('tagline api request error', { type: 'user/API key not found' });
+
       return new Response(JSON.stringify({ status: 'error', message: 'User/API key not found' }), {
         status: 404,
       });
@@ -78,10 +88,18 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
       userId: user.userId,
     });
 
+    posthog.capture('tagline api request success', {
+      userId: user.userId,
+      name: user.name,
+      wasConnected,
+    });
+
     return new Response(JSON.stringify({ status: `success`, wasConnected }, null, 2), {
       status: 200,
     });
   } catch (err) {
+    posthog.capture('tagline api request error', { type: 'other' });
+
     return new Response(
       JSON.stringify({ status: 'error', message: `Error: ${getErrorMessage(err)}` }),
       { status: 500 }
@@ -90,6 +108,8 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
 }
 
 export function debugInfo() {
+  posthog.capture('debug api request');
+
   const debugData = {
     dbUrl: process.env.DATABASE_URL?.slice(0, 15) + '...',
     dbAuth: '...' + process.env.DATABASE_AUTH_TOKEN?.slice(-5),

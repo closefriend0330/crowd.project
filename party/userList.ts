@@ -175,13 +175,13 @@ export class UserList {
     if (connectedUser) {
       const remainingConnections = connectedUser.connections.filter((c) => c !== connectionId);
 
-      debug('User disconnected partially: ', {
-        userId: connectedUser.userId,
-        connectionId,
-        remainingConnections,
-      });
-
       if (remainingConnections.length > 0) {
+        debug('User disconnected partially: ', {
+          userId: connectedUser.userId,
+          connectionId,
+          remainingConnections,
+        });
+
         connectedUser.connections = remainingConnections;
 
         updatedUserData = { connections: remainingConnections };
