@@ -1,14 +1,17 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
+import posthog from 'posthog-js';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { userDataAtom } from '@/store';
+import useUserData from '@/hooks/useUserData';
+
+import { confettiAtom } from '@/store';
 
 const formSchema = z.object({
   tagline: z.string().min(1, { message: 'Min tagline length is 1 character' }).max(120, {
@@ -23,12 +26,16 @@ export default function TagLine() {
       tagline: '',
     },
   });
-  const setUserData = useSetAtom(userDataAtom);
+  const { updateUserData } = useUserData();
+  const confetti = useAtomValue(confettiAtom);
 
   const onSubmit = ({ tagline }: z.infer<typeof formSchema>) => {
-    setUserData((prev) => ({ ...prev, tagline }));
-
+    updateUserData({ tagline });
     form.reset();
+
+    posthog.capture('tagline update', { length: tagline.length });
+
+    confetti.shoot({ source: 'tagline update' });
   };
 
   return (
@@ -41,7 +48,12 @@ export default function TagLine() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input className='bg-white' placeholder='what are you up to?' {...field} />
+                  <Input
+                    className='bg-white'
+                    placeholder='what are you up to?'
+                    autoFocus
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

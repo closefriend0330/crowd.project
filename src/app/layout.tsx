@@ -1,6 +1,6 @@
-import { GoogleAnalytics } from '@next/third-parties/google';
 import '@fontsource/space-grotesk/400.css'; // Specify weight
 import '@fontsource/space-grotesk/600.css'; // Specify weight
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
@@ -10,8 +10,9 @@ import Providers from '@/components/Providers';
 import Footer from '@/components/Site/Footer';
 import Header from '@/components/Site/Header';
 
-import { DEFAULT_SITENAME } from '@/config';
 import { cn } from '@/lib/utils';
+
+import { DEFAULT_SITENAME } from '@/config';
 
 const fontSans = FontSans({
   subsets: ['latin'],

@@ -1,6 +1,6 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-import { DEFAULT_SITENAME } from './src/config';
+import { DEFAULT_SITENAME } from '@/config';
 
 export default $config({
   app(input) {
@@ -55,10 +55,12 @@ export default $config({
         AUTH_TWITCH_SECRET: process.env.AUTH_TWITCH_SECRET || '',
         NEXT_PUBLIC_PARTYKIT_PROJECT: process.env.NEXT_PUBLIC_PARTYKIT_URL,
         NEXT_PUBLIC_SITENAME: process.env.NEXT_PUBLIC_SITENAME || DEFAULT_SITENAME,
-        NEXT_PUBLIC_DEBUG: process.env.DEBUG || '',
-        DEBUG: process.env.DEBUG || '',
+        NEXT_PUBLIC_LOGGING: process.env.LOGGING || '',
+        LOGGING: process.env.LOGGING || '',
         NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN || '',
         NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '',
+        NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY || '',
+        NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST || '',
       },
     });
   },

@@ -1,6 +1,13 @@
 import { atom } from 'jotai';
+import { PartySocket } from 'partysocket';
 
-import { ConnectedUser, UserData } from '@/lib/types';
+import { Confetti } from '@/lib/types';
 
-export const userListAtom = atom<ConnectedUser[]>([]);
-export const userDataAtom = atom<UserData>({ tagline: null });
+import { UserData, UserPublicData } from '@/lib/types';
+
+export const userListAtom = atom<UserPublicData[]>([]);
+export const userDataAtom = atom<UserData | null>(null);
+
+export const connectedAtom = atom<boolean>(false);
+export const partySocketAtom = atom<PartySocket | null>(null);
+export const confettiAtom = atom<Confetti>({ shoot: () => {} });

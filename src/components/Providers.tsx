@@ -1,29 +1,33 @@
 'use client';
 
+import { Provider as JotaiProvider } from 'jotai';
+import { SessionProvider } from 'next-auth/react';
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
 import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { SessionProvider } from 'next-auth/react';
+if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+  });
+}
 
-import usePartyKit from '@/hooks/usePartyKit';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 type Props = {
   children: ReactNode;
 };
 
-const PartyKit = () => {
-  usePartyKit();
-
-  return null;
-};
-
 export default function Providers({ children }: Props) {
   return (
-    <SessionProvider>
-      <PartyKit />
-      <Toaster richColors position='bottom-center' offset='40px' />
-      <TooltipProvider>{children}</TooltipProvider>
-    </SessionProvider>
+    <PostHogProvider client={posthog}>
+      <SessionProvider>
+        <JotaiProvider>
+          <Toaster richColors position='bottom-center' offset='40px' />
+          <TooltipProvider>{children}</TooltipProvider>
+        </JotaiProvider>
+      </SessionProvider>
+    </PostHogProvider>
   );
 }

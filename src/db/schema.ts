@@ -1,13 +1,14 @@
-import { randomUUID } from 'crypto';
+import { sql } from 'drizzle-orm';
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from 'next-auth/adapters';
+import { v4 as uuidv4 } from 'uuid';
 
-import { UserData } from '@/lib/types';
+import { userStatusOptions } from '@/config';
 
 export const users = sqliteTable('user', {
   id: text('id')
     .primaryKey()
-    .$defaultFn(() => randomUUID()),
+    .$defaultFn(() => uuidv4()),
   name: text('name'),
   email: text('email').notNull().unique(),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
@@ -44,7 +45,7 @@ export const sessions = sqliteTable(
   {
     id: text('id')
       .primaryKey()
-      .$defaultFn(() => randomUUID()),
+      .$defaultFn(() => uuidv4()),
     sessionToken: text('sessionToken').notNull().unique(),
     userId: text('userId')
       .notNull()
@@ -72,14 +73,30 @@ export const userData = sqliteTable(
   'userData',
   {
     userId: text('userId')
-      .notNull()
       .primaryKey()
+      .$defaultFn(() => uuidv4())
       .references(() => users.id, { onDelete: 'cascade' }),
-    data: text('data', { mode: 'json' }).$type<UserData>().notNull(),
+    name: text('name'),
+    image: text('image'),
+    tagline: text('tagline'),
+    status: text('status', { enum: userStatusOptions }).notNull().default('offline'),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
+    updatedAt: integer('updatedAt', { mode: 'timestamp_ms' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp_ms' }),
+    lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp_ms' }),
+    lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp_ms' }),
+    // private data
     apiKey: text('apiKey')
       .notNull()
       .unique()
-      .$defaultFn(() => randomUUID()),
+      .$defaultFn(() => uuidv4()),
+    connections: text('connections', { mode: 'json' })
+      .$type<string[]>()
+      .notNull()
+      .default(sql`[]`),
+    email: text('email').unique(),
   },
   (ud) => ({
     userIdIdx: index('UserData_userId_index').on(ud.userId),

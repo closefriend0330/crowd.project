@@ -5,7 +5,7 @@ import FooterMessage from '@/components/Site/FooterMessage';
 
 export default function Footer() {
   return (
-    <footer className='flex items-center gap-2 text-slate-500 text-[8pt] sm:text-sm py-1 sm:py-2 px-4 bg-white border-t border-slate-400 shadow-sm'>
+    <footer className='flex items-center gap-2 text-slate-500 text-[8pt] sm:text-sm py-1 sm:py-2 px-4 mt-4 sticky bottom-0 bg-white border-t border-slate-400 shadow-sm'>
       <ConnectionStatus />
       <div className='grow'>
         <FooterMessage />
