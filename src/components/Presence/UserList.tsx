@@ -1,30 +1,29 @@
 'use client';
 
-import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 
 import UserListEntry from '@/components/Presence/UserListEntry';
 
+import useConfetti from '@/hooks/useConfetti';
 import useUserListStore from '@/hooks/useUserListStore';
 
 import { CONFETTI_DELAY_MAX, CONFETTI_DELAY_MIN } from '@/config';
-import { confettiAtom } from '@/store';
 
 export default function UserList() {
   const { users } = useUserListStore();
-  const confettiConductor = useAtomValue(confettiAtom);
+  const { shootConfetti } = useConfetti();
   const [shot, setShot] = useState(false);
 
   useEffect(() => {
     if (!shot) {
       console.log('confetti shot');
       setShot(true);
-      confettiConductor.shoot({
+      shootConfetti({
         delay: Math.floor(Math.random() * CONFETTI_DELAY_MIN) + CONFETTI_DELAY_MAX,
         source: 'user list load',
       });
     }
-  }, [confettiConductor, shot]);
+  }, [shootConfetti, shot]);
 
   return users?.length > 0 ? (
     <>

@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAtomValue } from 'jotai';
 import posthog from 'posthog-js';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -9,9 +8,8 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
+import useConfetti from '@/hooks/useConfetti';
 import useUserData from '@/hooks/useUserData';
-
-import { confettiAtom } from '@/store';
 
 const formSchema = z.object({
   tagline: z.string().min(1, { message: 'Min tagline length is 1 character' }).max(120, {
@@ -27,7 +25,7 @@ export default function TagLine() {
     },
   });
   const { updateUserData } = useUserData();
-  const confetti = useAtomValue(confettiAtom);
+  const { shootConfetti } = useConfetti();
 
   const onSubmit = ({ tagline }: z.infer<typeof formSchema>) => {
     updateUserData({ tagline });
@@ -35,7 +33,7 @@ export default function TagLine() {
 
     posthog.capture('tagline update', { length: tagline.length });
 
-    confetti.shoot({ source: 'tagline update' });
+    shootConfetti({ source: 'tagline update' });
   };
 
   return (
