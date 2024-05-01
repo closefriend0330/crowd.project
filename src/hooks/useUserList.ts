@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai';
 import { PartySocket } from 'partysocket';
 
+import userSoundEffects from '@/hooks/useSoundEffects';
 import useUserListStore from '@/hooks/useUserListStore';
 
 import { serverMessageSchema, userDataSchema } from '@/lib/types';
@@ -18,6 +19,7 @@ export default function useUserList({ ws }: Props) {
   const [userData, setUserData] = useAtom(userDataAtom);
   const { users, updateUser, setUserList } = useUserListStore();
   const { shootConfetti } = useConfetti();
+  const { playListTaglineUpdated, playUserJoined, playUserLeft } = userSoundEffects();
 
   async function processSeverMessage({ message }: { message: string }) {
     try {
@@ -48,12 +50,14 @@ export default function useUserList({ ws }: Props) {
         debug('addUser client message', { data: msg.data });
 
         setUserList([...users, msg.data]);
+        playUserJoined();
         shootConfetti({ source: 'list add user' });
       } else if (msg.type === 'removeUser') {
         // remove a user from the list
         debug('removeUser client message', { userId: msg.userId });
 
         setUserList(users.filter((user) => user.userId !== msg.userId));
+        playUserLeft();
         shootConfetti({ source: 'list remove user' });
       } else if (msg.type === 'updateUsersPublicData') {
         // update a user's data in a local list
@@ -61,8 +65,11 @@ export default function useUserList({ ws }: Props) {
 
         updateUser(msg.userId, msg.data);
 
-        if (msg.data.tagline && msg.data.userId !== userData?.userId)
+        if (msg.data.tagline && msg.userId !== userData?.userId) {
+          console.log(msg.userId, userData?.userId);
           shootConfetti({ source: 'list tagline update' });
+          playListTaglineUpdated();
+        }
       }
     } catch (err) {
       console.error('Error processing server message:', getErrorMessage(err));

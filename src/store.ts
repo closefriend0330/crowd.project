@@ -10,3 +10,4 @@ export const userDataAtom = atom<UserData | null>(null);
 export const connectedAtom = atom<boolean>(false);
 export const partySocketAtom = atom<PartySocket | null>(null);
 export const confettiConductorAtom = atom<TConductorInstance | null>(null);
+export const mutedAtom = atom<boolean>(false);

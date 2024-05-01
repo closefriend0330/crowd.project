@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 
 import useConfetti from '@/hooks/useConfetti';
+import useSoundEffects from '@/hooks/useSoundEffects';
 import useUserData from '@/hooks/useUserData';
 
 const formSchema = z.object({
@@ -18,6 +19,7 @@ const formSchema = z.object({
 });
 
 export default function TagLine() {
+  const { playUserTaglineUpdated } = useSoundEffects();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,6 +35,7 @@ export default function TagLine() {
 
     posthog.capture('tagline update', { length: tagline.length });
 
+    playUserTaglineUpdated();
     shootConfetti({ source: 'tagline update' });
   };
 

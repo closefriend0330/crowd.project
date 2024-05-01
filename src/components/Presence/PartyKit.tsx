@@ -6,6 +6,7 @@ import usePartySocket from 'partysocket/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 
+import useSoundEffects from '@/hooks/useSoundEffects';
 import useUserList from '@/hooks/useUserList';
 
 import { debug } from '@/lib/utils';
@@ -15,6 +16,7 @@ export default function PartyKit() {
   const { data: session } = useSession();
   const setIsConnected = useSetAtom(connectedAtom);
   const setPartySocket = useSetAtom(partySocketAtom);
+  const { playConnectionChange } = useSoundEffects();
 
   const ws = usePartySocket({
     host: process.env.NEXT_PUBLIC_PARTYKIT_URL,
@@ -36,6 +38,8 @@ export default function PartyKit() {
       toast('Connection closed');
 
       setIsConnected(false);
+
+      playConnectionChange();
     },
     onError(e) {
       const message = JSON.stringify(e);

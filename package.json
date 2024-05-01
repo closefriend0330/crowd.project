@@ -66,6 +66,7 @@
     "sst": "ion",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "use-sound": "^4.0.1",
     "usehooks-ts": "^3.1.0",
     "uuid": "^9.0.1",
     "zod": "^3.23.4",
