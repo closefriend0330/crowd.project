@@ -17,4 +17,5 @@ export default {
       return session;
     },
   },
+  trustHost: true,
 } satisfies NextAuthConfig;
