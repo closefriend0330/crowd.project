@@ -13,9 +13,7 @@ export default function Footer() {
 
   return (
     <Tooltip tooltip={`Status: ${isConnected ? 'connected' : 'disconnected'}`} delayDuration={0}>
-      <IconPointFilled
-        className={cn('size-4 sm:size-5', isConnected ? 'text-green-500' : 'text-red-500')}
-      />
+      <IconPointFilled className={cn('size-5', isConnected ? 'text-green-500' : 'text-red-500')} />
     </Tooltip>
   );
 }

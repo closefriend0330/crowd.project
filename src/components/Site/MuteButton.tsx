@@ -3,6 +3,8 @@
 import { IconBell, IconBellOff } from '@tabler/icons-react';
 import { useIsClient } from 'usehooks-ts';
 
+import Tooltip from '@/components/Site/Tooltip';
+
 import useSoundEffects from '@/hooks/useSoundEffects';
 
 export default function MuteButton() {
@@ -17,5 +19,9 @@ export default function MuteButton() {
     toggleMuted();
   };
 
-  return <div>{muted ? <IconBellOff onClick={toggle} /> : <IconBell onClick={toggle} />}</div>;
+  return (
+    <Tooltip tooltip='Mute sound effects'>
+      {muted ? <IconBellOff onClick={toggle} /> : <IconBell onClick={toggle} />}
+    </Tooltip>
+  );
 }
