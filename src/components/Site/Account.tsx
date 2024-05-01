@@ -23,12 +23,16 @@ import {
 import Avatar from '@/components/Presence/Avatar';
 import AccountMenu from '@/components/Site/AccountMenu';
 import posthog from 'posthog-js';
+import { useIsClient } from 'usehooks-ts';
 
-export default function User() {
+export default function Account() {
   const { data: session, status } = useSession();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const isClient = useIsClient();
 
   const user = session?.user;
+
+  if (!isClient) return null;
 
   return user ? (
     <AccountMenu user={user}>

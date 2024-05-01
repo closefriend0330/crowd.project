@@ -1,6 +1,7 @@
 'use client';
 
 import { Provider as JotaiProvider } from 'jotai';
+import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
@@ -15,14 +16,19 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
+import { debug } from '@/lib/utils';
+
 type Props = {
   children: ReactNode;
+  session: Session | null;
 };
 
-export default function Providers({ children }: Props) {
+export default function Providers({ children, session }: Props) {
+  debug('Providers', session);
+
   return (
     <PostHogProvider client={posthog}>
-      <SessionProvider>
+      <SessionProvider session={session}>
         <JotaiProvider>
           <Toaster richColors position='bottom-center' offset='40px' />
           <TooltipProvider>{children}</TooltipProvider>

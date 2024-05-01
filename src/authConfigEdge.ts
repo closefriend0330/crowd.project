@@ -5,14 +5,15 @@ import Twitch from 'next-auth/providers/twitch';
 export default {
   providers: [Discord, Twitch],
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id;
+      if (token) session.user.id = token.id;
+      else console.error('token not found in session callback', { session });
 
       return session;
     },

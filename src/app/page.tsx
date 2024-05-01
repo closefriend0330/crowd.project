@@ -7,9 +7,13 @@ import PartyKit from '@/components/Presence/PartyKit';
 import TagLine from '@/components/Presence/TagLine';
 import UserList from '@/components/Presence/UserList';
 
+import { debug } from '@/lib/utils';
+
 export default function Home() {
   const { data: session } = useSession();
   const user = session?.user;
+
+  debug('Home', { user });
 
   return (
     <main className='px-4'>

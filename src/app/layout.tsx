@@ -10,6 +10,7 @@ import Providers from '@/components/Providers';
 import Footer from '@/components/Site/Footer';
 import Header from '@/components/Site/Header';
 
+import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
 
 import { DEFAULT_SITENAME } from '@/config';
@@ -24,17 +25,18 @@ export const metadata: Metadata = {
   description: 'Have fun getting stuff done.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const googleAnalyticsId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
+  const session = await auth();
 
   return (
     <html lang='en'>
       <body className={cn('font-sans antialiased bg-purple-100', fontSans.variable)}>
-        <Providers>
+        <Providers session={session}>
           <div className='flex min-h-screen flex-col'>
             <Header />
             <div className='flex-grow justify-center items-center max-w-xl mx-auto'>{children}</div>
