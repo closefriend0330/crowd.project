@@ -7,18 +7,18 @@ export default function useSoundEffects() {
 
   const toggleMuted = () => setMuted((prev) => !prev);
 
-  const [playUserJoined] = useSound('/sounds/userJoined.wav', { ...soundOptions, volume: 0.5 });
-  const [playUserLeft] = useSound('/sounds/userLeft.wav', { ...soundOptions, volume: 0.5 });
-  const [playUserTaglineUpdated] = useSound('/sounds/userTaglineUpdated.wav', {
+  const [playUserJoined] = useSound('/sounds/userJoined.mp3', { ...soundOptions, volume: 0.5 });
+  const [playUserLeft] = useSound('/sounds/userLeft.mp3', { ...soundOptions, volume: 0.5 });
+  const [playUserTaglineUpdated] = useSound('/sounds/userTaglineUpdated.mp3', {
     ...soundOptions,
     volume: 0.5,
   });
-  const [playListTaglineUpdated] = useSound('/sounds/listTaglineUpdated.wav', {
+  const [playListTaglineUpdated] = useSound('/sounds/listTaglineUpdated.mp3', {
     ...soundOptions,
     volume: 0.5,
   });
-  const [playClick] = useSound('/sounds/click.wav', soundOptions);
-  const [playConnectionChange] = useSound('/sounds/connectionChange.wav', soundOptions);
+  const [playClick] = useSound('/sounds/click.mp3', soundOptions);
+  const [playConnectionChange] = useSound('/sounds/connectionChange.mp3', soundOptions);
 
   return {
     muted,
