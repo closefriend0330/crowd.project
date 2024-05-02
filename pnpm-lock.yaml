@@ -45,8 +45,8 @@ importers:
         specifier: ^7.112.2
         version: 7.112.2(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tabler/icons-react':
-        specifier: ^3.2.0
-        version: 3.2.0(react@18.3.1)
+        specifier: ^3.3.0
+        version: 3.3.0(react@18.3.1)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -57,11 +57,11 @@ importers:
         specifier: ^16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: ^0.30.9
-        version: 0.30.9(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
+        specifier: ^0.30.10
+        version: 0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.30.9(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.4)
+        version: 0.5.1(drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.4)
       framer-motion:
         specifier: ^11.1.7
         version: 11.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -84,8 +84,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1
       posthog-js:
-        specifier: ^1.130.1
-        version: 1.130.1
+        specifier: ^1.130.2
+        version: 1.130.2
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1596,13 +1596,13 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
-  '@tabler/icons-react@3.2.0':
-    resolution: {integrity: sha512-b1mZT1XpZrzvbM+eFe1YbYbxkzgJ18tM4knZKqXh0gnHDZ6XVLIH3TzJZ3HZ7PTkUqZLZ7XcGae3qQVGburlBw==}
+  '@tabler/icons-react@3.3.0':
+    resolution: {integrity: sha512-Qn1Po+0gErh1zCWlaOdoVoGqeonWfSuiboYgwZBs6PIJNsj7yr3bIa4BkHmgJgtlXLT9LvCzt/RvwlgjxLfjjg==}
     peerDependencies:
       react: '>= 16'
 
-  '@tabler/icons@3.2.0':
-    resolution: {integrity: sha512-h8GQ2rtxgiSjltrVz4vcopAxTPSpUSUi5nBfJ09H3Bk4fJk6wZ/dVUjzhv/BHfDwGTkAxZBiYe/Q/T95cPeg5Q==}
+  '@tabler/icons@3.3.0':
+    resolution: {integrity: sha512-PLVe9d7b59sKytbx00KgeGhQG3N176Ezv8YMmsnSz4s0ifDzMWlp/h2wEfQZ0ZNe8e377GY2OW6kovUe3Rnd0g==}
 
   '@types/canvas-confetti@1.6.4':
     resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
@@ -2032,8 +2032,8 @@ packages:
     resolution: {integrity: sha512-mLVDS4nXmO09wFVlzGrdshWnAL+U9eQGC5zRs6hTN6Q9arwQGWU2XnZ17I8BM8Quau8CQRx3Ms6VPgRWJFVp7Q==}
     hasBin: true
 
-  drizzle-orm@0.30.9:
-    resolution: {integrity: sha512-VOiCFsexErmgqvNCOmbzmqDCZzZsHoz6SkWAjTFxsTr1AllKDbDJ2+GgedLXsXMDgpg/ljDG1zItIFeZtiO2LA==}
+  drizzle-orm@0.30.10:
+    resolution: {integrity: sha512-IRy/QmMWw9lAQHpwbUh1b8fcn27S/a9zMIzqea1WNOxK9/4EB8gIo+FZWLiPXzl2n9ixGSv8BhsLZiOppWEwBw==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -3170,8 +3170,8 @@ packages:
     resolution: {integrity: sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.130.1:
-    resolution: {integrity: sha512-BC283kxeJnVIeAxn7ZPHf5sCTA6oXs4uvo9fdGAsbKwwfmF9g09rnJOOaoF95J/auf8HT4YB6Vt2KytqtJD44w==}
+  posthog-js@1.130.2:
+    resolution: {integrity: sha512-QR/j9Xs/STK3+VJgqiByeXFKT17LGZZvJtrCdgFhwydp8WfisJw7zrSy7rVDjYS0UeKJJ/3cO/qtlXD3dR2+Eg==}
 
   preact-render-to-string@5.2.3:
     resolution: {integrity: sha512-aPDxUn5o3GhWdtJtW0svRC2SS/l8D9MAgo2+AWml+BhDImb27ALf04Q2d+AHqUUOc6RdSXFIBVa2gxzgMKgtZA==}
@@ -5373,12 +5373,12 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.6.2
 
-  '@tabler/icons-react@3.2.0(react@18.3.1)':
+  '@tabler/icons-react@3.3.0(react@18.3.1)':
     dependencies:
-      '@tabler/icons': 3.2.0
+      '@tabler/icons': 3.3.0
       react: 18.3.1
 
-  '@tabler/icons@3.2.0': {}
+  '@tabler/icons@3.3.0': {}
 
   '@types/canvas-confetti@1.6.4': {}
 
@@ -5852,16 +5852,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.9(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1):
+  drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20240320.1
       '@libsql/client': 0.6.0
       '@types/react': 18.3.1
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.30.9(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.4):
+  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.4):
     dependencies:
-      drizzle-orm: 0.30.9(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
+      drizzle-orm: 0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
       zod: 3.23.4
 
   eastasianwidth@0.2.0: {}
@@ -7136,7 +7136,7 @@ snapshots:
       picocolors: 1.0.0
       source-map-js: 1.2.0
 
-  posthog-js@1.130.1:
+  posthog-js@1.130.2:
     dependencies:
       fflate: 0.4.8
       preact: 10.20.2
