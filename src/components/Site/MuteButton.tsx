@@ -1,6 +1,6 @@
 'use client';
 
-import { IconBell, IconBellOff } from '@tabler/icons-react';
+import { IconVolume, IconVolumeOff } from '@tabler/icons-react';
 import { useIsClient } from 'usehooks-ts';
 
 import Tooltip from '@/components/Site/Tooltip';
@@ -21,7 +21,11 @@ export default function MuteButton() {
 
   return (
     <Tooltip tooltip='Mute sound effects'>
-      {muted ? <IconBellOff onClick={toggle} /> : <IconBell onClick={toggle} />}
+      {muted ? (
+        <IconVolumeOff onClick={toggle} className='size-4' />
+      ) : (
+        <IconVolume onClick={toggle} className='size-4' />
+      )}
     </Tooltip>
   );
 }
