@@ -8,6 +8,7 @@ import { getUserDataByApiKey } from '@/db/queries';
 import { userPublicDataSchema } from '@/lib/types';
 import { getErrorMessage } from '@/lib/utils';
 
+import type Server from '@/party/server';
 import { UserList } from '@/party/userList';
 
 const taglineUpdateSchema = z.object({
@@ -16,11 +17,13 @@ const taglineUpdateSchema = z.object({
 });
 
 type parseApiRequestParams = {
+  partyServer: Server;
   request: Party.Request;
-  users: UserList;
 };
-export async function parseApiRequest({ request, users }: parseApiRequestParams) {
+export async function parseApiRequest({ request, partyServer }: parseApiRequestParams) {
   try {
+    const users = partyServer.users;
+
     const { method, url } = request;
     const path = new URL(url).pathname.replace('/party/main', '');
 
@@ -39,7 +42,7 @@ export async function parseApiRequest({ request, users }: parseApiRequestParams)
     }
 
     if (method === 'GET' && path === '/debug') {
-      return debugInfo();
+      return debugInfo(partyServer);
     }
 
     return new Response(null, { status: 405 });
@@ -49,8 +52,6 @@ export async function parseApiRequest({ request, users }: parseApiRequestParams)
     });
   }
 }
-
-const startTime = Date.now();
 
 type TaglineUpdateParams = {
   request: Party.Request;
@@ -84,8 +85,8 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
     }
 
     const { wasConnected } = await users.updateUserData({
-      data: { tagline: result.data.tagline },
       userId: user.userId,
+      data: { tagline: result.data.tagline },
     });
 
     posthog.capture('tagline api request success', {
@@ -107,15 +108,24 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
   }
 }
 
-export function debugInfo() {
+export function debugInfo(partyServer: Server) {
   posthog.capture('debug api request');
 
-  const debugData = {
+  let debugData: Record<string, any> = {
+    environment: process.env.ENV || process.env.NODE_ENV,
+    connectedUsers: partyServer.users.list.length,
+    userConnections: partyServer.users.list.reduce((acc, user) => acc + user.connections.length, 0),
     dbUrl: process.env.DATABASE_URL?.slice(0, 15) + '...',
     dbAuth: '...' + process.env.DATABASE_AUTH_TOKEN?.slice(-5),
-    uptime: humanizeDuration(Date.now() - startTime, { round: true }),
-    startTime: new Date(startTime).toISOString(),
   };
+
+  if (partyServer.timeSinceOnStart) {
+    debugData.timeSinceOnStart = new Date(partyServer.timeSinceOnStart).toISOString();
+    debugData.timeSinceOnStartHuman = humanizeDuration(
+      Date.now() - partyServer.timeSinceOnStart.getTime(),
+      { round: true }
+    );
+  }
 
   return new Response(JSON.stringify(debugData, null, 2), { status: 200 });
 }

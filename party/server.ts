@@ -7,8 +7,14 @@ import { UserList } from '@/party/userList';
 
 export default class Server implements Party.Server {
   users: UserList = new UserList(this);
+  // can't set this in global scope: https://stackoverflow.com/a/58491358/122864
+  timeSinceOnStart?: Date = undefined;
 
   constructor(readonly room: Party.Room) {}
+
+  onStart() {
+    this.timeSinceOnStart = new Date();
+  }
 
   async onConnect(connection: Party.Connection<unknown>, ctx: Party.ConnectionContext) {
     const { request } = ctx;
@@ -40,7 +46,7 @@ export default class Server implements Party.Server {
   }
 
   async onRequest(request: Party.Request) {
-    return parseApiRequest({ users: this.users, request });
+    return parseApiRequest({ partyServer: this, request });
   }
 }
 
