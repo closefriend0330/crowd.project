@@ -3,7 +3,10 @@ import Discord from 'next-auth/providers/discord';
 import Twitch from 'next-auth/providers/twitch';
 
 export default {
-  providers: [Discord, Twitch],
+  providers: [
+    Discord({ allowDangerousEmailAccountLinking: true }),
+    Twitch({ allowDangerousEmailAccountLinking: true }),
+  ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
