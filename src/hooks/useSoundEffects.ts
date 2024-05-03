@@ -2,10 +2,10 @@ import useSound from 'use-sound';
 import { useLocalStorage } from 'usehooks-ts';
 
 export default function useSoundEffects() {
-  const [muted, setMuted] = useLocalStorage('CP_soundEffectsMuted', false);
-  const soundOptions = { soundEnabled: !muted };
+  const [soundEffects, setSoundEffects] = useLocalStorage('CP_soundEffects', false);
+  const soundOptions = { soundEnabled: soundEffects };
 
-  const toggleMuted = () => setMuted((prev) => !prev);
+  const toggleSoundEffects = () => setSoundEffects((prev) => !prev);
 
   const [playUserJoined] = useSound('/sounds/userJoined.mp3', { ...soundOptions, volume: 0.5 });
   const [playUserLeft] = useSound('/sounds/userLeft.mp3', { ...soundOptions, volume: 0.5 });
@@ -21,8 +21,8 @@ export default function useSoundEffects() {
   const [playConnectionChange] = useSound('/sounds/connectionChange.mp3', soundOptions);
 
   return {
-    muted,
-    toggleMuted,
+    soundEffects,
+    toggleSoundEffects,
     playUserJoined,
     playUserLeft,
     playUserTaglineUpdated,

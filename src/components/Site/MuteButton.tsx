@@ -8,23 +8,24 @@ import Tooltip from '@/components/Site/Tooltip';
 import useSoundEffects from '@/hooks/useSoundEffects';
 
 export default function MuteButton() {
-  const { playClick, muted, toggleMuted } = useSoundEffects();
+  const { playClick, soundEffects, toggleSoundEffects } = useSoundEffects();
   const isClient = useIsClient();
 
   if (!isClient) return null;
 
   const toggle = () => {
-    if (muted) playClick({ forceSoundEnabled: true });
+    // play sound to confirm sound effects are enabled
+    if (!soundEffects) playClick({ forceSoundEnabled: true });
 
-    toggleMuted();
+    toggleSoundEffects();
   };
 
   return (
     <Tooltip tooltip='Mute sound effects'>
-      {muted ? (
-        <IconVolumeOff onClick={toggle} className='size-4' />
-      ) : (
+      {soundEffects ? (
         <IconVolume onClick={toggle} className='size-4' />
+      ) : (
+        <IconVolumeOff onClick={toggle} className='size-4' />
       )}
     </Tooltip>
   );
