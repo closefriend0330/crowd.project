@@ -11,5 +11,3 @@ export const CONFETTI_DELAY_MAX = 1200;
 
 // time a browser tab must be inactive before the user is considered away
 export const AWAY_TIME_THRESHOLD = 15 * 60 * 1000;
-
-export const userStatusOptions = ['offline', 'online', 'away', 'busy'] as const;

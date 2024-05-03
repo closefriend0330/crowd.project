@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
+import StatusSelect from '@/components/Presence/StatusSelect';
 import Account from '@/components/Site/Account';
 const Logo = dynamic(() => import('@/components/Site/Logo'), { ssr: false });
 
@@ -26,6 +27,7 @@ export default function Header() {
         </h1>
         <p className='text-sm hidden sm:block'>{SITE_STRAPLINE}</p>
       </div>
+      <StatusSelect />
       <Account />
     </div>
   );

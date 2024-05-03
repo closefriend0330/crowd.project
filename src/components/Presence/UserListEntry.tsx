@@ -1,5 +1,6 @@
 import Avatar from '@/components/Presence/Avatar';
 import TimeAgo from '@/components/Presence/TimeAgo';
+import StatusBadge from '@/components/Site/StatusBadge';
 
 import { UserPublicData } from '@/lib/types';
 
@@ -17,6 +18,7 @@ export default function UserListEntry({ user }: Props) {
         <div className='flex flex-col min-w-64 max-w-72 grow'>
           <div className='flex flex-row items-center gap-8 text-xl'>
             <div className='flex-grow'>{user.name}</div>
+            <div>{user.status !== 'online' && <StatusBadge user={user} />}</div>
           </div>
           <div className='text-sm text-slate-500 mt-2 min-h-[1.4em]'>{user.tagline || ''}</div>
           {user.away

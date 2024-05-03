@@ -51,23 +51,21 @@ export default function useUserList({ ws }: Props) {
 
         setUserList([...users, msg.data]);
         playUserJoined();
-        shootConfetti({ source: 'list add user' });
       } else if (msg.type === 'removeUser') {
         // remove a user from the list
         debug('removeUser client message', { userId: msg.userId });
 
         setUserList(users.filter((user) => user.userId !== msg.userId));
         playUserLeft();
-        shootConfetti({ source: 'list remove user' });
       } else if (msg.type === 'updateUsersPublicData') {
         // update a user's data in a local list
         debug('updateUsersPublicData client message', msg.userId, msg.data);
 
         updateUser(msg.userId, msg.data);
 
-        if (msg.data.tagline && msg.userId !== userData?.userId) {
-          console.log(msg.userId, userData?.userId);
-          shootConfetti({ source: 'list tagline update' });
+        if ((msg.data.tagline || msg.data.status) && msg.userId !== userData?.userId) {
+          if (msg.data.tagline) shootConfetti({ source: 'list tagline update' });
+
           playListTaglineUpdated();
         }
       }

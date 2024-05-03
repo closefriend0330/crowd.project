@@ -8,7 +8,9 @@ import {
   IconMoodSmile,
 } from '@tabler/icons-react';
 import { signIn, useSession } from 'next-auth/react';
+import posthog from 'posthog-js';
 import { useState } from 'react';
+import { useIsClient } from 'usehooks-ts';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -22,8 +24,6 @@ import {
 
 import Avatar from '@/components/Presence/Avatar';
 import AccountMenu from '@/components/Site/AccountMenu';
-import posthog from 'posthog-js';
-import { useIsClient } from 'usehooks-ts';
 
 export default function Account() {
   const { data: session, status } = useSession();

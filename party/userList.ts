@@ -203,6 +203,9 @@ export class UserList {
         updatedUserData = {
           connections: [],
           status: 'offline',
+          away: false,
+          awayStartedAt: null,
+          tagline: null,
           lastSessionEndedAt: new Date(),
         };
       }

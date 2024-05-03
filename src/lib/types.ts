@@ -1,6 +1,22 @@
-import { userData } from '@/db/schema';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
+
+import { userData } from '@/db/schema';
+
+import { TablerIcon } from '@/statusConfig';
+
+export type UserStatus = keyof UserStatusConfig;
+export type UserSelectableStatus = Omit<UserStatus, 'offline'>;
+
+export type UserStatusConfig = Record<
+  string,
+  {
+    textColor: string;
+    backgroundColor: string;
+    icon?: TablerIcon;
+    nonSelectable?: boolean;
+  }
+>;
 
 const userDataSchemaOptions = {
   away: z.coerce.boolean(),

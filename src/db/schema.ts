@@ -3,8 +3,6 @@ import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlit
 import type { AdapterAccount } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 
-import { userStatusOptions } from '@/config';
-
 export const users = sqliteTable('user', {
   id: text('id')
     .primaryKey()
@@ -79,7 +77,7 @@ export const userData = sqliteTable(
     name: text('name'),
     image: text('image'),
     tagline: text('tagline'),
-    status: text('status', { enum: userStatusOptions }).notNull().default('offline'),
+    status: text('status').notNull().default('offline'),
     away: integer('away', { mode: 'boolean' }).notNull().default(false),
     awayStartedAt: integer('awayStartedAt', { mode: 'timestamp_ms' }),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
