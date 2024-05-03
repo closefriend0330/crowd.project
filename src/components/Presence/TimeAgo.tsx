@@ -35,10 +35,18 @@ const UPDATE_INTERVAL = 60000;
 type Props = {
   date: Date;
   className?: string;
+  tooltipPrefix?: string;
+  prefix?: string;
   updateInterval?: number;
 };
 
-export default function TimeAgo({ date, className, updateInterval = UPDATE_INTERVAL }: Props) {
+export default function TimeAgo({
+  date,
+  className,
+  updateInterval = UPDATE_INTERVAL,
+  tooltipPrefix,
+  prefix,
+}: Props) {
   const dateTime = new Date(date).getTime();
   const [timeAgo, setTimeAgo] = useState<string>(humanize(dateTime));
 
@@ -51,8 +59,10 @@ export default function TimeAgo({ date, className, updateInterval = UPDATE_INTER
   }, [dateTime, updateInterval]);
 
   return (
-    <Tooltip tooltip={`connected ${new Date(date).toLocaleString()}`} asChild>
-      <div className={className}>{timeAgo}</div>
+    <Tooltip tooltip={`${tooltipPrefix || ''}${new Date(date).toLocaleString()}`} asChild>
+      <div className={className}>
+        {prefix && timeAgo !== 'just now' && <span>{prefix}</span>} {timeAgo}
+      </div>
     </Tooltip>
   );
 }

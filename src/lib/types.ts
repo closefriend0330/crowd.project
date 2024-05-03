@@ -3,6 +3,8 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 const userDataSchemaOptions = {
+  away: z.coerce.boolean(),
+  awayStartedAt: z.coerce.date(),
   sessionStartedAt: z.coerce.date(),
   lastConnectedAt: z.coerce.date(),
   lastSessionEndedAt: z.coerce.date(),

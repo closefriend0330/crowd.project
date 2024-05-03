@@ -80,6 +80,8 @@ export const userData = sqliteTable(
     image: text('image'),
     tagline: text('tagline'),
     status: text('status', { enum: userStatusOptions }).notNull().default('offline'),
+    away: integer('away', { mode: 'boolean' }).notNull().default(false),
+    awayStartedAt: integer('awayStartedAt', { mode: 'timestamp_ms' }),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
     updatedAt: integer('updatedAt', { mode: 'timestamp_ms' })
       .default(sql`CURRENT_TIMESTAMP`)

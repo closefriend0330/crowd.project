@@ -21,6 +21,7 @@ export async function getUserData(userId: string): Promise<UserData> {
         image: fullUserInfo.image,
         tagline: null,
         status: 'offline',
+        away: false,
         connections: [],
         createdAt: now,
         lastConnectedAt: now,
