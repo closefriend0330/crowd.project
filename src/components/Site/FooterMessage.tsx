@@ -1,3 +1,3 @@
 export default function FooterMessage() {
-  return 'You can do the thing!';
+  return <span className='hidden xs:block'>You can do the thing!</span>;
 }

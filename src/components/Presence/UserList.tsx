@@ -10,6 +10,31 @@ import useUserListStore from '@/hooks/useUserListStore';
 
 import { CONFETTI_DELAY_MAX, CONFETTI_DELAY_MIN } from '@/config';
 
+import { UserPublicData } from '@/lib/types';
+
+type UserListSegmentProps = {
+  users: UserPublicData[];
+  title: string;
+  className?: string;
+};
+
+function UserListSegment({ users, title, className }: UserListSegmentProps) {
+  if (users.length === 0) return null;
+
+  return (
+    <div className={className}>
+      <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-1 border-black text-right'>
+        {title} ({users.length})
+      </h2>
+      <div>
+        {users.map((user) => (
+          <UserListEntry key={user.userId} user={user} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function UserList() {
   const { users } = useUserListStore();
   const { shootConfetti } = useConfetti();
@@ -29,32 +54,10 @@ export default function UserList() {
   }, [shootConfetti, shot]);
 
   return users?.length > 0 ? (
-    <>
-      {connectedUsers.length > 0 && (
-        <div className='mb-4'>
-          <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-1 border-black text-right'>
-            Online ({connectedUsers.length})
-          </h2>
-          <div>
-            {connectedUsers.map((user) => (
-              <UserListEntry key={user.userId} user={user} />
-            ))}
-          </div>
-        </div>
-      )}
-      {awayUsers.length > 0 && (
-        <div>
-          <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-1 border-black text-right'>
-            Away ({awayUsers.length})
-          </h2>
-          <div>
-            {awayUsers.map((user) => (
-              <UserListEntry key={user.userId} user={user} />
-            ))}
-          </div>
-        </div>
-      )}
-    </>
+    <div className='xs:min-w-96 max-w-[500px] grow'>
+      <UserListSegment users={connectedUsers} title='Online' className='mb-4' />
+      <UserListSegment users={awayUsers} title='Away' />
+    </div>
   ) : (
     <div className='italic'>No active users right now. Come join the party!</div>
   );

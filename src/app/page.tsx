@@ -22,17 +22,17 @@ export default function Home() {
   if (!user) return <LoggedOutHomepage />;
 
   return (
-    <>
+    <div>
       <Confetti />
       <PartyKit />
       <VisibilityEvents />
       {connectionStatus === 'fully connected' && (
-        <>
+        <div>
           <TagLine />
           <UserList />
-        </>
+        </div>
       )}
       {connectionStatus === 'partially connected' && <Error />}
-    </>
+    </div>
   );
 }

@@ -39,7 +39,7 @@ export default async function RootLayout({
         <Providers session={session}>
           <div className='flex min-h-screen flex-col'>
             <Header />
-            <main className='flex-grow justify-center items-center max-w-xl mx-auto px-4'>
+            <main className='flex-grow justify-center items-center xs:mx-auto px-6'>
               {children}
             </main>
             <Footer />

@@ -51,7 +51,7 @@ export default function StatusSelect() {
             return (
               <SelectItem key={status} value={status}>
                 <div className='flex items-center gap-4'>
-                  <div className='w-5'>{Icon && <Icon className='size-5' />}</div>
+                  <div className='w-5 hidden xs:block'>{Icon && <Icon className='size-5' />}</div>
                   <div className='text-sm'>{status}</div>
                 </div>
               </SelectItem>
