@@ -2,14 +2,15 @@ import type * as Party from 'partykit/server';
 
 import { debug } from '@/lib/utils';
 import { parseApiRequest } from '@/party/api';
-import { processClientMessage } from '@/party/messages';
+import { buildServerMessage, processClientMessage } from '@/party/messages';
 
+import { ServerMessageServerMetaData } from '@/party/serverMessages';
 import { UserList } from '@/party/userList';
 
 export default class Server implements Party.Server {
   users: UserList = new UserList(this);
   // can't set this in global scope: https://stackoverflow.com/a/58491358/122864
-  timeSinceOnStart?: Date = undefined;
+  timeSinceOnStart: Date = new Date();
 
   constructor(readonly room: Party.Room) {}
 
@@ -31,6 +32,15 @@ export default class Server implements Party.Server {
 
     await this.users.addUser({ userId, connection });
     // await persistUserList({ users: this.users, partyServer: this });
+
+    connection.send(
+      buildServerMessage<ServerMessageServerMetaData>({
+        type: 'serverMetaData',
+        data: {
+          timeSinceOnStart: this.timeSinceOnStart,
+        },
+      })
+    );
   }
 
   async onClose(connection: Party.Connection) {

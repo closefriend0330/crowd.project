@@ -8,15 +8,15 @@ import { buildServerMessage } from '@/party/messages';
 
 import { SESSION_RECONNECT_GRACE_PERIOD } from '@/config';
 
-import {
+import type { UserData } from '@/lib/types';
+import type Server from '@/party/server';
+import type {
   ServerMessageAddUser,
   ServerMessageRemoveUser,
   ServerMessageUpdatePublicData,
   ServerMessageUserData,
   ServerMessageUserList,
-  UserData,
-} from '@/lib/types';
-import type Server from '@/party/server';
+} from '@/party/serverMessages';
 
 type AddUserParams = {
   userId: string;

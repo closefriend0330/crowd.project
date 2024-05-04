@@ -6,8 +6,8 @@ import usePartySocket from 'partysocket/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 
+import useUserList from '@/hooks/useServerMessages';
 import useSoundEffects from '@/hooks/useSoundEffects';
-import useUserList from '@/hooks/useUserList';
 
 import { debug } from '@/lib/utils';
 import { connectionStatusAtom, partySocketAtom } from '@/store';
@@ -52,7 +52,7 @@ export default function PartyKit() {
     setPartySocket(ws);
   }, [ws, setPartySocket]);
 
-  const { processSeverMessage } = useUserList({ ws });
+  const processSeverMessage = useUserList({ ws });
 
   return null;
 }

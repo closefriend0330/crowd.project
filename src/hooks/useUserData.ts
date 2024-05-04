@@ -5,7 +5,8 @@ import { buildClientMessage } from '@/lib/messages';
 import { debug } from '@/lib/utils';
 import { partySocketAtom, userDataAtom } from '@/store';
 
-import { ClientMessageUpdateUserData, UserData } from '@/lib/types';
+import type { ClientMessageUpdateUserData } from '@/lib/clientMessages';
+import type { UserData } from '@/lib/types';
 
 export default function useUserData() {
   const [userData, setUserData] = useAtom(userDataAtom);

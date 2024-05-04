@@ -2,8 +2,9 @@
 
 import Party from 'partykit/server';
 
-import { clientMessageSchema, serverMessageSchema } from '@/lib/types';
+import { clientMessageSchema } from '@/lib/clientMessages';
 import { debug, getErrorMessage } from '@/lib/utils';
+import { serverMessageSchema } from '@/party/serverMessages';
 
 import type Server from '@/party/server';
 import { UserList } from '@/party/userList';

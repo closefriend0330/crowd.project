@@ -5,11 +5,12 @@ import { useAtomValue } from 'jotai';
 
 import Tooltip from '@/components/Site/Tooltip';
 
-import { cn } from '@/lib/utils';
-import { connectionStatusAtom } from '@/store';
+import { cn, humanizeDurationShort } from '@/lib/utils';
+import { connectionStatusAtom, serverMetaDataAtom } from '@/store';
 
 export default function ConnectionStatus() {
   const connectionStatus = useAtomValue(connectionStatusAtom);
+  const { timeSinceOnStart } = useAtomValue(serverMetaDataAtom) || {};
 
   const color =
     connectionStatus === 'disconnected'
@@ -18,10 +19,20 @@ export default function ConnectionStatus() {
       ? 'text-green-500'
       : 'text-yellow-500';
 
-  let toolTip = `Status: ${connectionStatus}`;
+  const generateTooltip = () => {
+    let tooltip = `Status: ${connectionStatus}`;
+
+    if (timeSinceOnStart) {
+      tooltip += `. Last onStart: ${humanizeDurationShort(Date.now() - timeSinceOnStart.getTime(), {
+        round: true,
+      })} ago`;
+    }
+
+    return tooltip;
+  };
 
   return (
-    <Tooltip tooltip={toolTip} delayDuration={0}>
+    <Tooltip tooltip={generateTooltip} delayDuration={0}>
       <IconPointFilled className={cn('size-5', color)} />
     </Tooltip>
   );

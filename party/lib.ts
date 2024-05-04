@@ -4,7 +4,8 @@ import { getUser, getUserDataByUserId, setUserData, updateUserData } from '@/db/
 import { getErrorMessage } from '@/lib/utils';
 import { buildServerMessage } from '@/party/messages';
 
-import { ServerMessageErrorEncountered, UserData, UserDataInsert } from '@/lib/types';
+import { UserData, UserDataInsert } from '@/lib/types';
+import { ServerMessageErrorEncountered } from '@/party/serverMessages';
 
 import Server from '@/party/server';
 import { UserList } from '@/party/userList';
