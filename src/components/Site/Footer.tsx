@@ -21,6 +21,9 @@ export default function Footer() {
       <a href='https://github.com/jschuur/coworking.party' target='_blank'>
         <IconBrandGithub className='size-5 text-purple-700 transition hover:scale-125 ease-in-out' />
       </a>
+      <span className='hidden sm:inline-block'>
+        (<a href='https://github.com/jschuur/coworking.party/issues'>roadmap</a>)
+      </span>
     </footer>
   );
 }
