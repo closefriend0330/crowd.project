@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getErrorMessage(error: unknown) {
-  if (error instanceof z.ZodError) return fromError(error);
+  if (error instanceof z.ZodError) return fromError(error).toString();
 
   if (error instanceof Error) return error.message;
 

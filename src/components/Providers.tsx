@@ -16,16 +16,12 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
-import { debug } from '@/lib/utils';
-
 type Props = {
   children: ReactNode;
   session: Session | null;
 };
 
 export default function Providers({ children, session }: Props) {
-  debug('Providers', session);
-
   return (
     <PostHogProvider client={posthog}>
       <SessionProvider session={session}>

@@ -1,5 +1,7 @@
 'use client';
 
+import Party from 'partykit/server';
+
 import { clientMessageSchema, serverMessageSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
 
@@ -10,14 +12,11 @@ type processClientMessageParams = {
   message: string;
   users: UserList;
   partyServer: Server;
+  sender: Party.Connection<unknown>;
 };
 
 // messages received by the server from the client
-export async function processClientMessage({
-  message,
-  users,
-  partyServer,
-}: processClientMessageParams) {
+export async function processClientMessage({ message, users, sender }: processClientMessageParams) {
   try {
     const { type, data, userId } = clientMessageSchema.parse(JSON.parse(message));
 
@@ -28,6 +27,7 @@ export async function processClientMessage({
       await users.updateUserData({
         data,
         userId,
+        connection: sender,
       });
     } else {
       console.error('Unknown client message type:', type);

@@ -1,5 +1,6 @@
 'use client';
 
+import { useAtomValue } from 'jotai';
 import dynamic from 'next/dynamic';
 
 import StatusSelect from '@/components/Presence/StatusSelect';
@@ -9,9 +10,11 @@ const Logo = dynamic(() => import('@/components/Site/Logo'), { ssr: false });
 import useConfetti from '@/hooks/useConfetti';
 
 import { DEFAULT_SITENAME, SITE_STRAPLINE } from '@/config';
+import { connectionStatusAtom } from '@/store';
 
 export default function Header() {
   const { shootConfetti } = useConfetti();
+  const connectionStatus = useAtomValue(connectionStatusAtom);
 
   return (
     <div className='flex items-center justify-between w-full gap-4 px-4 min-h-12 sm:min-h-16 bg-gradient-to-br text-white from-blue-600 to-purple-600 mb-4 border-b-black border-b-[0.5px]'>
@@ -27,7 +30,7 @@ export default function Header() {
         </h1>
         <p className='text-sm hidden sm:block'>{SITE_STRAPLINE}</p>
       </div>
-      <StatusSelect />
+      {connectionStatus === 'fully connected' && <StatusSelect />}
       <Account />
     </div>
   );

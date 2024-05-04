@@ -3,6 +3,7 @@ import type * as Party from 'partykit/server';
 import { debug } from '@/lib/utils';
 import { parseApiRequest } from '@/party/api';
 import { processClientMessage } from '@/party/messages';
+
 import { UserList } from '@/party/userList';
 
 export default class Server implements Party.Server {
@@ -42,7 +43,7 @@ export default class Server implements Party.Server {
   async onMessage(message: string, sender: Party.Connection) {
     debug('Client message received:', message, { connectionId: sender.id });
 
-    await processClientMessage({ message, users: this.users, partyServer: this });
+    await processClientMessage({ message, users: this.users, partyServer: this, sender });
   }
 
   async onRequest(request: Party.Request) {

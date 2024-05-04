@@ -1,7 +1,11 @@
+import Party from 'partykit/server';
+
 import { getUser, getUserDataByUserId, setUserData, updateUserData } from '@/db/queries';
 import { getErrorMessage } from '@/lib/utils';
+import { buildServerMessage } from '@/party/messages';
 
-import { UserData, UserDataInsert } from '@/lib/types';
+import { ServerMessageErrorEncountered, UserData, UserDataInsert } from '@/lib/types';
+
 import Server from '@/party/server';
 import { UserList } from '@/party/userList';
 
@@ -51,4 +55,24 @@ export async function persistUserList({ users, partyServer }: PersistUserListPar
     'connectedUserIds',
     users.list.map((u) => u.userId)
   );
+}
+
+type ReturnErrorParams = {
+  connection?: Party.Connection<unknown>;
+  err: Error | unknown;
+  source: string;
+};
+export function processError({ err, connection, source }: ReturnErrorParams) {
+  const message = getErrorMessage(err);
+
+  console.error('Error adding user: ', message);
+
+  if (connection)
+    connection.send(
+      buildServerMessage<ServerMessageErrorEncountered>({
+        type: 'errorEncountered',
+        source,
+        message,
+      })
+    );
 }

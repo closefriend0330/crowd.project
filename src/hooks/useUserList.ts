@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { PartySocket } from 'partysocket';
 
 import userSoundEffects from '@/hooks/useSoundEffects';
@@ -6,7 +6,7 @@ import useUserListStore from '@/hooks/useUserListStore';
 
 import { serverMessageSchema, userDataSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
-import { userDataAtom } from '@/store';
+import { connectionStatusAtom, errorAtom, userDataAtom } from '@/store';
 import { toast } from 'sonner';
 
 import useConfetti from '@/hooks/useConfetti';
@@ -17,6 +17,8 @@ type Props = {
 
 export default function useUserList({ ws }: Props) {
   const [userData, setUserData] = useAtom(userDataAtom);
+  const setError = useSetAtom(errorAtom);
+  const setConnectionStatus = useSetAtom(connectionStatusAtom);
   const { users, updateUser, setUserList } = useUserListStore();
   const { shootConfetti } = useConfetti();
   const { playListTaglineUpdated, playUserJoined, playUserLeft } = userSoundEffects();
@@ -30,6 +32,9 @@ export default function useUserList({ ws }: Props) {
         debug('usersFullData client message');
 
         const result = userDataSchema.safeParse(msg.data);
+
+        setConnectionStatus('fully connected');
+        setError(null);
 
         if (result.success) setUserData(result.data);
         else {
@@ -68,9 +73,17 @@ export default function useUserList({ ws }: Props) {
 
           playListTaglineUpdated();
         }
+      } else if (msg.type === 'errorEncountered') {
+        setError({ title: 'Server Error', message: msg.message });
+        console.error('Server error:', msg.message);
+
+        toast.error(`Server error: ${msg.message}`);
       }
     } catch (err) {
-      console.error('Error processing server message:', getErrorMessage(err));
+      console.error(`Error processing server message: ${getErrorMessage(err)}`, { message });
+      toast.error(
+        `Error processing server message: ${getErrorMessage(err)}. See console logo for details.`
+      );
     }
   }
 

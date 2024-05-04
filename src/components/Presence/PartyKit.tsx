@@ -14,7 +14,7 @@ import useUserList from '@/hooks/useUserList';
 
 import { AWAY_TIME_THRESHOLD } from '@/config';
 import { debug } from '@/lib/utils';
-import { connectedAtom, partySocketAtom } from '@/store';
+import { connectionStatusAtom, partySocketAtom } from '@/store';
 
 export default function PartyKit() {
   const { data: session } = useSession();
@@ -32,7 +32,7 @@ export default function PartyKit() {
     onOpen() {
       debug('Connection created');
 
-      setIsConnected(true);
+      setConnectionStatusAtom('partially connected');
     },
     async onMessage(event: MessageEvent) {
       debug('Server message received: ', event.data);
@@ -41,9 +41,9 @@ export default function PartyKit() {
     },
     onClose() {
       debug('Connection closed');
-      toast('Connection closed');
+      toast.warning('Connection closed');
 
-      setIsConnected(false);
+      setConnectionStatusAtom('disconnected');
 
       playConnectionChange();
     },

@@ -42,6 +42,9 @@ export type Confetti = {
   shoot: (params?: ConfettiShootParams) => void;
 };
 
+const connectionStatusOptions = ['disconnected', 'partially connected', 'fully connected'] as const;
+export type ConnectionStatus = (typeof connectionStatusOptions)[number];
+
 export const userPublicDataSchema = userDataSchema.omit({
   apiKey: true,
   connections: true,
@@ -63,6 +66,16 @@ export const clientMessageSchema = clientMessageUpdateUserDataSchema;
 export type ClientMessage = z.infer<typeof clientMessageSchema>;
 
 // server messages sent FROM the server TO a client
+
+const serverMessageTypes = [
+  'userList',
+  'addUser',
+  'removeUser',
+  'usersFullData',
+  'updateUsersPublicData',
+  'errorEncountered',
+] as const;
+export type ServerMessageType = (typeof serverMessageTypes)[number];
 
 // send the full list of connected users
 const serverMessageUserListSchema = z.object({
@@ -100,9 +113,20 @@ const serverMessageUpdatePublicDataSchema = z.object({
 });
 export type ServerMessageUpdatePublicData = z.infer<typeof serverMessageUpdatePublicDataSchema>;
 
-export const serverMessageSchema = serverMessageUserListSchema
-  .or(serverMessageAddUserSchema)
-  .or(serverMessageRemoveUserSchema)
-  .or(serverMessageUserDataSchema)
-  .or(serverMessageUpdatePublicDataSchema);
+// the server has updated the public data of a user in the list
+const serverMessageErrorEncountered = z.object({
+  type: z.literal('errorEncountered'),
+  source: z.string(),
+  message: z.string(),
+});
+export type ServerMessageErrorEncountered = z.infer<typeof serverMessageErrorEncountered>;
+
+export const serverMessageSchema = z.union([
+  serverMessageUserListSchema,
+  serverMessageAddUserSchema,
+  serverMessageRemoveUserSchema,
+  serverMessageUserDataSchema,
+  serverMessageUpdatePublicDataSchema,
+  serverMessageErrorEncountered,
+]);
 export type ServerMessage = z.infer<typeof serverMessageSchema>;
