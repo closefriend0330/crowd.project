@@ -16,7 +16,7 @@ importers:
         version: 5.0.18
       '@hookform/resolvers':
         specifier: ^3.3.4
-        version: 3.3.4(react-hook-form@7.51.3(react@18.3.1))
+        version: 3.3.4(react-hook-form@7.51.4(react@18.3.1))
       '@libsql/client':
         specifier: ^0.6.0
         version: 0.6.0
@@ -45,8 +45,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@sentry/nextjs':
-        specifier: ^7.112.2
-        version: 7.112.2(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: ^7.113.0
+        version: 7.113.0(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@tabler/icons-react':
         specifier: ^3.3.0
         version: 3.3.0(react@18.3.1)
@@ -64,7 +64,7 @@ importers:
         version: 0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.4)
+        version: 0.5.1(drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.6)
       framer-motion:
         specifier: ^11.1.7
         version: 11.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -81,8 +81,8 @@ importers:
         specifier: 14.2.3
         version: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
-        specifier: 5.0.0-beta.16
-        version: 5.0.0-beta.16(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: 5.0.0-beta.17
+        version: 5.0.0-beta.17(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       partysocket:
         specifier: 1.0.1
         version: 1.0.1
@@ -99,13 +99,13 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-hook-form:
-        specifier: ^7.51.3
-        version: 7.51.3(react@18.3.1)
+        specifier: ^7.51.4
+        version: 7.51.4(react@18.3.1)
       sonner:
         specifier: ^1.4.41
         version: 1.4.41(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sst:
-        specifier: ion
+        specifier: ^3.0.13
         version: 3.0.13
       tailwind-merge:
         specifier: ^2.3.0
@@ -123,11 +123,11 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1
       zod:
-        specifier: ^3.23.4
-        version: 3.23.4
+        specifier: ^3.23.6
+        version: 3.23.6
       zod-validation-error:
         specifier: ^3.2.0
-        version: 3.2.0(zod@3.23.4)
+        version: 3.2.0(zod@3.23.6)
       zustand:
         specifier: ^4.5.2
         version: 4.5.2(@types/react@18.3.1)(react@18.3.1)
@@ -136,11 +136,11 @@ importers:
         specifier: ^3.27.4
         version: 3.27.4
       '@types/lodash':
-        specifier: ^4.17.0
-        version: 4.17.0
+        specifier: ^4.17.1
+        version: 4.17.1
       '@types/node':
-        specifier: ^20.12.7
-        version: 20.12.7
+        specifier: ^20.12.8
+        version: 20.12.8
       '@types/react':
         specifier: ^18.3.1
         version: 18.3.1
@@ -184,20 +184,6 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
-
-  '@auth/core@0.28.1':
-    resolution: {integrity: sha512-gvp74mypYZADpTlfGRp6HE0G3pIHWvtJpy+KZ+8FvY0cmlIpHog+jdMOdd29dQtLtN25kF2YbfHsesCFuGUQbg==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      nodemailer: ^6.8.0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
 
   '@auth/core@0.30.0':
     resolution: {integrity: sha512-8AE4m/nk+4EIiVCJwxZAsJeAQuzpEC8M8768mmKVn60CGDdupKQkVhxbRlm5Qh7eNRCoFFME+0DvtaX2aXrYaA==}
@@ -310,9 +296,9 @@ packages:
     resolution: {integrity: sha512-u9Mcg3euGJGs5clPt9mBuhBjHiEKiD0PnfvArhfq9i+dcY5mbCq/i1Dezp3iv1fZH9xxQt7hPXDfSpt1yUSM6g==}
     engines: {node: '>=14.0.0'}
 
-  '@aws-sdk/util-locate-window@3.535.0':
-    resolution: {integrity: sha512-PHJ3SL6d2jpcgbqdgiPxkXpu7Drc2PYViwxSIqvvMKhDwzSB1W3mMvtpzwKM4IE7zLFodZo0GKjJ9AsoXndXhA==}
-    engines: {node: '>=14.0.0'}
+  '@aws-sdk/util-locate-window@3.568.0':
+    resolution: {integrity: sha512-3nh4TINkXYr+H41QaPelCceEB2FXP3fxp93YZXB/kqJvX0U9j0N0Uk45gvsjmEPzG8XxkPEeLIfT2I1M7A6Lig==}
+    engines: {node: '>=16.0.0'}
 
   '@aws-sdk/util-user-agent-browser@3.468.0':
     resolution: {integrity: sha512-OJyhWWsDEizR3L+dCgMXSUmaCywkiZ7HSbnQytbeKGwokIhD69HTiJcibF/sgcM5gk4k3Mq3puUhGnEZ46GIig==}
@@ -1373,20 +1359,20 @@ packages:
   '@rushstack/eslint-patch@1.10.2':
     resolution: {integrity: sha512-hw437iINopmQuxWPSUEvqE56NCPsiU8N4AYtfHmJFckclktzK9YQJieD3XkDCDH4OjL+C7zgPUh73R/nrcHrqw==}
 
-  '@sentry-internal/feedback@7.112.2':
-    resolution: {integrity: sha512-z+XP8BwB8B3pa+i8xqbrPsbtDWUFUS6wo+FJbmOYUqOusJJbVFDAhBoEdKoo5ZjOcsAZG7XR6cA9zrhJynIWBA==}
+  '@sentry-internal/feedback@7.113.0':
+    resolution: {integrity: sha512-eEmL8QXauUnM3FXGv0GT29RpL0Jo0pkn/uMu3aqjhQo7JKNqUGVYIUxJxiGWbVMbDXqPQ7L66bjjMS3FR1GM2g==}
     engines: {node: '>=12'}
 
-  '@sentry-internal/replay-canvas@7.112.2':
-    resolution: {integrity: sha512-BCCCxrZ1wJvN6La5gg1JJbKitAhJI5MATCnhtklsZbUcHkHB9iZoj19J65+P56gwssvHz5xh63AjNiITaetIRg==}
+  '@sentry-internal/replay-canvas@7.113.0':
+    resolution: {integrity: sha512-K8uA42aobNF/BAXf14el15iSAi9fonLBUrjZi6nPDq7zaA8rPvfcTL797hwCbqkETz2zDf52Jz7I3WFCshDoUw==}
     engines: {node: '>=12'}
 
-  '@sentry-internal/tracing@7.112.2':
-    resolution: {integrity: sha512-fT1Y46J4lfXZkgFkb03YMNeIEs2xS6jdKMoukMFQfRfVvL9fSWEbTgZpHPd/YTT8r2i082XzjtAoQNgklm/0Hw==}
+  '@sentry-internal/tracing@7.113.0':
+    resolution: {integrity: sha512-8MDnYENRMnEfQjvN4gkFYFaaBSiMFSU/6SQZfY9pLI3V105z6JQ4D0PGMAUVowXilwNZVpKNYohE7XByuhEC7Q==}
     engines: {node: '>=8'}
 
-  '@sentry/browser@7.112.2':
-    resolution: {integrity: sha512-wULwavCch84+d0bueAdFm6CDm1u0TfOjN91VgY+sj/vxUV2vesvDgI8zRZfmbZEor3MYA90zerkZT3ehZQKbYw==}
+  '@sentry/browser@7.113.0':
+    resolution: {integrity: sha512-PdyVHPOprwoxGfKGsP2dXDWO0MBDW1eyP7EZlfZvM1A4hjk6ZRNfCv30g+TrqX4hiZDKzyqN3+AdP7N/J2IX0Q==}
     engines: {node: '>=8'}
 
   '@sentry/cli@1.77.3':
@@ -1394,16 +1380,16 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  '@sentry/core@7.112.2':
-    resolution: {integrity: sha512-gHPCcJobbMkk0VR18J65WYQTt3ED4qC6X9lHKp27Ddt63E+MDGkG6lvYBU1LS8cV7CdyBGC1XXDCfor61GvLsA==}
+  '@sentry/core@7.113.0':
+    resolution: {integrity: sha512-pg75y3C5PG2+ur27A0Re37YTCEnX0liiEU7EOxWDGutH17x3ySwlYqLQmZsFZTSnvzv7t3MGsNZ8nT5O0746YA==}
     engines: {node: '>=8'}
 
-  '@sentry/integrations@7.112.2':
-    resolution: {integrity: sha512-ioC2yyU6DqtLkdmWnm87oNvdn2+9oKctJeA4t+jkS6JaJ10DcezjCwiLscX4rhB9aWJV3IWF7Op0O6K3w0t2Hg==}
+  '@sentry/integrations@7.113.0':
+    resolution: {integrity: sha512-w0sspGBQ+6+V/9bgCkpuM3CGwTYoQEVeTW6iNebFKbtN7MrM3XsGAM9I2cW1jVxFZROqCBPFtd2cs5n0j14aAg==}
     engines: {node: '>=8'}
 
-  '@sentry/nextjs@7.112.2':
-    resolution: {integrity: sha512-cXxhNdvDRNg15D1fF0eo0AliRHj3eeiG1kpapKKr9rEDsVA+vRHquOyWf18X956gw5A81Y6s/BotBEWbaimioQ==}
+  '@sentry/nextjs@7.113.0':
+    resolution: {integrity: sha512-lI5iJfbAC3dSakwq5+/JP58mLftxlDPPeY5ttcIuSHmNV/oobETJFTbWRIojUWYYn0E+Eea2OSdY5jPqxI7+iA==}
     engines: {node: '>=8'}
     peerDependencies:
       next: ^10.0.8 || ^11.0 || ^12.0 || ^13.0 || ^14.0
@@ -1413,30 +1399,30 @@ packages:
       webpack:
         optional: true
 
-  '@sentry/node@7.112.2':
-    resolution: {integrity: sha512-MNzkqER8jc2xOS3ArkCLH5hakzu15tcjeC7qjU7rQ1Ms4WuV+MG0docSRESux0/p23Qjzf9tZOc8C5Eq+Sxduw==}
+  '@sentry/node@7.113.0':
+    resolution: {integrity: sha512-Vam4Ia0I9fhVw8GJOzcLP7MiiHJSKl8L9LzLMMLG3+2/dFnDQOyS7sOfk3GqgpwzqPiusP9vFu7CFSX7EMQbTg==}
     engines: {node: '>=8'}
 
-  '@sentry/react@7.112.2':
-    resolution: {integrity: sha512-Xf6mc1+/ncCk6ZFIj0oT4or2o0UxqqJZk09U/21RYNvVCn7+DNyCdJZ/F5wXWgPqVE67PrjydLLYaQWiqLibiA==}
+  '@sentry/react@7.113.0':
+    resolution: {integrity: sha512-+zVPz+h5Wydq4ntekw3/dXq5jeHIpZoQ2iqhB96PA9Y94JIq178i/xIP204S1h6rN7cmWAqtR93vnPKdxnlUbQ==}
     engines: {node: '>=8'}
     peerDependencies:
       react: 15.x || 16.x || 17.x || 18.x
 
-  '@sentry/replay@7.112.2':
-    resolution: {integrity: sha512-7Ns/8D54WPsht1nlVj93Inf6rXyve2AZoibYN0YfcM2w3lI4NO51gPPHJU0lFEfMwzwK4ZBJWzOeW9098a+uEg==}
+  '@sentry/replay@7.113.0':
+    resolution: {integrity: sha512-UD2IaphOWKFdeGR+ZiaNAQ+wFsnwbJK6PNwcW6cHmWKv9COlKufpFt06lviaqFZ8jmNrM4H+r+R8YVTrqCuxgg==}
     engines: {node: '>=12'}
 
-  '@sentry/types@7.112.2':
-    resolution: {integrity: sha512-kCMLt7yhY5OkWE9MeowlTNmox9pqDxcpvqguMo4BDNZM5+v9SEb1AauAdR78E1a1V8TyCzjBD7JDfXWhvpYBcQ==}
+  '@sentry/types@7.113.0':
+    resolution: {integrity: sha512-PJbTbvkcPu/LuRwwXB1He8m+GjDDLKBtu3lWg5xOZaF5IRdXQU2xwtdXXsjge4PZR00tF7MO7X8ZynTgWbYaew==}
     engines: {node: '>=8'}
 
-  '@sentry/utils@7.112.2':
-    resolution: {integrity: sha512-OjLh0hx0t1EcL4ZIjf+4svlmmP+tHUDGcr5qpFWH78tjmkPW4+cqPuZCZfHSuWcDdeiaXi8TnYoVRqDcJKK/eQ==}
+  '@sentry/utils@7.113.0':
+    resolution: {integrity: sha512-nzKsErwmze1mmEsbW2AwL2oB+I5v6cDEJY4sdfLekA4qZbYZ8pV5iWza6IRl4XfzGTE1qpkZmEjPU9eyo0yvYw==}
     engines: {node: '>=8'}
 
-  '@sentry/vercel-edge@7.112.2':
-    resolution: {integrity: sha512-19fyAAw7+wvgtpLsaLijvqvdPpf94oPmu9PRyvxM8azVeAF2YUtVo2XZkTKuxZwxAmouuKCNLgwtSJ51YbLSIw==}
+  '@sentry/vercel-edge@7.113.0':
+    resolution: {integrity: sha512-cHbo+v7ECRNluVWMJZqsNelf3JrV5Qw/aRH4Dw74IdErCYROAQx1pEuE7BnM3rIEgOQAMR/J/Fu7GFGecSbzTA==}
     engines: {node: '>=8'}
 
   '@sentry/webpack-plugin@1.21.0':
@@ -1647,11 +1633,11 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/lodash@4.17.0':
-    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
+  '@types/lodash@4.17.1':
+    resolution: {integrity: sha512-X+2qazGS3jxLAIz5JDXDzglAF3KpijdhFxlf/V1+hEsOUc+HnWi81L/uv/EvGuV90WY+7mPGFCUDGfQC3Gj95Q==}
 
-  '@types/node@20.12.7':
-    resolution: {integrity: sha512-wq0cICSkRLVaf3UGLMGItu/PtdY7oaXaI/RVU+xliKVOtRna3PRY57ZDfztpDL0n11vfymMUnXv8QwYCO7L1wg==}
+  '@types/node@20.12.8':
+    resolution: {integrity: sha512-NU0rJLJnshZWdE/097cdCBbyW1h4hEg0xpovcoAQYHl8dnEyp/NAOiE45pvc+Bd1Dt+2r94v2eGFpQJ4R7g+2w==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -2962,8 +2948,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  next-auth@5.0.0-beta.16:
-    resolution: {integrity: sha512-dX2snB+ezN23tFzSes3n3uosT9iBf0eILPYWH/R2fd9n3ZzdMQlRzq7JIOPeS1aLc84IuRlyuyXyx9XmmZB6og==}
+  next-auth@5.0.0-beta.17:
+    resolution: {integrity: sha512-XA/7JtAjOgDfAeotJPFUsFZGGItZwzZrxLt9Gc9fE7EchLk6zydZfuZ22Vvwixs3IilkN644D5IoD5tEOAFGCQ==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -3249,8 +3235,8 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-hook-form@7.51.3:
-    resolution: {integrity: sha512-cvJ/wbHdhYx8aviSWh28w9ImjmVsb5Y05n1+FW786vEZQJV5STNM0pW6ujS+oiBecb0ARBxJFyAnXj9+GHXACQ==}
+  react-hook-form@7.51.4:
+    resolution: {integrity: sha512-V14i8SEkh+V1gs6YtD0hdHYnoL4tp/HX/A45wWQN15CYr9bFRmmRdYStSO5L65lCCZRF+kYiSKhm9alqbcdiVA==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
@@ -3779,8 +3765,8 @@ packages:
     peerDependencies:
       zod: ^3.18.0
 
-  zod@3.23.4:
-    resolution: {integrity: sha512-/AtWOKbBgjzEYYQRNfoGKHObgfAZag6qUJX1VbHo2PRBgS+wfWagEY2mizjfyAPcGesrJOcx/wcl0L9WnVrHFw==}
+  zod@3.23.6:
+    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
 
   zustand@4.5.2:
     resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
@@ -3802,16 +3788,6 @@ snapshots:
   '@aashutoshrathi/word-wrap@1.2.6': {}
 
   '@alloc/quick-lru@5.2.0': {}
-
-  '@auth/core@0.28.1':
-    dependencies:
-      '@panva/hkdf': 1.1.1
-      '@types/cookie': 0.6.0
-      cookie: 0.6.0
-      jose: 5.2.3
-      oauth4webapi: 2.10.4
-      preact: 10.11.3
-      preact-render-to-string: 5.2.3(preact@10.11.3)
 
   '@auth/core@0.30.0':
     dependencies:
@@ -3848,7 +3824,7 @@ snapshots:
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
       '@aws-sdk/types': 3.468.0
-      '@aws-sdk/util-locate-window': 3.535.0
+      '@aws-sdk/util-locate-window': 3.568.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
 
@@ -4178,7 +4154,7 @@ snapshots:
       '@smithy/util-endpoints': 1.2.0
       tslib: 2.6.2
 
-  '@aws-sdk/util-locate-window@3.535.0':
+  '@aws-sdk/util-locate-window@3.568.0':
     dependencies:
       tslib: 2.6.2
 
@@ -4485,14 +4461,14 @@ snapshots:
 
   '@hono/node-server@1.11.0': {}
 
-  '@hono/zod-validator@0.2.1(hono@4.2.5)(zod@3.23.4)':
+  '@hono/zod-validator@0.2.1(hono@4.2.5)(zod@3.23.6)':
     dependencies:
       hono: 4.2.5
-      zod: 3.23.4
+      zod: 3.23.6
 
-  '@hookform/resolvers@3.3.4(react-hook-form@7.51.3(react@18.3.1))':
+  '@hookform/resolvers@3.3.4(react-hook-form@7.51.4(react@18.3.1))':
     dependencies:
-      react-hook-form: 7.51.3(react@18.3.1)
+      react-hook-form: 7.51.4(react@18.3.1)
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -5028,35 +5004,35 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.2': {}
 
-  '@sentry-internal/feedback@7.112.2':
+  '@sentry-internal/feedback@7.113.0':
     dependencies:
-      '@sentry/core': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
-  '@sentry-internal/replay-canvas@7.112.2':
+  '@sentry-internal/replay-canvas@7.113.0':
     dependencies:
-      '@sentry/core': 7.112.2
-      '@sentry/replay': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry/core': 7.113.0
+      '@sentry/replay': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
-  '@sentry-internal/tracing@7.112.2':
+  '@sentry-internal/tracing@7.113.0':
     dependencies:
-      '@sentry/core': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
-  '@sentry/browser@7.112.2':
+  '@sentry/browser@7.113.0':
     dependencies:
-      '@sentry-internal/feedback': 7.112.2
-      '@sentry-internal/replay-canvas': 7.112.2
-      '@sentry-internal/tracing': 7.112.2
-      '@sentry/core': 7.112.2
-      '@sentry/integrations': 7.112.2
-      '@sentry/replay': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry-internal/feedback': 7.113.0
+      '@sentry-internal/replay-canvas': 7.113.0
+      '@sentry-internal/tracing': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/integrations': 7.113.0
+      '@sentry/replay': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
   '@sentry/cli@1.77.3':
     dependencies:
@@ -5070,28 +5046,28 @@ snapshots:
       - encoding
       - supports-color
 
-  '@sentry/core@7.112.2':
+  '@sentry/core@7.113.0':
     dependencies:
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
-  '@sentry/integrations@7.112.2':
+  '@sentry/integrations@7.113.0':
     dependencies:
-      '@sentry/core': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
       localforage: 1.10.0
 
-  '@sentry/nextjs@7.112.2(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@sentry/nextjs@7.113.0(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@rollup/plugin-commonjs': 24.0.0(rollup@2.78.0)
-      '@sentry/core': 7.112.2
-      '@sentry/integrations': 7.112.2
-      '@sentry/node': 7.112.2
-      '@sentry/react': 7.112.2(react@18.3.1)
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
-      '@sentry/vercel-edge': 7.112.2
+      '@sentry/core': 7.113.0
+      '@sentry/integrations': 7.113.0
+      '@sentry/node': 7.113.0
+      '@sentry/react': 7.113.0(react@18.3.1)
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
+      '@sentry/vercel-edge': 7.113.0
       '@sentry/webpack-plugin': 1.21.0
       chalk: 3.0.0
       next: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -5103,43 +5079,43 @@ snapshots:
       - encoding
       - supports-color
 
-  '@sentry/node@7.112.2':
+  '@sentry/node@7.113.0':
     dependencies:
-      '@sentry-internal/tracing': 7.112.2
-      '@sentry/core': 7.112.2
-      '@sentry/integrations': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry-internal/tracing': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/integrations': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
-  '@sentry/react@7.112.2(react@18.3.1)':
+  '@sentry/react@7.113.0(react@18.3.1)':
     dependencies:
-      '@sentry/browser': 7.112.2
-      '@sentry/core': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry/browser': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
 
-  '@sentry/replay@7.112.2':
+  '@sentry/replay@7.113.0':
     dependencies:
-      '@sentry-internal/tracing': 7.112.2
-      '@sentry/core': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry-internal/tracing': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
-  '@sentry/types@7.112.2': {}
+  '@sentry/types@7.113.0': {}
 
-  '@sentry/utils@7.112.2':
+  '@sentry/utils@7.113.0':
     dependencies:
-      '@sentry/types': 7.112.2
+      '@sentry/types': 7.113.0
 
-  '@sentry/vercel-edge@7.112.2':
+  '@sentry/vercel-edge@7.113.0':
     dependencies:
-      '@sentry-internal/tracing': 7.112.2
-      '@sentry/core': 7.112.2
-      '@sentry/integrations': 7.112.2
-      '@sentry/types': 7.112.2
-      '@sentry/utils': 7.112.2
+      '@sentry-internal/tracing': 7.113.0
+      '@sentry/core': 7.113.0
+      '@sentry/integrations': 7.113.0
+      '@sentry/types': 7.113.0
+      '@sentry/utils': 7.113.0
 
   '@sentry/webpack-plugin@1.21.0':
     dependencies:
@@ -5459,9 +5435,9 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/lodash@4.17.0': {}
+  '@types/lodash@4.17.1': {}
 
-  '@types/node@20.12.7':
+  '@types/node@20.12.8':
     dependencies:
       undici-types: 5.26.5
 
@@ -5480,7 +5456,7 @@ snapshots:
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.12.7
+      '@types/node': 20.12.8
 
   '@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5)':
     dependencies:
@@ -5903,7 +5879,7 @@ snapshots:
     dependencies:
       '@esbuild-kit/esm-loader': 2.6.5
       '@hono/node-server': 1.11.0
-      '@hono/zod-validator': 0.2.1(hono@4.2.5)(zod@3.23.4)
+      '@hono/zod-validator': 0.2.1(hono@4.2.5)(zod@3.23.6)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -5917,7 +5893,7 @@ snapshots:
       minimatch: 7.4.6
       semver: 7.6.0
       superjson: 2.2.1
-      zod: 3.23.4
+      zod: 3.23.6
     transitivePeerDependencies:
       - supports-color
 
@@ -5928,10 +5904,10 @@ snapshots:
       '@types/react': 18.3.1
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.4):
+  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1))(zod@3.23.6):
     dependencies:
       drizzle-orm: 0.30.10(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.1)(react@18.3.1)
-      zod: 3.23.4
+      zod: 3.23.6
 
   eastasianwidth@0.2.0: {}
 
@@ -6928,7 +6904,7 @@ snapshots:
       workerd: 1.20240320.1
       ws: 8.16.0
       youch: 3.3.3
-      zod: 3.23.4
+      zod: 3.23.6
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -6978,9 +6954,9 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next-auth@5.0.0-beta.16(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-auth@5.0.0-beta.17(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@auth/core': 0.28.1
+      '@auth/core': 0.30.0
       next: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
@@ -7251,7 +7227,7 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-hook-form@7.51.3(react@18.3.1):
+  react-hook-form@7.51.4(react@18.3.1):
     dependencies:
       react: 18.3.1
 
@@ -7823,11 +7799,11 @@ snapshots:
       mustache: 4.2.0
       stacktracey: 2.1.8
 
-  zod-validation-error@3.2.0(zod@3.23.4):
+  zod-validation-error@3.2.0(zod@3.23.6):
     dependencies:
-      zod: 3.23.4
+      zod: 3.23.6
 
-  zod@3.23.4: {}
+  zod@3.23.6: {}
 
   zustand@4.5.2(@types/react@18.3.1)(react@18.3.1):
     dependencies:
