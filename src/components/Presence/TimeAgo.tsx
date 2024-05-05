@@ -1,5 +1,5 @@
 import humanizeDuration from 'humanize-duration';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Tooltip from '@/components/Site/Tooltip';
 
@@ -36,7 +36,9 @@ type Props = {
   date: Date;
   className?: string;
   tooltipPrefix?: string;
+  disableTooltip?: boolean;
   prefix?: string;
+  suffix?: string;
   updateInterval?: number;
 };
 
@@ -45,23 +47,41 @@ export default function TimeAgo({
   className,
   updateInterval = UPDATE_INTERVAL,
   tooltipPrefix,
+  disableTooltip,
   prefix,
+  suffix,
 }: Props) {
-  const dateTime = new Date(date).getTime();
-  const [timeAgo, setTimeAgo] = useState<string>(humanize(dateTime));
+  const [timeAgo, setTimeAgo] = useState<string>('');
+  const intervalRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeAgo(humanize(dateTime));
+    if (!date) return;
+
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setTimeAgo(humanize(new Date(date).getTime()));
+
+    intervalRef.current = setInterval(() => {
+      setTimeAgo(humanize(new Date(date).getTime()));
     }, updateInterval);
 
-    return () => clearInterval(interval);
-  }, [dateTime, updateInterval]);
+    return () => clearInterval(intervalRef.current);
+  }, [date, updateInterval]);
 
-  return (
+  if (!date) return null;
+  if (timeAgo === 'just now' || timeAgo === '0 m') return;
+
+  return disableTooltip ? (
+    <div className={className}>
+      {prefix}
+      {timeAgo}
+      {suffix}
+    </div>
+  ) : (
     <Tooltip tooltip={`${tooltipPrefix || ''}${new Date(date).toLocaleString()}`} asChild>
       <div className={className}>
-        {prefix && timeAgo !== 'just now' && <span>{prefix}</span>} {timeAgo}
+        {prefix}
+        {timeAgo}
+        {suffix}
       </div>
     </Tooltip>
   );

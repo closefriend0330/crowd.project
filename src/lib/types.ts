@@ -21,6 +21,7 @@ export type UserStatusConfig = Record<
 const userDataSchemaOptions = {
   away: z.coerce.boolean(),
   awayStartedAt: z.coerce.date(),
+  statusChangedAt: z.coerce.date(),
   sessionStartedAt: z.coerce.date(),
   lastConnectedAt: z.coerce.date(),
   lastSessionEndedAt: z.coerce.date(),

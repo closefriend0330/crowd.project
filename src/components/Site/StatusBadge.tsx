@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 
+import TimeAgo from '@/components/Presence/TimeAgo';
+
 import { cn } from '@/lib/utils';
 import { userStatusConfig } from '@/statusConfig';
 
@@ -24,6 +26,9 @@ export default function StatusBadge({ user, className }: Props) {
         )}
       >
         {user.status}
+        {user.statusChangedAt && (
+          <TimeAgo date={user.statusChangedAt} prefix='(' suffix=')' disableTooltip />
+        )}
         {Icon && <Icon strokeWidth={2} className='size-4 xs:size-5' />}
       </Badge>
     </div>

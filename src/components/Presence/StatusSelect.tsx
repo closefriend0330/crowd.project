@@ -26,7 +26,7 @@ export default function StatusSelect() {
     if (status) {
       posthog.capture('status update', { status, oldStatus: currentStatus });
 
-      updateUserData({ status });
+      updateUserData({ status, statusChangedAt: new Date() });
     }
   };
 

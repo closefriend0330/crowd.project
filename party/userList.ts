@@ -96,6 +96,7 @@ export class UserList {
         const userData = await getUserData(userId);
         const lastSessionEndedAt = userData?.lastSessionEndedAt;
 
+        // defaults for some status fields at the start of a new session
         userUpdates = {
           status: 'online',
           connections: [connectionId],
@@ -214,9 +215,11 @@ export class UserList {
             })
           );
 
+          // reset some status fields at the end of a session
           updatedUserData = {
             connections: [],
             status: 'offline',
+            statusChangedAt: new Date(),
             away: false,
             awayStartedAt: null,
             tagline: null,
