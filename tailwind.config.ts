@@ -46,6 +46,8 @@ const config = {
     'text-fuchsia-700',
     'text-pink-700',
     'text-green-800',
+    'text-rose-600',
+    'text-blue-800',
     'bg-red-500',
     'bg-green-500',
     'bg-blue-500',
@@ -80,6 +82,8 @@ const config = {
     'bg-fuchsia-700',
     'bg-pink-700',
     'bg-green-800',
+    'bg-rose-600',
+    'bg-blue-800',
   ],
   prefix: '',
   theme: {
