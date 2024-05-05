@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently pnpm:dev:*",
+    "dev": "concurrently -c auto -t 'HH:mm:ss.SSS' -p '[{name} {time}]' pnpm:dev:*",
     "dev:next": "sst dev next dev",
     "dev:partykit": "partykit dev --live",
     "db": "concurrently pnpm:dev:db:*",

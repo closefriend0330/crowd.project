@@ -33,7 +33,7 @@ export default function useServerMessages({ ws }: Props) {
   const setConnectionStatus = useSetAtom(connectionStatusAtom);
   const { users, updateUser, setUserList } = useUserListStore();
   const { shootConfetti } = useConfetti();
-  const { playListTaglineUpdated, playUserJoined, playUserLeft } = userSoundEffects();
+  const { playListStatusUpdated, playUserJoined, playUserLeft } = userSoundEffects();
 
   // update the logged in user's data locally
   const processUsersFullDataMessage = ({ data }: ServerMessageUserData) => {
@@ -96,9 +96,9 @@ export default function useServerMessages({ ws }: Props) {
     if (userData && userId !== userData.userId) {
       if (data.tagline) {
         shootConfetti({ source: 'list tagline update' });
-        playListTaglineUpdated();
+        playListStatusUpdated();
       } else if (data.status) {
-        playListTaglineUpdated();
+        playListStatusUpdated();
       }
     }
   };

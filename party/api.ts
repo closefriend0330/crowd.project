@@ -4,17 +4,29 @@ import posthog from 'posthog-js';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 
+import { MAX_TAGLINE_LENGTH } from '@/config';
 import { getUserDataByApiKey } from '@/db/queries';
 import { userPublicDataSchema } from '@/lib/types';
 import { getErrorMessage } from '@/lib/utils';
+import { userSelectableStatusOptions } from '@/statusConfig';
 
 import type Server from '@/party/server';
 import { UserList } from '@/party/userList';
 
-const taglineUpdateSchema = z.object({
-  apiKey: z.string().min(1),
-  tagline: z.string().min(1).max(120),
-});
+const statusUpdateSchema = z
+  .object({
+    apiKey: z.string().min(1),
+    update: z.string().min(1).max(MAX_TAGLINE_LENGTH).optional(),
+    status: z
+      .string()
+      .refine((status: string) => userSelectableStatusOptions.includes(status), {
+        message: 'Invalid selectable status option',
+      })
+      .optional(),
+  })
+  .refine((data) => Boolean(data.update || data.status), {
+    message: `Provide either an 'update' or 'status' field`,
+  });
 
 type parseApiRequestParams = {
   partyServer: Server;
@@ -37,8 +49,8 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
       );
     }
 
-    if (method === 'POST' && path === '/tagline') {
-      return await taglineUpdate({ request, users });
+    if (method === 'POST' && path === '/status') {
+      return await statusUpdate({ request, users });
     }
 
     if (method === 'GET' && path === '/debug') {
@@ -53,16 +65,16 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
   }
 }
 
-type TaglineUpdateParams = {
+type StatusUpdateParams = {
   request: Party.Request;
   users: UserList;
 };
-export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
+export async function statusUpdate({ request, users }: StatusUpdateParams) {
   try {
-    const result = taglineUpdateSchema.safeParse(await request.json());
+    const result = statusUpdateSchema.safeParse(await request.json());
 
     if (!result.success) {
-      posthog.capture('tagline api request error', { type: 'invalid request' });
+      posthog.capture('status api request error', { type: 'invalid request' });
 
       return new Response(
         JSON.stringify({
@@ -77,7 +89,7 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
 
     const [user] = await getUserDataByApiKey(result.data.apiKey);
     if (!user) {
-      posthog.capture('tagline api request error', { type: 'user/API key not found' });
+      posthog.capture('status api request error', { type: 'user/API key not found' });
 
       return new Response(JSON.stringify({ status: 'error', message: 'User/API key not found' }), {
         status: 404,
@@ -86,10 +98,10 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
 
     const { wasConnected } = await users.updateUserData({
       userId: user.userId,
-      data: { tagline: result.data.tagline },
+      data: { tagline: result.data.update, status: result.data.status },
     });
 
-    posthog.capture('tagline api request success', {
+    posthog.capture('status api request success', {
       userId: user.userId,
       name: user.name,
       wasConnected,
@@ -99,7 +111,7 @@ export async function taglineUpdate({ request, users }: TaglineUpdateParams) {
       status: 200,
     });
   } catch (err) {
-    posthog.capture('tagline api request error', { type: 'other' });
+    posthog.capture('status api request error', { type: 'other' });
 
     return new Response(
       JSON.stringify({ status: 'error', message: `Error: ${getErrorMessage(err)}` }),

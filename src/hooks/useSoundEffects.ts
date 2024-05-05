@@ -9,11 +9,11 @@ export default function useSoundEffects() {
 
   const [playUserJoined] = useSound('/sounds/userJoined.mp3', { ...soundOptions, volume: 0.5 });
   const [playUserLeft] = useSound('/sounds/userLeft.mp3', { ...soundOptions, volume: 0.5 });
-  const [playUserTaglineUpdated] = useSound('/sounds/userTaglineUpdated.mp3', {
+  const [playUserUpdatePosted] = useSound('/sounds/userUpdatePosted.mp3', {
     ...soundOptions,
     volume: 0.5,
   });
-  const [playListTaglineUpdated] = useSound('/sounds/listTaglineUpdated.mp3', {
+  const [playListStatusUpdated] = useSound('/sounds/playListStatusUpdated.mp3', {
     ...soundOptions,
     volume: 0.5,
   });
@@ -25,8 +25,8 @@ export default function useSoundEffects() {
     toggleSoundEffects,
     playUserJoined,
     playUserLeft,
-    playUserTaglineUpdated,
-    playListTaglineUpdated,
+    playUserUpdatePosted,
+    playListStatusUpdated,
     playClick,
     playConnectionChange,
   };
