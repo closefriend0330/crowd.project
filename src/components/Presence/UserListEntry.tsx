@@ -15,7 +15,7 @@ function UserListTagline({ user }: { user: UserPublicData }) {
     truncate: 30,
   };
   return (
-    <div className='text-xs xs:text-sm text-slate-500 break-words'>
+    <div className='text-sm text-slate-500 break-words'>
       <Linkify options={linkifyOptions}>{user.tagline || ''}</Linkify>
     </div>
   );
