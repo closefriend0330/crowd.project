@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently -c auto -t 'HH:mm:ss.SSS' -p '[{name} {time}]' pnpm:dev:*",
+    "dev:lite": "concurrently -c auto -t 'HH:mm:ss.SSS' -p '[{name} {time}]' pnpm:dev:next pnpm:dev:db:turso",
     "dev:next": "sst dev next dev",
     "dev:partykit": "partykit dev --live",
     "db": "concurrently pnpm:dev:db:*",

@@ -91,14 +91,13 @@ export class UserList {
         // ...but save any updated data to the database
         await updateUserData(userId, userUpdates);
       } else {
-        debug('User connected:', userId, connectionId);
+        debug('User connected:', { userId, connectionId });
 
         const userData = await getUserData(userId);
         const lastSessionEndedAt = userData?.lastSessionEndedAt;
 
         // defaults for some status fields at the start of a new session
         userUpdates = {
-          status: 'online',
           connections: [connectionId],
           lastConnectedAt: now,
         };
@@ -108,13 +107,23 @@ export class UserList {
           lastSessionEndedAt &&
           new Date(lastSessionEndedAt).getTime() < now.getTime() - SESSION_RECONNECT_GRACE_PERIOD
         ) {
+          // user was offline passed the grace period, reset some session fields
+          debug('New session started past grace period:', { userId, connectionId });
+
           userUpdates.sessionStartedAt = now;
           userUpdates.tagline = null;
+          userUpdates.status = 'online';
+          userUpdates.lastSessionEndedAt = null;
+        } else {
+          debug('Reconnecting user was within grace period:', { userId, connectionId });
         }
 
         updatedUserData = {
           ...userData,
           ...userUpdates,
+          // no longer away, since they just reconnected? But what if they reconnected in a tab?
+          // away: false,
+          // awayStartedAt: null,
         };
         this.users.push(updatedUserData);
 
@@ -201,6 +210,7 @@ export class UserList {
 
           updatedUserData = { connections: remainingConnections };
         } else {
+          // this was rhe last connection from that user
           debug('User disconnected entirely: ', {
             userId: connectedUser.userId,
             connectionId: connection.id,
@@ -218,13 +228,10 @@ export class UserList {
           // reset some status fields at the end of a session
           updatedUserData = {
             connections: [],
-            status: 'offline',
-            statusChangedAt: new Date(),
-            away: false,
-            awayStartedAt: null,
-            tagline: null,
             lastSessionEndedAt: new Date(),
           };
+
+          // TODO: schedule full cleanup of user data after a certain amount of time
         }
 
         await updateUserData(connectedUser.userId, updatedUserData);
