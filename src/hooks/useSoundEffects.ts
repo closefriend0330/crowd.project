@@ -13,7 +13,7 @@ export default function useSoundEffects() {
     ...soundOptions,
     volume: 0.5,
   });
-  const [playListStatusUpdated] = useSound('/sounds/playListStatusUpdated.mp3', {
+  const [playListStatusUpdated] = useSound('/sounds/listStatusUpdated.mp3', {
     ...soundOptions,
     volume: 0.5,
   });
