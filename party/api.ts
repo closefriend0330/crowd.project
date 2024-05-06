@@ -120,13 +120,16 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
   }
 }
 
-export function debugInfo(partyServer: Server) {
+export async function debugInfo(partyServer: Server) {
   posthog.capture('debug api request');
+  const connectedUserIds = await partyServer.room.storage.get<string[]>('connectedUserIds');
 
   let debugData: Record<string, any> = {
     environment: process.env.ENV || process.env.NODE_ENV,
-    connectedUsers: partyServer.users.list.length,
+    connectedUsersCount: partyServer.users.list.length,
     userConnections: partyServer.users.list.reduce((acc, user) => acc + user.connections.length, 0),
+    storageConnectedUserIdCount: connectedUserIds?.length,
+    storageConnectedUserIds: connectedUserIds,
     dbUrl: process.env.DATABASE_URL?.slice(0, 15) + '...',
     dbAuth: '...' + process.env.DATABASE_AUTH_TOKEN?.slice(-5),
   };

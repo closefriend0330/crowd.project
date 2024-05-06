@@ -7,9 +7,6 @@ import { buildServerMessage } from '@/party/messages';
 import { UserData, UserDataInsert } from '@/lib/types';
 import { ServerMessageErrorEncountered } from '@/party/serverMessages';
 
-import Server from '@/party/server';
-import { UserList } from '@/party/userList';
-
 export async function getUserData(userId: string): Promise<UserData> {
   try {
     let userData: UserData = await getUserDataByUserId(userId);
@@ -44,18 +41,6 @@ export async function getUserData(userId: string): Promise<UserData> {
   } catch (err) {
     throw Error(`Error in getUserData: ${getErrorMessage(err)}`);
   }
-}
-
-type PersistUserListParams = {
-  users: UserList;
-  partyServer: Server;
-};
-// don't really need this just yet, since disconnected clients will reconnect automatically
-export async function persistUserList({ users, partyServer }: PersistUserListParams) {
-  await partyServer.room.storage.put(
-    'connectedUserIds',
-    users.list.map((u) => u.userId)
-  );
 }
 
 type ReturnErrorParams = {

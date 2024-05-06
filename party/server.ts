@@ -1,6 +1,7 @@
 import type * as Party from 'partykit/server';
 
-import { debug } from '@/lib/utils';
+import { clearConnectionData, getUserDataList } from '@/db/queries';
+import { debug, getErrorMessage } from '@/lib/utils';
 import { parseApiRequest } from '@/party/api';
 import { buildServerMessage, processClientMessage } from '@/party/messages';
 
@@ -14,8 +15,26 @@ export default class Server implements Party.Server {
 
   constructor(readonly room: Party.Room) {}
 
-  onStart() {
-    this.timeSinceOnStart = new Date();
+  async onStart() {
+    try {
+      this.timeSinceOnStart = new Date();
+
+      // reset any lingering connections since the server has restarted.
+      // currently connected clients will auto reconnect.
+      await clearConnectionData();
+
+      const connectedUserIds = await this.room.storage.get<string[]>('connectedUserIds');
+
+      if (connectedUserIds) {
+        const usersData = await getUserDataList(connectedUserIds);
+
+        this.users.list = usersData;
+
+        debug(`Restored ${connectedUserIds.length} users from storage after restart`);
+      }
+    } catch (err) {
+      console.error('Error in onStart:', getErrorMessage(err));
+    }
   }
 
   async onConnect(connection: Party.Connection<unknown>, ctx: Party.ConnectionContext) {
@@ -31,7 +50,6 @@ export default class Server implements Party.Server {
     }
 
     await this.users.addUser({ userId, connection });
-    // await persistUserList({ users: this.users, partyServer: this });
 
     connection.send(
       buildServerMessage<ServerMessageServerMetaData>({
@@ -47,7 +65,10 @@ export default class Server implements Party.Server {
     debug('Connection closed: ', { connectionId: connection.id });
 
     await this.users.removeUser({ connection });
-    // await persistUserList({ users: this.users, partyServer: this });
+  }
+
+  onError(connection: Party.Connection<unknown>, error: Error): void {
+    console.error('Connection error: ', { errorMessage: getErrorMessage(error), connection });
   }
 
   async onMessage(message: string, sender: Party.Connection) {

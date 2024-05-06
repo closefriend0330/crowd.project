@@ -1,4 +1,4 @@
-import { eq, inArray } from 'drizzle-orm';
+import { eq, inArray, ne } from 'drizzle-orm';
 
 import { db } from '@/db/db';
 import { userData, users } from '@/db/schema';
@@ -35,4 +35,13 @@ export function getUser(userId: string) {
 
 export function getUserDataList(userIds: string[]) {
   return db.query.userData.findMany({ where: inArray(userData.userId, userIds) });
+}
+
+export function clearConnectionData() {
+  const now = new Date();
+
+  return db
+    .update(userData)
+    .set({ connections: [], updatedAt: now })
+    .where(ne(userData.connections, []));
 }
