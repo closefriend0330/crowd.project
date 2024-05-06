@@ -13,7 +13,7 @@ export default function Footer() {
       </div>
       <Socials />
       <span className='hidden sm:inline-block'>
-        (<a href='https://github.com/jschuur/coworking.party/issues'>roadmap</a>)
+        (<a title="GitHub Issues" target="_blank" href='https://github.com/jschuur/coworking.party/issues'>roadmap</a>)
       </span>
     </footer>
   );
