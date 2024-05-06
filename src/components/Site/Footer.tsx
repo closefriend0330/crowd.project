@@ -1,8 +1,7 @@
-import { IconBrandGithub, IconBrandThreads, IconBrandTwitter } from '@tabler/icons-react';
-
 import ConnectionStatus from '@/components/Site/ConnectionStatus';
 import FooterMessage from '@/components/Site/FooterMessage';
 import MuteButton from '@/components/Site/MuteButton';
+import Socials from '@/components/Site/Socials';
 
 export default function Footer() {
   return (
@@ -12,15 +11,7 @@ export default function Footer() {
       <div className='grow'>
         <FooterMessage />
       </div>
-      <a href='https://threads.net/@joostschuur' target='_blank'>
-        <IconBrandThreads className='size-5 text-black transition hover:scale-125 ease-in-out' />
-      </a>
-      <a href='https://twitter.com/joostschuur' target='_blank'>
-        <IconBrandTwitter className='size-5 text-blue-400 transition hover:scale-125 ease-in-out' />
-      </a>
-      <a href='https://github.com/jschuur/coworking.party' target='_blank'>
-        <IconBrandGithub className='size-5 text-purple-700 transition hover:scale-125 ease-in-out' />
-      </a>
+      <Socials />
       <span className='hidden sm:inline-block'>
         (<a href='https://github.com/jschuur/coworking.party/issues'>roadmap</a>)
       </span>
