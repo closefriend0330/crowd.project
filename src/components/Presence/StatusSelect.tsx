@@ -44,7 +44,12 @@ export default function StatusSelect() {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Status</SelectLabel>
+          <SelectLabel>
+            <div className='flex flex-row justify-between items-center'>
+              <div>Status</div>{' '}
+              <div className='font-normal'>({userSelectableStatusOptions.length})</div>
+            </div>
+          </SelectLabel>
           {userSelectableStatusOptions.map((status) => {
             const Icon = userStatusConfig[status].icon;
 
