@@ -62,6 +62,7 @@ export default function TagLine() {
                       placeholder='what are you up to?'
                       maxLength={MAX_TAGLINE_LENGTH}
                       autoFocus
+                      autoComplete='off'
                       {...field}
                     />
                   </FormControl>
