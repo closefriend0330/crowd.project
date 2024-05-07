@@ -1,5 +1,6 @@
-import { withSentryConfig } from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
+import { withSentryConfig } from '@sentry/nextjs';
+
 const nextConfig = {};
 
 export default withSentryConfig(

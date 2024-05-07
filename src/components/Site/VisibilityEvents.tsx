@@ -1,3 +1,5 @@
+'use client';
+
 import { useAtomValue } from 'jotai';
 import { useSession } from 'next-auth/react';
 import posthog from 'posthog-js';

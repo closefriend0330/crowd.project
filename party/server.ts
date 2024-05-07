@@ -5,6 +5,7 @@ import { debug, getErrorMessage } from '@/lib/utils';
 import { parseApiRequest } from '@/party/api';
 import { buildServerMessage, processClientMessage } from '@/party/messages';
 
+import { getNextAuthSession } from '@/party/auth';
 import { ServerMessageServerMetaData } from '@/party/serverMessages';
 import { UserList } from '@/party/userList';
 
@@ -25,7 +26,7 @@ export default class Server implements Party.Server {
 
       const connectedUserIds = await this.room.storage.get<string[]>('connectedUserIds');
 
-      if (connectedUserIds) {
+      if (connectedUserIds && connectedUserIds.length > 0) {
         const usersData = await getUserDataList(connectedUserIds);
 
         this.users.list = usersData;
@@ -36,14 +37,35 @@ export default class Server implements Party.Server {
       console.error('Error in onStart:', getErrorMessage(err));
     }
   }
+  static async onBeforeConnect(request: Party.Request) {
+    try {
+      // identify the user via the NextAuth session
+      const { user } = (await getNextAuthSession(request)) || {};
+
+      if (!user || !user.id) {
+        console.error('User could not be authenticated in onBeforeConnect');
+
+        return new Response('Access denied', { status: 403 });
+      } else {
+        request.headers.set('X-User-ID', user.id);
+
+        return request;
+      }
+    } catch (err) {
+      console.error('Error in onBeforeConnect:', getErrorMessage(err));
+
+      return new Response('Error', { status: 500 });
+    }
+  }
 
   async onConnect(connection: Party.Connection<unknown>, ctx: Party.ConnectionContext) {
     const { request } = ctx;
     // sending the userId in the query string lets us identify the user
-    const userId = new URL(request.url).searchParams.get('userId');
+    // const userId = new URL(request.url).searchParams.get('userId');
+    const userId = request.headers.get('X-User-ID');
 
     if (!userId) {
-      console.error('userId query param missing in onConnect');
+      console.error('User was missing in onConnect');
 
       connection.close();
       return;

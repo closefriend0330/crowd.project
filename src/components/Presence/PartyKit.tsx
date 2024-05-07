@@ -1,7 +1,6 @@
 'use client';
 
 import { useSetAtom } from 'jotai';
-import { useSession } from 'next-auth/react';
 import usePartySocket from 'partysocket/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -12,8 +11,10 @@ import useSoundEffects from '@/hooks/useSoundEffects';
 import { debug } from '@/lib/utils';
 import { connectionStatusAtom, partySocketAtom } from '@/store';
 
-export default function PartyKit() {
-  const { data: session } = useSession();
+type Props = {
+  sessionToken: string;
+};
+export default function PartyKit({ sessionToken }: Props) {
   const setConnectionStatusAtom = useSetAtom(connectionStatusAtom);
   const setPartySocket = useSetAtom(partySocketAtom);
   const { playConnectionChange } = useSoundEffects();
@@ -21,7 +22,7 @@ export default function PartyKit() {
   const ws = usePartySocket({
     host: process.env.NEXT_PUBLIC_PARTYKIT_URL,
     room: 'main',
-    query: session ? { userId: session.user.id } : { userId: undefined },
+    query: { sessionToken },
 
     onOpen() {
       debug('Connection created');

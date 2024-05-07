@@ -1,38 +1,30 @@
-'use client';
-
-import { useAtomValue } from 'jotai';
-import { useSession } from 'next-auth/react';
+import { cookies } from 'next/headers';
 
 import Confetti from '@/components/Confetti';
+import CoworkingParty from '@/components/CoworkingParty';
 import PartyKit from '@/components/Presence/PartyKit';
-import TagLine from '@/components/Presence/TagLine';
-import UserList from '@/components/Presence/UserList';
-import Error from '@/components/Site/Error';
 import LoggedOutHomepage from '@/components/Site/LoggedOutHomepage';
 import VisibilityEvents from '@/components/Site/VisibilityEvents';
 
-import { connectionStatusAtom } from '@/store';
+import { auth } from '@/auth';
 
-export default function Home() {
-  const { data: session } = useSession();
-  const user = session?.user;
+export default async function Home() {
+  const session = await auth();
 
-  const connectionStatus = useAtomValue(connectionStatusAtom);
+  if (!session?.user) return <LoggedOutHomepage />;
 
-  if (!user) return <LoggedOutHomepage />;
+  // local dev uses non 'Secure' cookies
+  const sessionToken =
+    cookies().get('__Secure-authjs.session-token')?.value ||
+    cookies().get('authjs.session-token')?.value ||
+    '';
 
   return (
     <div>
       <Confetti />
-      <PartyKit />
+      <PartyKit sessionToken={sessionToken} />
       <VisibilityEvents />
-      {connectionStatus === 'fully connected' && (
-        <div>
-          <TagLine />
-          <UserList />
-        </div>
-      )}
-      {connectionStatus === 'partially connected' && <Error />}
+      <CoworkingParty />
     </div>
   );
 }
