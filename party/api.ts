@@ -38,6 +38,7 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
 
     const { method, url } = request;
     const path = new URL(url).pathname.replace('/party/main', '');
+    console.log('API request:', { method, path });
 
     posthog.capture('api request', { method, path });
 
@@ -55,6 +56,10 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
 
     if (method === 'GET' && path === '/debug') {
       return debugInfo(partyServer);
+    }
+
+    if (method === 'GET' && path === '/reset') {
+      return await resetStorage({ partyServer, request });
     }
 
     return new Response(null, { status: 405 });
@@ -143,4 +148,38 @@ export async function debugInfo(partyServer: Server) {
   }
 
   return new Response(JSON.stringify(debugData, null, 2), { status: 200 });
+}
+
+type ResetStorageParams = {
+  partyServer: Server;
+  request: Party.Request;
+};
+async function resetStorage({ partyServer, request }: ResetStorageParams) {
+  try {
+    const url = new URL(request.url);
+    const adminSecret = url.searchParams.get('secret');
+
+    if (adminSecret !== process.env.ADMIN_SECRET)
+      return new Response(JSON.stringify({ status: 'error', message: 'Unauthorized access' }), {
+        status: 403,
+      });
+
+    const connectedUserIds =
+      (await partyServer.room.storage.get<string[]>('connectedUserIds')) || [];
+    await partyServer.room.storage.put('connectedUserIds', []);
+    partyServer.users.list = [];
+
+    return new Response(
+      JSON.stringify({
+        status: 'success',
+        removedUserIds: connectedUserIds,
+        removedUserIdCount: connectedUserIds?.length,
+      }),
+      { status: 200 }
+    );
+  } catch (err) {
+    return new Response(JSON.stringify({ status: 'error', message: getErrorMessage(err) }), {
+      status: 500,
+    });
+  }
 }

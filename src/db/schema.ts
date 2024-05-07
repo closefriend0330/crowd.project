@@ -77,7 +77,7 @@ export const userData = sqliteTable(
     name: text('name'),
     image: text('image'),
     tagline: text('tagline'),
-    status: text('status').notNull().default('offline'),
+    status: text('status').notNull().default('online'),
     statusChangedAt: integer('statusChangedAt', { mode: 'timestamp_ms' }),
     away: integer('away', { mode: 'boolean' }).notNull().default(false),
     awayStartedAt: integer('awayStartedAt', { mode: 'timestamp_ms' }),

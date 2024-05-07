@@ -22,7 +22,7 @@ export async function getUserData(userId: string): Promise<UserData> {
         name: fullUserInfo.name,
         image: fullUserInfo.image,
         tagline: null,
-        status: 'offline',
+        status: 'online',
         away: false,
         connections: [],
         createdAt: now,
