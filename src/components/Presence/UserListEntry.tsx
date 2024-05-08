@@ -1,7 +1,10 @@
+'use client';
+
+import Linkify from 'linkify-react';
+
 import Avatar from '@/components/Presence/Avatar';
 import TimeAgo from '@/components/Presence/TimeAgo';
 import StatusBadge from '@/components/Site/StatusBadge';
-import Linkify from 'linkify-react';
 
 import { UserPublicData } from '@/lib/types';
 
@@ -24,23 +27,13 @@ function UserListTagline({ user }: { user: UserPublicData }) {
 function UserListTimestamp({ user, className }: { user: UserPublicData; className?: string }) {
   return (
     <div className={className}>
-      {user.away
-        ? user.awayStartedAt && (
-            <TimeAgo
-              className='text-xs text-slate-700 self-end'
-              tooltipPrefix={`Connected at ${user?.sessionStartedAt?.toLocaleString()}, away since `}
-              date={user.awayStartedAt}
-            />
-          )
-        : user.sessionStartedAt && (
-            <>
-              <TimeAgo
-                className='text-xs text-slate-700 self-end'
-                tooltipPrefix='Connected at '
-                date={user.sessionStartedAt}
-              />
-            </>
-          )}
+      {user.away && user.awayStartedAt && (
+        <TimeAgo
+          className='text-xs text-slate-700 self-end'
+          tooltipPrefix={`Connected at ${user?.sessionStartedAt?.toLocaleString()}, away since `}
+          date={user.awayStartedAt}
+        />
+      )}
     </div>
   );
 }
