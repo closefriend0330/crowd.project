@@ -13,3 +13,25 @@ export const CONFETTI_DELAY_MAX = 1200;
 
 // time a browser tab must be inactive before the user is considered away
 export const AWAY_TIME_THRESHOLD = 15 * 60 * 1000;
+
+// used to announce new users in the Discord
+export const newUserAdjectives = [
+  'awesome',
+  'amazing',
+  'fantastic',
+  'very cool',
+  'super interesting',
+  'magical',
+  'wonderful',
+  'incredible',
+  'terrific',
+  'outstanding',
+  'impressive',
+  'marvelous',
+  'extraordinary',
+  'remarkable',
+  'exceptional',
+  'phenomenal',
+  'splendid',
+  'spectacular',
+] as const;

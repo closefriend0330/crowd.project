@@ -1,7 +1,7 @@
 import { eq, inArray, ne } from 'drizzle-orm';
 
 import { db } from '@/db/db';
-import { userData, users } from '@/db/schema';
+import { accounts, userData, users } from '@/db/schema';
 
 import { UserData, UserDataInsert } from '@/lib/types';
 
@@ -44,4 +44,10 @@ export function clearConnectionData() {
     .update(userData)
     .set({ connections: [], updatedAt: now })
     .where(ne(userData.connections, []));
+}
+
+export function getUserAccounts(userId: string) {
+  return db.query.accounts.findMany({
+    where: eq(accounts.userId, userId),
+  });
 }

@@ -35,3 +35,5 @@ export const humanizeDurationShort = humanizeDuration.humanizer({
     },
   },
 });
+
+export const capitaliseFirst = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
