@@ -122,6 +122,7 @@ const config = {
     extend: {
       screens: {
         xs: '480px',
+        pwa: { raw: '(display-mode: fullscreen)' },
       },
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],

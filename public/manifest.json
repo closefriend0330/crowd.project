@@ -1,0 +1,8 @@
+{
+  "name": "Coworking Party",
+  "short_name": "Coworking Party",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#2563eb",
+  "background_color": "#E8F3FF"
+}

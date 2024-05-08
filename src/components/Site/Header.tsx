@@ -17,7 +17,7 @@ export default function Header() {
   const connectionStatus = useAtomValue(connectionStatusAtom);
 
   return (
-    <div className='flex items-center justify-between w-full gap-4 px-4 min-h-12 sm:min-h-16 bg-gradient-to-br text-white from-blue-600 to-purple-600 mb-4 border-b-black border-b-[0.5px]'>
+    <div className='flex items-center justify-between w-full gap-4 px-4 min-h-12 sm:min-h-16 bg-gradient-to-br pwa:from-blue-600 pwa:to-blue-600 text-white from-blue-600 to-purple-600 mb-4 border-b-black border-b-[0.5px]'>
       <div className='w-10 hidden sm:block'>
         <Logo />
       </div>
