@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import type { Config } from 'drizzle-kit';
 
-export default {
+const config: Config = {
   schema: './src/db/schema.ts',
   out: './db/migrations',
   driver: 'turso',
@@ -10,4 +10,6 @@ export default {
     url: process.env.DATABASE_URL as string,
     authToken: process.env.DATABASE_AUTH_TOKEN,
   },
-} satisfies Config;
+};
+
+export default config;
