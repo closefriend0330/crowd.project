@@ -6,6 +6,7 @@ import { parseApiRequest } from '@/party/api';
 import { buildServerMessage, processClientMessage } from '@/party/messages';
 
 import { getNextAuthSession } from '@/party/auth';
+import { processError } from '@/party/lib';
 import { ServerMessageServerMetaData } from '@/party/serverMessages';
 import { UserList } from '@/party/userList';
 
@@ -94,9 +95,13 @@ export default class Server implements Party.Server {
   }
 
   async onMessage(message: string, sender: Party.Connection) {
-    debug('Client message received:', message, { connectionId: sender.id });
+    try {
+      debug('Client message received:', message, { connectionId: sender.id });
 
-    await processClientMessage({ message, users: this.users, partyServer: this, sender });
+      await processClientMessage({ message, users: this.users, partyServer: this, sender });
+    } catch (err) {
+      processError({ err, connection: sender, source: 'onMessage' });
+    }
   }
 
   async onRequest(request: Party.Request) {

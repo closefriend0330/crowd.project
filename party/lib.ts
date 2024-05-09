@@ -22,7 +22,8 @@ export async function getUserData(userId: string): Promise<UserData> {
     if (!userData) {
       const fullUserInfo = await getUser(userId);
 
-      if (!fullUserInfo) throw Error(`User not found for initial userData population: ${userId}`);
+      if (!fullUserInfo)
+        throw new Error(`User not found for initial userData population: ${userId}`);
 
       const newUserData: UserDataInsert = {
         email: fullUserInfo.email,
@@ -48,7 +49,7 @@ export async function getUserData(userId: string): Promise<UserData> {
 
     return userData;
   } catch (err) {
-    throw Error(`Error in getUserData: ${getErrorMessage(err)}`);
+    throw new Error(`Error in getUserData: ${getErrorMessage(err)}`);
   }
 }
 
@@ -77,7 +78,7 @@ type ReturnErrorParams = {
 export function processError({ err, connection, source }: ReturnErrorParams) {
   const message = getErrorMessage(err);
 
-  console.error('Error adding user: ', message);
+  console.error(`Error in ${source}: `, message);
 
   if (connection)
     connection.send(

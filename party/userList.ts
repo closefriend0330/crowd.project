@@ -142,7 +142,7 @@ export class UserList {
 
         await updateUserData(userId, userUpdates);
 
-        await this.persistUserList();
+        await this.persistUserList({ connection });
       }
 
       // send user their full data and the full user list (even for additional connection)
@@ -166,11 +166,27 @@ export class UserList {
 
   async updateUserData({ data, userId, connection }: UpdateUserDataParams) {
     try {
-      if (!userId) {
-        console.error('No userId provided for updateUserData');
+      if (!userId || !connection)
+        throw new Error(
+          `No userId or connection provided for updateUserData ${JSON.stringify({
+            userId,
+            connectionId: connection?.id,
+          })}`
+        );
 
-        return { wasConnected: false };
-      }
+      // make sure user is only updating their own data
+      const userIdByConnection = this.users.find((u) =>
+        u.connections.includes(connection.id)
+      )?.userId;
+
+      if (!userIdByConnection || userIdByConnection !== userId)
+        throw new Error(
+          `User ID mismatch in updatedUserData: ${JSON.stringify({
+            userId,
+            userIdByConnection,
+            connectionId: connection.id,
+          })}`
+        );
 
       const userIndex = this.users.findIndex((u) => u.userId === userId);
       const wasConnected = Boolean(userIndex !== -1);
@@ -242,7 +258,7 @@ export class UserList {
             })
           );
 
-          await this.persistUserList();
+          await this.persistUserList({ connection });
 
           // reset some status fields at the end of a session, but not everything,
           // in case they reconnect within the grace period
@@ -264,20 +280,24 @@ export class UserList {
   }
 
   // save the list of user IDs to restore them on server restart
-  async persistUserList() {
-    const connectedUserIds = this.users.map((u) => u.userId);
+  async persistUserList({ connection }: { connection?: Party.Connection<unknown> }) {
+    try {
+      const connectedUserIds = this.users.map((u) => u.userId);
 
-    await this.partyServer.room.storage.put('connectedUserIds', connectedUserIds);
+      await this.partyServer.room.storage.put('connectedUserIds', connectedUserIds);
 
-    if (connectedUserIds.length > 0)
-      debug(
-        `User list with ${pluralize(
-          'connected user',
-          connectedUserIds.length,
-          true
-        )} persisted to storage`,
-        { connectedUserIds }
-      );
-    else debug(`Empty list persisted to storage for connected users. No more users connected.`);
+      if (connectedUserIds.length > 0)
+        debug(
+          `User list with ${pluralize(
+            'connected user',
+            connectedUserIds.length,
+            true
+          )} persisted to storage`,
+          { connectedUserIds }
+        );
+      else debug(`Empty list persisted to storage for connected users. No more users connected.`);
+    } catch (err) {
+      processError({ err, connection, source: 'persistUserList' });
+    }
   }
 }

@@ -3,9 +3,10 @@
 import Party from 'partykit/server';
 
 import { clientMessageSchema } from '@/lib/clientMessages';
-import { debug, getErrorMessage } from '@/lib/utils';
+import { debug } from '@/lib/utils';
 import { serverMessageSchema } from '@/party/serverMessages';
 
+import { processError } from '@/party/lib';
 import type Server from '@/party/server';
 import { UserList } from '@/party/userList';
 
@@ -34,7 +35,7 @@ export async function processClientMessage({ message, users, sender }: processCl
       console.error('Unknown client message type:', type);
     }
   } catch (err) {
-    console.error('Error processing client message:', getErrorMessage(err));
+    processError({ err, connection: sender, source: 'processClientMessage' });
   }
 }
 
