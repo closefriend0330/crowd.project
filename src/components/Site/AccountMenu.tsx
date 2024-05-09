@@ -33,7 +33,7 @@ export default function AccountMenu({ children, user }: Props) {
         </DropdownMenuTrigger>
         <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()} align='end'>
           <DropdownMenuLabel className='flex flex-col'>
-            <div>{user.name}</div>
+            <div>{userData?.name || user.name}</div>
             <div className='text-[7pt] text-slate-500 font-normal'>{user.email}</div>
           </DropdownMenuLabel>
           {userData && (

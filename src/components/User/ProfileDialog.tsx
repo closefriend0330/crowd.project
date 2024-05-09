@@ -58,7 +58,6 @@ export default function ProfileDialog() {
     values: {
       name: userData?.name || '',
       apiKey: maskApiKey(apiKey),
-      homepage: '',
     },
   });
 
@@ -76,10 +75,7 @@ export default function ProfileDialog() {
       );
 
       if (Object.keys(updatedValues).length > 0) {
-        // TODO: Make sure errors are still shown in toast when updating profile failed on the server
-        updateUserData(updatedValues);
-
-        toast.success('Profile updated');
+        updateUserData({ data: updatedValues, successMessage: 'Profile updated' });
       } else toast.info('No changes to update');
 
       close();

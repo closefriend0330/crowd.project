@@ -37,7 +37,7 @@ export default function TagLine() {
   const tagline = form.watch('tagline');
 
   const onSubmit = ({ tagline }: z.infer<typeof formSchema>) => {
-    updateUserData({ tagline });
+    updateUserData({ data: { tagline } });
     form.reset();
 
     posthog.capture('tagline update', { length: tagline.length });

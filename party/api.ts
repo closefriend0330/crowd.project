@@ -92,7 +92,7 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
       );
     }
 
-    const [user] = await getUserDataByApiKey(result.data.apiKey);
+    const user = await getUserDataByApiKey(result.data.apiKey);
     if (!user) {
       posthog.capture('status api request error', { type: 'user/API key not found' });
 

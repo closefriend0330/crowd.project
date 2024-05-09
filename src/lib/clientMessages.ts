@@ -9,6 +9,7 @@ export const clientMessageUpdateUserDataSchema = z.object({
   type: z.literal('updateUserData'),
   userId: z.string(),
   data: userDataSchema.partial(),
+  successMessage: z.string().optional(),
 });
 export type ClientMessageUpdateUserData = z.infer<typeof clientMessageUpdateUserDataSchema>;
 

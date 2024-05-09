@@ -12,7 +12,11 @@ export default function useUserData() {
   const [userData, setUserData] = useAtom(userDataAtom);
   const ws = useAtomValue(partySocketAtom);
 
-  function updateUserData(data: Partial<UserData>) {
+  type UpdateUserDataParams = {
+    data: Partial<UserData>;
+    successMessage?: string;
+  };
+  function updateUserData({ data, successMessage }: UpdateUserDataParams) {
     debug('updateUserData in useUserData', data);
 
     if (!data || Object.keys(data).length === 0) {
@@ -51,6 +55,7 @@ export default function useUserData() {
         type: 'updateUserData',
         userId: userData.userId,
         data,
+        successMessage,
       })
     );
   }

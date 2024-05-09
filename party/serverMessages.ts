@@ -12,6 +12,7 @@ const serverMessageTypes = [
   'updateUsersPublicData',
   'serverMetaData',
   'errorEncountered',
+  'updateSuccess',
 ] as const;
 export type ServerMessageType = (typeof serverMessageTypes)[number];
 
@@ -51,6 +52,13 @@ const serverMessageUpdatePublicDataSchema = z.object({
 });
 export type ServerMessageUpdatePublicData = z.infer<typeof serverMessageUpdatePublicDataSchema>;
 
+// the server has successfully updated data with a 'source' (i.e. a form in a dialog box that can be closed)
+const serverMessageUpdateSuccessSchema = z.object({
+  type: z.literal('updateSuccess'),
+  message: z.string().optional(),
+});
+export type ServerMessageUpdateSuccess = z.infer<typeof serverMessageUpdateSuccessSchema>;
+
 // the server has updated the public data of a user in the list
 const serverMessageErrorEncounteredSchema = z.object({
   type: z.literal('errorEncountered'),
@@ -73,5 +81,6 @@ export const serverMessageSchema = z.union([
   serverMessageUpdatePublicDataSchema,
   serverMessageServerMetaDataSchema,
   serverMessageErrorEncounteredSchema,
+  serverMessageUpdateSuccessSchema,
 ]);
 export type ServerMessage = z.infer<typeof serverMessageSchema>;

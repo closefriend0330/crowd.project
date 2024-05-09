@@ -5,14 +5,30 @@ import { accounts, userData, users } from '@/db/schema';
 
 import { UserData, UserDataInsert } from '@/lib/types';
 
-export function getUserDataByApiKey(apiKey: string) {
-  return db.select().from(userData).where(eq(userData.apiKey, apiKey));
+export async function getUserDataByApiKey(apiKey: string) {
+  const res = await db.query.userData.findFirst({
+    where: (users, { eq }) => eq(users.apiKey, apiKey),
+    with: { user: true },
+  });
+
+  if (!res) return null;
+
+  const { user, ...userData } = res;
+
+  return { ...userData, name: res.user.name };
 }
 
 export async function getUserDataByUserId(userId: string): Promise<UserData> {
-  const [res] = await db.select().from(userData).where(eq(userData.userId, userId));
+  const res = await db.query.userData.findFirst({
+    where: eq(userData.userId, userId),
+    with: { user: true },
+  });
 
-  return res;
+  if (!res) throw new Error(`User not found for initial userData population: ${userId}`);
+
+  const { user, ...data } = res;
+
+  return { ...data, name: res.user.name };
 }
 
 export function setUserData(userId: string, data: UserDataInsert) {
@@ -22,19 +38,34 @@ export function setUserData(userId: string, data: UserDataInsert) {
     .returning();
 }
 
-export function updateUserData(userId: string, data: Partial<UserData>) {
-  return db
+export async function updateUserData(userId: string, data: Partial<UserData>) {
+  const { name, ...rest } = data;
+
+  await db
     .update(userData)
-    .set({ ...data, updatedAt: new Date() })
+    .set({ ...rest, updatedAt: new Date() })
     .where(eq(userData.userId, userId));
+
+  if (name) await db.update(users).set({ name }).where(eq(users.id, userId));
 }
 
 export function getUser(userId: string) {
   return db.query.users.findFirst({ where: eq(users.id, userId) });
 }
 
-export function getUserDataList(userIds: string[]) {
-  return db.query.userData.findMany({ where: inArray(userData.userId, userIds) });
+export async function getUserDataList(userIds: string[]) {
+  const res = await db.query.userData.findMany({
+    where: inArray(userData.userId, userIds),
+    with: { user: true },
+  });
+
+  if (!res || res.length === 0) return [];
+
+  return res.map((r) => {
+    const { user, ...data } = r;
+
+    return { ...data, name: user.name };
+  });
 }
 
 export function clearConnectionData() {

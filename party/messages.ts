@@ -10,6 +10,8 @@ import { processError } from '@/party/lib';
 import type Server from '@/party/server';
 import { UserList } from '@/party/userList';
 
+import { ServerMessageUpdateSuccess } from '@/party/serverMessages';
+
 type processClientMessageParams = {
   message: string;
   users: UserList;
@@ -20,19 +22,31 @@ type processClientMessageParams = {
 // messages received by the server from the client
 export async function processClientMessage({ message, users, sender }: processClientMessageParams) {
   try {
-    const { type, data, userId } = clientMessageSchema.parse(JSON.parse(message));
+    const msg = clientMessageSchema.parse(JSON.parse(message));
 
-    if (type === 'updateUserData') {
+    if (msg.type === 'updateUserData') {
+      const { data, userId, successMessage } = msg;
+
       // update the user's data
       debug('updateUserData: ', { userId, data });
 
-      await users.updateUserData({
+      const { success } = await users.updateUserData({
         data,
         userId,
         connection: sender,
       });
+
+      // confirm the update if source requested it (e.g. so a dialog box can be closed)
+      if (success && successMessage) {
+        sender.send(
+          buildServerMessage<ServerMessageUpdateSuccess>({
+            type: 'updateSuccess',
+            message: successMessage,
+          })
+        );
+      }
     } else {
-      console.error('Unknown client message type:', type);
+      console.error('Unknown client message type:', msg.type);
     }
   } catch (err) {
     processError({ err, connection: sender, source: 'processClientMessage' });

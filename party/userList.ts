@@ -166,33 +166,32 @@ export class UserList {
 
   async updateUserData({ data, userId, connection }: UpdateUserDataParams) {
     try {
-      if (!userId || !connection)
-        throw new Error(
-          `No userId or connection provided for updateUserData ${JSON.stringify({
-            userId,
-            connectionId: connection?.id,
-          })}`
-        );
+      if (!userId) throw new Error('No userId provided for updateUserData');
 
-      // make sure user is only updating their own data
-      const userIdByConnection = this.users.find((u) =>
-        u.connections.includes(connection.id)
-      )?.userId;
+      if (connection) {
+        // make sure user is only updating their own data
+        // these should be non API updates
+        const userIdByConnection = this.users.find((u) =>
+          u.connections.includes(connection.id)
+        )?.userId;
 
-      if (!userIdByConnection || userIdByConnection !== userId)
-        throw new Error(
-          `User ID mismatch in updatedUserData: ${JSON.stringify({
-            userId,
-            userIdByConnection,
-            connectionId: connection.id,
-          })}`
-        );
+        if (!userIdByConnection || userIdByConnection !== userId)
+          throw new Error(
+            `User ID mismatch in updatedUserData: ${JSON.stringify({
+              userId,
+              userIdByConnection,
+              connectionId: connection.id,
+            })}`
+          );
+      }
 
       const userIndex = this.users.findIndex((u) => u.userId === userId);
       const wasConnected = Boolean(userIndex !== -1);
 
       // update the connected user's data on the server
       if (wasConnected) {
+        if (data.status) data.statusChangedAt = new Date();
+
         this.users[userIndex] = { ...this.users[userIndex], ...data };
 
         this.partyServer.room.broadcast(
@@ -207,7 +206,7 @@ export class UserList {
       // persist the update to the database, even if they weren't connected
       await updateUserData(userId, data);
 
-      return { wasConnected };
+      return { wasConnected, success: true };
     } catch (err) {
       processError({ err, connection, source: 'updateUserData' });
 
