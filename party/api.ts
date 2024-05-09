@@ -7,7 +7,7 @@ import { fromError } from 'zod-validation-error';
 import { MAX_TAGLINE_LENGTH } from '@/config';
 import { getUserDataByApiKey } from '@/db/queries';
 import { userPublicDataSchema } from '@/lib/types';
-import { getErrorMessage } from '@/lib/utils';
+import { debug, getErrorMessage } from '@/lib/utils';
 import { userSelectableStatusOptions } from '@/statusConfig';
 
 import type Server from '@/party/server';
@@ -38,7 +38,7 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
 
     const { method, url } = request;
     const path = new URL(url).pathname.replace('/party/main', '');
-    console.log('API request:', { method, path });
+    debug('API request:', { method, path });
 
     posthog.capture('api request', { method, path });
 

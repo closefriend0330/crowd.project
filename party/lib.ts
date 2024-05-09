@@ -90,8 +90,6 @@ export function processError({ err, connection, source }: ReturnErrorParams) {
 }
 
 export async function discordNotification(message: string) {
-  console.log('Discord notification:', message);
-
   if (!process.env.DISCORD_WEBHOOK_URL)
     debug('No DISCORD_WEBHOOK_URL set, skipping Discord notification.');
   else {
