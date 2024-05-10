@@ -40,9 +40,7 @@ export default async function RootLayout({
         <Providers session={session}>
           <div className='flex min-h-screen flex-col'>
             <Header />
-            <main className='flex-grow justify-center items-center xs:mx-auto px-6'>
-              {children}
-            </main>
+            <main className='xs:mx-auto px-6 grow'>{children}</main>
             <Footer />
             {googleAnalyticsId && <GoogleAnalytics gaId={googleAnalyticsId} />}
           </div>
