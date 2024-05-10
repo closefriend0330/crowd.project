@@ -7,7 +7,7 @@ export const users = sqliteTable('user', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => uuidv4()),
-  name: text('name').unique(),
+  name: text('name'),
   email: text('email').notNull().unique(),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
   image: text('image'),
@@ -74,9 +74,6 @@ export const userData = sqliteTable(
       .primaryKey()
       .$defaultFn(() => uuidv4())
       .references(() => users.id, { onDelete: 'cascade' }),
-    // TODO: remove name from userData, since we're using the users one
-    name: text('name'),
-    image: text('image'),
     tagline: text('tagline'),
     status: text('status').notNull().default('online'),
     statusChangedAt: integer('statusChangedAt', { mode: 'timestamp_ms' }),
@@ -98,7 +95,6 @@ export const userData = sqliteTable(
       .$type<string[]>()
       .notNull()
       .default(sql`[]`),
-    email: text('email').unique(),
   },
   (ud) => ({
     userIdIdx: index('UserData_userId_index').on(ud.userId),

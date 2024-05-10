@@ -16,19 +16,18 @@ import { ServerMessageErrorEncountered } from '@/party/serverMessages';
 
 export async function getUserData(userId: string): Promise<UserData> {
   try {
-    let userData: UserData = await getUserDataByUserId(userId);
+    let userData: UserData | null = await getUserDataByUserId(userId);
     const now = new Date();
 
     if (!userData) {
       const fullUserInfo = await getUser(userId);
 
       if (!fullUserInfo)
-        throw new Error(`User not found for initial userData population: ${userId}`);
+        throw new Error(
+          `User not found for initial userData population, creating new entry: ${userId}`
+        );
 
       const newUserData: UserDataInsert = {
-        email: fullUserInfo.email,
-        name: fullUserInfo.name,
-        image: fullUserInfo.image,
         tagline: null,
         status: 'online',
         away: false,
@@ -38,7 +37,12 @@ export async function getUserData(userId: string): Promise<UserData> {
         sessionStartedAt: now,
       };
 
-      userData = (await setUserData(userId, newUserData))[0];
+      userData = {
+        ...(await setUserData(userId, newUserData))[0],
+        name: fullUserInfo.name || '',
+        email: fullUserInfo.email || '',
+        image: fullUserInfo.image,
+      };
 
       newUserNotification(userData);
     } else {

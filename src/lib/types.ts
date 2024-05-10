@@ -1,7 +1,7 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { userData } from '@/db/schema';
+import { userData, users } from '@/db/schema';
 
 import { TablerIcon } from '@/statusConfig';
 
@@ -30,17 +30,26 @@ const userDataSchemaOptions = {
   connections: z.array(z.string()).default([]),
 };
 
-export const userDataSchema = createSelectSchema(userData, userDataSchemaOptions);
+const authUserSchema = createSelectSchema(users).pick({ email: true, name: true, image: true });
+const authPublicUserSchema = authUserSchema.omit({ email: true });
+export type AuthUser = z.infer<typeof authUserSchema>;
+export type AuthUserPublic = z.infer<typeof authPublicUserSchema>;
+
+export const userDataSchema = createSelectSchema(userData, userDataSchemaOptions).merge(
+  authUserSchema
+);
 export type UserData = z.infer<typeof userDataSchema>;
 export const userDataInsertSchema = createInsertSchema(userData, userDataSchemaOptions);
 export type UserDataInsert = z.infer<typeof userDataInsertSchema>;
 
 // public data gets sent to other users in the same room
-export const userPublicDataSchema = userDataSchema.omit({
-  apiKey: true,
-  connections: true,
-  email: true,
-});
+export const userPublicDataSchema = userDataSchema
+  .omit({
+    apiKey: true,
+    connections: true,
+    email: true,
+  })
+  .merge(authPublicUserSchema);
 export type UserPublicData = z.infer<typeof userPublicDataSchema>;
 
 type ConfettiShootParams = {

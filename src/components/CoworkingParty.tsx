@@ -15,9 +15,9 @@ export default function CoworkingParty() {
   if (connectionStatus === 'fully connected')
     return (
       <div className='max-w-xl'>
-        <NewsCallout title='New feature: Edit your profile' className='mb-4'>
-          Change your username or grab your API key via &apos;Edit profile&apos; under the the
-          account menu.
+        <NewsCallout title='New features: API key, new status update UI' className='mb-4'>
+          Change your username or grab your API key via &apos;Edit profile&apos; under the account
+          menu and update your status and update text at the same time.
         </NewsCallout>
 
         <div className='flex flex-col justify-center items-center'>

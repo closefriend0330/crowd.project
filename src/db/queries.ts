@@ -18,17 +18,17 @@ export async function getUserDataByApiKey(apiKey: string) {
   return { ...userData, name: res.user.name };
 }
 
-export async function getUserDataByUserId(userId: string): Promise<UserData> {
+export async function getUserDataByUserId(userId: string): Promise<UserData | null> {
   const res = await db.query.userData.findFirst({
     where: eq(userData.userId, userId),
     with: { user: true },
   });
 
-  if (!res) throw new Error(`User not found for initial userData population: ${userId}`);
+  if (!res) return null;
 
   const { user, ...data } = res;
 
-  return { ...data, name: res.user.name };
+  return { ...data, image: res.user.image, name: res.user.name, email: res.user.email };
 }
 
 export function setUserData(userId: string, data: UserDataInsert) {
@@ -64,7 +64,7 @@ export async function getUserDataList(userIds: string[]) {
   return res.map((r) => {
     const { user, ...data } = r;
 
-    return { ...data, name: user.name };
+    return { ...data, name: user.name, image: user.image, email: user.email };
   });
 }
 
