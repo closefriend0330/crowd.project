@@ -7,36 +7,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useSession } from 'next-auth/react';
-
-import useUserData from '@/hooks/useUserData';
 
 import { cn } from '@/lib/utils';
 import { userSelectableStatusOptions, userStatusConfig } from '@/statusConfig';
-import posthog from 'posthog-js';
 
-export default function StatusSelect() {
-  const { userData, updateUserData } = useUserData();
-  const { data: session } = useSession();
-  const currentStatus = userData?.status;
-
-  if (!session?.user) return null;
-
-  const updateStatus = (status: string) => {
-    if (status) {
-      posthog.capture('status update', { status, oldStatus: currentStatus });
-
-      updateUserData({ data: { status } });
-    }
-  };
-
+type Props = {
+  field: any;
+  selectedStatus: string;
+};
+export default function StatusSelect({ field, selectedStatus }: Props) {
   return (
-    <Select onValueChange={updateStatus} defaultValue={currentStatus} value={currentStatus}>
+    <Select onValueChange={field.onChange} defaultValue={field.value} {...field}>
       <SelectTrigger
         className={cn(
           'w-min',
-          currentStatus
-            ? [userStatusConfig[userData.status].backgroundColor, 'text-white font-bold']
+          selectedStatus
+            ? [userStatusConfig[selectedStatus]?.backgroundColor, 'text-white font-bold']
             : 'text-black bg-white'
         )}
       >

@@ -23,7 +23,7 @@ function UserListSegment({ users, title, className }: UserListSegmentProps) {
 
   return (
     <div className={className}>
-      <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-1 border-black text-right'>
+      <h2 className='text-lg sm:text-xl font-header font-bold border-b pb-2 border-gray-400 text-right'>
         {title} ({users.length})
       </h2>
       <div>
@@ -54,7 +54,7 @@ export default function UserList() {
   }, [shootConfetti, shot]);
 
   return users?.length > 0 ? (
-    <div className='xs:min-w-96 max-w-[500px] grow'>
+    <div className='xs:min-w-96 w-full max-w-[450px]'>
       <UserListSegment users={connectedUsers} title='Online' className='mb-4' />
       <UserListSegment users={awayUsers} title='Away' />
     </div>
