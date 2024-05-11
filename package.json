@@ -20,10 +20,10 @@
     "lint": "next lint",
     "check": "tsc --noEmit",
     "deploy": "pnpm run deploy:preview",
-    "deploy:preview": "pnpm run deploy:preview:partykit && pnpm run deploy:preview:site",
+    "deploy:preview": "pnpm run db:dump:preview && pnpm run db:dump:prune:preview && pnpm run deploy:preview:partykit && pnpm run deploy:preview:site",
     "deploy:preview:partykit": "cp .env .env.bak; cp .env.preview .env; partykit deploy --preview preview --with-vars; mv .env.bak .env",
     "deploy:preview:site": "dotenv -e .env.preview -- sst deploy --stage preview",
-    "deploy:prod": "pnpm run deploy:prod:partykit && pnpm run deploy:prod:site",
+    "deploy:prod": "pnpm run db:dump:prod && pnpm run db:dump:prune:prod && pnpm run deploy:prod:partykit && pnpm run deploy:prod:site",
     "deploy:prod:partykit": "cp .env .env.bak; cp .env.production .env; partykit deploy --with-vars; mv .env.bak .env",
     "deploy:prod:site": "dotenv -e .env.production -- sst deploy --stage production",
     "db:push": "drizzle-kit push",
@@ -32,7 +32,13 @@
     "db:studio": "drizzle-kit studio",
     "db:shell": "turso db shell http://127.0.0.1:8080",
     "db:shell:preview": "turso db shell coworking-party-preview",
-    "db:shell:prod": "turso db shell coworking-party"
+    "db:shell:prod": "turso db shell coworking-party",
+    "db:dump": "turso db shell http://127.0.0.1:8080 .dump > db/exports/coworking_party_local_`date -u +\"%Y-%m-%dT%H-%M-%S\"`.sql",
+    "db:dump:preview": "turso db shell coworking-party-preview .dump > db/exports/coworking_party_preview_`date -u +\"%Y-%m-%dT%H-%M-%S\"`.sql",
+    "db:dump:prod": "turso db shell coworking-party .dump > db/exports/coworking_party_prod_`date -u +\"%Y-%m-%dT%H-%M-%S\"`.sql",
+    "db:dump:prune": "find db/exports -name \"coworking_party_local*sql\" -type f -mtime 14 -exec rm -f {} +",
+    "db:dump:prune:preview": "find db/exports -name \"coworking_party_preview*sql\" -type f -mtime 14 -exec rm -f {} +",
+    "db:dump:prune:prod": "find db/exports -name \"coworking_party_prod*sql\" -type f -mtime 14 -exec rm -f {} +"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "1.0.1",
