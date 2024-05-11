@@ -64,10 +64,10 @@ importers:
         version: 16.4.5
       drizzle-orm:
         specifier: ^0.30.10
-        version: 0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.25.0)(react@18.3.1)
+        version: 0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240502.0)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.27.3)(react@18.3.1)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.25.0)(react@18.3.1))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240502.0)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.27.3)(react@18.3.1))(zod@3.23.8)
       framer-motion:
         specifier: ^11.1.9
         version: 11.1.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -136,7 +136,7 @@ importers:
         version: 3.3.0(zod@3.23.8)
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.3.2)(immer@9.0.21)(react@18.3.1)
+        version: 4.5.2(@types/react@18.3.2)(immer@10.1.1)(react@18.3.1)
     devDependencies:
       '@types/humanize-duration':
         specifier: ^3.27.4
@@ -464,6 +464,9 @@ packages:
 
   '@cloudflare/workers-types@4.20240320.1':
     resolution: {integrity: sha512-CiYtVpQURPgQqtBKkmOAnfPElVZuD7Xyf1IxKtKp2B4aB9gnooapwJhzeY8c4Ls4u17SgMS0MprOkrgYwzZ6xg==}
+
+  '@cloudflare/workers-types@4.20240502.0':
+    resolution: {integrity: sha512-OB1jIyPOzyOcuZFHWhsQnkRLN6u8+jmU9X3T4KZlGgn3Ivw8pBiswhLOp+yFeChR3Y4/5+V0hPFRko5SReordg==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -2687,8 +2690,8 @@ packages:
   immediate@3.0.6:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
 
-  immer@9.0.21:
-    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
+  immer@10.1.1:
+    resolution: {integrity: sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==}
 
   import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -2870,6 +2873,9 @@ packages:
   jose@5.2.3:
     resolution: {integrity: sha512-KUXdbctm1uHVL8BYhnyHkgp3zDX5KW8ZhAKVFEfUbU2P8Alpzjb+48hHvjOdQIyPshoblhzsuqOwEEAbtHVirA==}
 
+  jose@5.3.0:
+    resolution: {integrity: sha512-IChe9AtAE79ru084ow8jzkN2lNrG3Ntfiv65Cvj9uOCE2m5LNsdHG+9EbxWxAoWRF9TgDOqLN5jm08++owDVRg==}
+
   jotai@2.8.0:
     resolution: {integrity: sha512-yZNMC36FdLOksOr8qga0yLf14miCJlEThlp5DeFJNnqzm2+ZG7wLcJzoOyij5K6U6Xlc5ljQqPDlJRgqW0Y18g==}
     engines: {node: '>=12.20.0'}
@@ -2916,8 +2922,8 @@ packages:
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
-  kysely@0.25.0:
-    resolution: {integrity: sha512-srn0efIMu5IoEBk0tBmtGnoUss4uwvxtbFQWG/U2MosfqIace1l43IFP1PmEpHRDp+Z79xIcKEqmHH3dAvQdQA==}
+  kysely@0.27.3:
+    resolution: {integrity: sha512-lG03Ru+XyOJFsjH3OMY6R/9U38IjDPfnOfDgO3ynhbDr+Dz8fak+X6L62vqu3iybQnj+lG84OttBuU9KY3L9kA==}
     engines: {node: '>=14.0.0'}
 
   language-subtag-registry@0.3.22:
@@ -3913,7 +3919,7 @@ snapshots:
       '@panva/hkdf': 1.1.1
       '@types/cookie': 0.6.0
       cookie: 0.6.0
-      jose: 5.2.3
+      jose: 5.3.0
       oauth4webapi: 2.10.4
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
@@ -4790,6 +4796,9 @@ snapshots:
     optional: true
 
   '@cloudflare/workers-types@4.20240320.1': {}
+
+  '@cloudflare/workers-types@4.20240502.0':
+    optional: true
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -6502,18 +6511,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.25.0)(react@18.3.1):
+  drizzle-orm@0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240502.0)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.27.3)(react@18.3.1):
     optionalDependencies:
       '@aws-sdk/client-rds-data': 3.574.0
-      '@cloudflare/workers-types': 4.20240320.1
+      '@cloudflare/workers-types': 4.20240502.0
       '@libsql/client': 0.6.0
       '@types/react': 18.3.2
-      kysely: 0.25.0
+      kysely: 0.27.3
       react: 18.3.1
 
-  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.25.0)(react@18.3.1))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240502.0)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.27.3)(react@18.3.1))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240320.1)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.25.0)(react@18.3.1)
+      drizzle-orm: 0.30.10(@aws-sdk/client-rds-data@3.574.0)(@cloudflare/workers-types@4.20240502.0)(@libsql/client@0.6.0)(@types/react@18.3.2)(kysely@0.27.3)(react@18.3.1)
       zod: 3.23.8
 
   eastasianwidth@0.2.0: {}
@@ -7196,7 +7205,7 @@ snapshots:
 
   immediate@3.0.6: {}
 
-  immer@9.0.21:
+  immer@10.1.1:
     optional: true
 
   import-fresh@3.3.0:
@@ -7367,6 +7376,8 @@ snapshots:
 
   jose@5.2.3: {}
 
+  jose@5.3.0: {}
+
   jotai@2.8.0(@types/react@18.3.2)(react@18.3.1):
     optionalDependencies:
       '@types/react': 18.3.2
@@ -7407,7 +7418,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  kysely@0.25.0:
+  kysely@0.27.3:
     optional: true
 
   language-subtag-registry@0.3.22: {}
@@ -8415,10 +8426,10 @@ snapshots:
 
   zod@3.23.8: {}
 
-  zustand@4.5.2(@types/react@18.3.2)(immer@9.0.21)(react@18.3.1):
+  zustand@4.5.2(@types/react@18.3.2)(immer@10.1.1)(react@18.3.1):
     dependencies:
       use-sync-external-store: 1.2.0(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.2
-      immer: 9.0.21
+      immer: 10.1.1
       react: 18.3.1
