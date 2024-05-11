@@ -22,7 +22,7 @@ export default function StatusBadge({ user, className }: Props) {
         variant='default'
         className={cn(
           'flex flex-row items-center gap-2 text-xs xs:text-sm hover:bg-opacity-75',
-          userStatusConfig[user.status].backgroundColor
+          userStatusConfig[user.status].color
         )}
       >
         {user.status}

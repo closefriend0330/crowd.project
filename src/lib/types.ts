@@ -11,8 +11,7 @@ export type UserSelectableStatus = Omit<UserStatus, 'offline'>;
 export type UserStatusConfig = Record<
   string,
   {
-    textColor: string;
-    backgroundColor: string;
+    color: string;
     icon?: TablerIcon;
     nonSelectable?: boolean;
   }

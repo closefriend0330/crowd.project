@@ -22,7 +22,7 @@ export default function StatusSelect({ field, selectedStatus }: Props) {
         className={cn(
           'w-min',
           selectedStatus
-            ? [userStatusConfig[selectedStatus]?.backgroundColor, 'text-white font-bold']
+            ? [userStatusConfig[selectedStatus]?.color, 'text-white font-bold']
             : 'text-black bg-white'
         )}
       >
