@@ -1,0 +1,6 @@
+{
+  "$schema": "https://www.partykit.io/schema.json",
+  "name": "coworking-party-party",
+  "main": "party/server.ts",
+  "compatibilityDate": "2024-04-22"
+}

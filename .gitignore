@@ -47,5 +47,6 @@ certificates
 db/dev.db*
 
 .partykit
+partykit.json
 # Sentry Config File
 .sentryclirc

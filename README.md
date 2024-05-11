@@ -29,7 +29,7 @@ If you're looking to contribute or just want to try running this locally, here's
 1. Clone the repo and install the dependencies. Note that some of the scripts in `package.json` have explicit references to [pnpm](https://pnpm.io) that you may wish to adjust if you use a different package manager.
 2. Create a `.env` file in the root of the project based on the `.env.example` file and adjust the secrets as needed.
 3. Create a free [Turso](https://turso.tech/) account, [install the CLI](https://docs.turso.tech/cli/introduction), run `turso auth login` and initialise the local database with `pnpm run db:push`. Local development uses a [local](https://docs.turso.tech/local-development) Turso dev instance. The `DATABASE_URL` secret already points to http://127.0.0.1:8080 (no auth token needed for local dev).
-4. [PartyKit](https://docs.partykit.io/) should not require an account for local development, but set a new unique name in `partykit.json`.
+4. [PartyKit](https://docs.partykit.io/) should not require an account for local development, but create a new `partykit.json` file in the root of the project based on `partykit.example.json`.
 5. Create a [Twitch app](https://dev.twitch.tv/console/apps) and [Discord app](https://discord.com/developers/applications/) and define the respective `AUTH_` secrets in the `.env` file. You could use just one and modify the `providers` in `src/authConfigEdge.ts` accordingly. Also add a random `AUTH_SECRET`.
 6. Configure the OAuth callback URLs for the Twitch and Discord apps to point to `http://localhost:3000/api/auth/callback/twitch` and `http://localhost:3000/api/auth/callback/discord` respectively on their dev portals.
 
@@ -37,7 +37,9 @@ Configuring additional third party services (Posthog, Google Analytics, Sentry, 
 
 ### Running Coworking Party Locally
 
-[SST Ion](https://ion.sst.dev/) is used to deploy the app to AWS. The default `pnpm run dev` script also uses SST for [live](https://ion.sst.dev/docs/live/) mode during local development, which would require a [configured AWS account](https://docs.sst.dev/setting-up-aws). You can skip this by running `pnpm run dev-nosst` instead. This launches the Next.js app with the regular `next dev` command, along with all the other local services (Turso, PartyKit, etc).
+[SST Ion](https://ion.sst.dev/) is used to deploy the app to AWS. The default `pnpm run dev` script also uses SST for [live](https://ion.sst.dev/docs/live/) mode during local development, which would require a [configured AWS account](https://docs.sst.dev/setting-up-aws) and the [3.0 sst CLI](https://ion.sst.dev/docs/reference/cli/) installed.
+
+For local development, you can skip SST and needing an AWS account by running `pnpm run dev-nosst` instead. This launches Next.js with the regular `next dev` command, along with all the other local services (Turso, PartyKit, etc).
 
 The local Next.js app will be at http://localhost:3000/, a local [Drizzle Studio](https://orm.drizzle.team/drizzle-studio/overview) instance to manage the database at https://local.drizzle.studio/ and the PartyKit instance at port 1999. This means you can hit http://localhost:1999/party/main/debug e.g. to see the PartyKit debug endpoint.
 
@@ -45,7 +47,7 @@ Join the [#dev channel](https://discord.com/channels/1236966373549150218/1236966
 
 ## Thanks
 
-Big thanks to [The Claw](https://theclaw.team/) for the inspiration and being early adopters. Cool 'party' name via [Andreas](https://www.twitch.tv/andreassasdev) and [Matty](https://mattytwo.shoes/). First PR: [tdrayson](https://taylordrayson.com/).
+Big thanks to [The Claw](https://theclaw.team/) for the inspiration and being early adopters. Cool 'party' name via [Andreas](https://www.twitch.tv/andreassasdev) and [Matty](https://mattytwo.shoes/). First PR: [tdrayson](https://taylordrayson.com/), additional contributions from [DR-DinoMight](https://github.com/DR-DinoMight).
 
 ## Tech Stack
 
