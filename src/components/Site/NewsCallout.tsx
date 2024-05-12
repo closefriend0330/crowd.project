@@ -34,7 +34,7 @@ export function NewsCallout({ title, children, className }: Props) {
       )}
     >
       <h3 className='text-sm sm:text-base font-medium mb-1'>{title}</h3>
-      <div className='text-xs sm:text-sm text-slate-7004'>{children}</div>
+      <div className='text-xs sm:text-sm text-slate-700'>{children}</div>
 
       <Cross2Icon className='absolute top-2 right-2 h-4 w-4 cursor-pointer' onClick={onClose} />
     </div>

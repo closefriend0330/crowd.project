@@ -10,9 +10,15 @@ export const MAX_TAGLINE_LENGTH = 200;
 
 export const CONFETTI_DELAY_MIN = 300;
 export const CONFETTI_DELAY_MAX = 1200;
+export const CONFETTI_RESET_DELAY = 2000;
 
 // time a browser tab must be inactive before the user is considered away
 export const AWAY_TIME_THRESHOLD = 15 * 60 * 1000;
+
+export const MAX_TODO_ITEM_LENGTH = 120;
+// don't let users load up their task list with too many items
+export const TODO_LIST_WARNING_THRESHOLD = 7;
+export const MAX_OPEN_TODO_LIST_ITEMS = 12;
 
 // used to announce new users in the Discord
 export const newUserAdjectives = [

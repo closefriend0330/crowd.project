@@ -18,6 +18,8 @@ export default function useSoundEffects() {
     volume: 0.5,
   });
   const [playClick] = useSound('/sounds/click.mp3', soundOptions);
+  const [playUnCheck] = useSound('/sounds/uncheck.mp3', soundOptions);
+  const [playCheckCompleted] = useSound('/sounds/checkCompleted.mp3', soundOptions);
   const [playConnectionChange] = useSound('/sounds/connectionChange.mp3', soundOptions);
 
   return {
@@ -28,6 +30,8 @@ export default function useSoundEffects() {
     playUserUpdatePosted,
     playListStatusUpdated,
     playClick,
+    playUnCheck,
+    playCheckCompleted,
     playConnectionChange,
   };
 }

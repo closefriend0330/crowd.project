@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 
+import CharactersLeft from '@/components/CharactersLeft';
 import StatusSelect from '@/components/Presence/StatusSelect';
 
 import useConfetti from '@/hooks/useConfetti';
@@ -30,19 +31,6 @@ const statusFormSchema = z.object({
   status: z.string().optional(),
 });
 type StatusFormValues = z.infer<typeof statusFormSchema>;
-
-function CharactersLeft({ update }: { update: string }) {
-  return (
-    <div
-      className={cn(
-        'text-xs sm:text-sm grow text-right mr-2 w-full',
-        MAX_TAGLINE_LENGTH - update.length <= 10 && 'text-red-500'
-      )}
-    >
-      {update.length >= MAX_TAGLINE_LENGTH - 20 && `${update.length}/${MAX_TAGLINE_LENGTH}`}
-    </div>
-  );
-}
 
 export default function StatusUpdate() {
   const { playUserUpdatePosted } = useSoundEffects();
@@ -141,7 +129,7 @@ export default function StatusUpdate() {
                   )}
                 />
               </div>
-              <CharactersLeft update={update} />
+              <CharactersLeft monitor={update} maxLength={MAX_TAGLINE_LENGTH} className='w-full' />
               <Button variant='outline' type='submit' disabled={!form.formState.isDirty}>
                 Post
               </Button>

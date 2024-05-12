@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import StatusUpdate from '@/components/Presence/StatusUpdate';
 import UserList from '@/components/Presence/UserList';
 import Error from '@/components/Site/Error';
+import Todos from '@/components/Todos/Todos';
 
 import { NewsCallout } from '@/components/Site/NewsCallout';
 import { connectionStatusAtom } from '@/store';
@@ -15,15 +16,16 @@ export default function CoworkingParty() {
   if (connectionStatus === 'fully connected')
     return (
       <div className='max-w-xl'>
-        <NewsCallout title='New features: API key, new status update UI' className='mb-4'>
-          Change your username or grab your API key via &apos;Edit profile&apos; under the account
-          menu and update your status and update text at the same time.
+        <NewsCallout title='Todo List Preview' className='mb-4'>
+          Try out the new, local-only todo list to track your most important priorities for the day
+          and see if you can break it. Coming soon: shared progress tracking. 🚀
         </NewsCallout>
 
         <div className='flex flex-col justify-center items-center'>
           <div className='xs:min-w-96 w-full max-w-[450px]'>
             <StatusUpdate />
             <UserList />
+            <Todos />
           </div>
         </div>
       </div>

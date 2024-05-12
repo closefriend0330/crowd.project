@@ -9,7 +9,7 @@ type Props = {
   asChild?: boolean;
 };
 
-export default function Tooltip({ children, tooltip, delayDuration = 700, asChild }: Props) {
+export default function Tooltip({ children, tooltip, delayDuration = 1000, asChild }: Props) {
   const [content, setContent] = useState<string | undefined>(
     typeof tooltip === 'function' ? tooltip() : tooltip
   );
