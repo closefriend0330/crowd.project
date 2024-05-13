@@ -52,3 +52,5 @@ db/exports/*
 partykit.json
 # Sentry Config File
 .sentryclirc
+
+tmp/*
