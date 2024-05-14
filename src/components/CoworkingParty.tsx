@@ -15,18 +15,16 @@ export default function CoworkingParty() {
 
   if (connectionStatus === 'fully connected')
     return (
-      <div className='max-w-xl'>
+      <div className='flex flex-col items-center max-w-xl'>
         <NewsCallout title='Todo List Preview' className='mb-4'>
           Try out the new, local-only todo list to track your most important priorities for the day
           and see if you can break it. Coming soon: shared progress tracking. 🚀
         </NewsCallout>
 
-        <div className='flex flex-col justify-center items-center'>
-          <div className='xs:min-w-96 w-full max-w-[450px]'>
-            <StatusUpdate />
-            <UserList />
-            <Todos />
-          </div>
+        <div className='w-full xs:w-[450px]'>
+          <StatusUpdate className='w-full' />
+          <UserList className='w-full' />
+          <Todos className='w-full' />
         </div>
       </div>
     );

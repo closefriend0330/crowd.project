@@ -13,12 +13,18 @@ import TodoProgress from '@/components/Todos/TodoProgress';
 
 import useTodoList from '@/hooks/useTodoList';
 
-export default function Todos() {
+import { cn } from '@/lib/utils';
+
+type Props = {
+  className?: string;
+};
+
+export default function Todos({ className }: Props) {
   const { todos, removeAllTodos } = useTodoList();
   const [showTodos, setShowTodos] = useState(true);
 
   return (
-    <div className='w-full py-4'>
+    <div className={cn('py-4', className)}>
       <Collapsible open={showTodos} onOpenChange={setShowTodos}>
         <TodoHeader showTodos={showTodos} setShowTodos={setShowTodos} />
         <div className='flex flex-row items-center gap-4 w-full'>

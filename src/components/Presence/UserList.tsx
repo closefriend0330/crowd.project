@@ -35,7 +35,11 @@ function UserListSegment({ users, title, className }: UserListSegmentProps) {
   );
 }
 
-export default function UserList() {
+type Props = {
+  className?: string;
+};
+
+export default function UserList({ className }: Props) {
   const { users } = useUserListStore();
   const { shootConfetti } = useConfetti();
   const [shot, setShot] = useState(false);
@@ -54,7 +58,7 @@ export default function UserList() {
   }, [shootConfetti, shot]);
 
   return users?.length > 0 ? (
-    <div className='xs:min-w-96 w-full max-w-[450px]'>
+    <div className={className}>
       <UserListSegment users={connectedUsers} title='Online' className='mb-4' />
       <UserListSegment users={awayUsers} title='Away' />
     </div>

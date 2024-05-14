@@ -32,7 +32,11 @@ const statusFormSchema = z.object({
 });
 type StatusFormValues = z.infer<typeof statusFormSchema>;
 
-export default function StatusUpdate() {
+type Props = {
+  className?: string;
+};
+
+export default function StatusUpdate({ className }: Props) {
   const { playUserUpdatePosted } = useSoundEffects();
   const { updateUserData, userData } = useUserData();
   const status = userData?.status || 'online';
@@ -84,7 +88,7 @@ export default function StatusUpdate() {
   );
 
   return (
-    <div className='pb-8 w-full'>
+    <div className={cn('pb-8', className)}>
       <h2 className='text-lg sm:text-xl font-header font-bold pb-2'>Status Update</h2>
 
       <Form {...form}>
