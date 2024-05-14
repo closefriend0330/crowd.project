@@ -66,3 +66,11 @@ export const serverMetaDataSchema = z.object({
   timeSinceOnStart: z.coerce.date(),
 });
 export type ServerMetaData = z.infer<typeof serverMetaDataSchema>;
+
+export type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+  createdAt: Date | null;
+  completedAt: Date | null;
+};

@@ -10,7 +10,7 @@ import useTodoList from '@/hooks/useTodoList';
 import { MAX_OPEN_TODO_LIST_ITEMS } from '@/config';
 import { cn } from '@/lib/utils';
 
-import { type Todo } from '@/hooks/useTodoStore';
+import { Todo } from '@/lib/types';
 
 type Props = {
   todo: Todo;

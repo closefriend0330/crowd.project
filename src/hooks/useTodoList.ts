@@ -1,9 +1,9 @@
-import useTodoStore from '@/hooks/useTodoStore';
+import { useTodoStore } from '@/components/ZustandStoreProvider';
 
 import { MAX_OPEN_TODO_LIST_ITEMS } from '@/config';
 
 export default function useTodoList() {
-  const store = useTodoStore();
+  const store = useTodoStore((state) => state);
   const { todos } = store;
 
   const completedTodos = todos.filter((todo) => todo.completed).length;

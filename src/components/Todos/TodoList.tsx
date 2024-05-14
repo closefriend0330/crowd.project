@@ -19,7 +19,7 @@ import TodoItem from '@/components/Todos/TodoItem';
 
 import useTodoList from '@/hooks/useTodoList';
 
-import { type Todo } from '@/hooks/useTodoStore';
+import { Todo } from '@/lib/types';
 
 export default function TodoList() {
   const { todos, moveTodo } = useTodoList();

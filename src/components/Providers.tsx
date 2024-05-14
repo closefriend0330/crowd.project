@@ -16,6 +16,8 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
+import { TodoStoreProvider } from '@/components/ZustandStoreProvider';
+
 type Props = {
   children: ReactNode;
   session: Session | null;
@@ -26,8 +28,10 @@ export default function Providers({ children, session }: Props) {
     <PostHogProvider client={posthog}>
       <SessionProvider session={session}>
         <JotaiProvider>
-          <Toaster richColors position='bottom-center' offset='40px' />
-          <TooltipProvider>{children}</TooltipProvider>
+          <TodoStoreProvider>
+            <Toaster richColors position='bottom-center' offset='40px' />
+            <TooltipProvider>{children}</TooltipProvider>
+          </TodoStoreProvider>
         </JotaiProvider>
       </SessionProvider>
     </PostHogProvider>
