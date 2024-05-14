@@ -8,7 +8,7 @@ import Error from '@/components/Site/Error';
 import Todos from '@/components/Todos/Todos';
 
 import { NewsCallout } from '@/components/Site/NewsCallout';
-import { connectionStatusAtom } from '@/store';
+import { connectionStatusAtom } from '@/stores/jotai';
 
 export default function CoworkingParty() {
   const connectionStatus = useAtomValue(connectionStatusAtom);

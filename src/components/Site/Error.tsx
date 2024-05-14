@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-import { errorAtom } from '@/store';
+import { errorAtom } from '@/stores/jotai';
 
 export default function Error() {
   const error = useAtomValue(errorAtom);

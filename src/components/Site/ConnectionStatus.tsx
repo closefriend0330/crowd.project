@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import Tooltip from '@/components/Site/Tooltip';
 
 import { cn, humanizeDurationShort } from '@/lib/utils';
-import { connectionStatusAtom, serverMetaDataAtom } from '@/store';
+import { connectionStatusAtom, serverMetaDataAtom } from '@/stores/jotai';
 
 export default function ConnectionStatus() {
   const connectionStatus = useAtomValue(connectionStatusAtom);

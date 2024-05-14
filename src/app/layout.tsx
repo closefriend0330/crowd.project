@@ -6,7 +6,7 @@ import { Inter as FontSans } from 'next/font/google';
 
 import './globals.css';
 
-import Providers from '@/components/Providers';
+import Providers from '@/components/Providers/Providers';
 import Footer from '@/components/Site/Footer';
 import Header from '@/components/Site/Header';
 

@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 
-import { visibilityAtom } from '@/store';
+import { visibilityAtom } from '@/stores/jotai';
 
 export default function usePageVisibility(onVisibilityChange?: (isVisible: boolean) => void) {
   const [isVisible, setIsVisible] = useAtom(visibilityAtom);

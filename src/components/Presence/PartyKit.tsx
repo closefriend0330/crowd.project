@@ -9,7 +9,7 @@ import useUserList from '@/hooks/useServerMessages';
 import useSoundEffects from '@/hooks/useSoundEffects';
 
 import { debug } from '@/lib/utils';
-import { connectionStatusAtom, partySocketAtom } from '@/store';
+import { connectionStatusAtom, partySocketAtom } from '@/stores/jotai';
 
 type Props = {
   sessionToken: string;

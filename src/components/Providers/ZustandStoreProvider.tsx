@@ -3,7 +3,7 @@
 import { createContext, useContext, useRef, type ReactNode } from 'react';
 import { useStore, type StoreApi } from 'zustand';
 
-import { createTodoStore, type TodoStore } from '@/storeZustand';
+import { createTodoStore, type TodoStore } from '@/stores/zustand';
 
 export const TodoStoreContext = createContext<StoreApi<TodoStore> | null>(null);
 

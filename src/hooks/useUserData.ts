@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 
 import { buildClientMessage } from '@/lib/messages';
 import { debug } from '@/lib/utils';
-import { partySocketAtom, userDataAtom } from '@/store';
+import { partySocketAtom, userDataAtom } from '@/stores/jotai';
 
 import type { ClientMessageUpdateUserData } from '@/lib/clientMessages';
 import type { UserData } from '@/lib/types';

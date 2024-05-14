@@ -8,7 +8,7 @@ import useUserListStore from '@/hooks/useUserListStore';
 import { userDataSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { serverMessageSchema } from '@/party/serverMessages';
-import { connectionStatusAtom, errorAtom, serverMetaDataAtom, userDataAtom } from '@/store';
+import { connectionStatusAtom, errorAtom, serverMetaDataAtom, userDataAtom } from '@/stores/jotai';
 
 import {
   ServerMessageAddUser,

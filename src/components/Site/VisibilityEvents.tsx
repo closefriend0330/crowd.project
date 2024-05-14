@@ -9,7 +9,7 @@ import usePageVisibility from '@/hooks/usePageVisibility';
 import useUserData from '@/hooks/useUserData';
 
 import { AWAY_TIME_THRESHOLD } from '@/config';
-import { partySocketAtom } from '@/store';
+import { partySocketAtom } from '@/stores/jotai';
 
 export default function VisibilityEvents() {
   const { data: session } = useSession();

@@ -1,4 +1,4 @@
-import { useTodoStore } from '@/components/ZustandStoreProvider';
+import { useTodoStore } from '@/components/Providers/ZustandStoreProvider';
 
 import { MAX_OPEN_TODO_LIST_ITEMS } from '@/config';
 

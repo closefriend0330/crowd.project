@@ -16,7 +16,7 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
-import { TodoStoreProvider } from '@/components/ZustandStoreProvider';
+import { TodoStoreProvider } from '@/components/Providers/ZustandStoreProvider';
 
 type Props = {
   children: ReactNode;
