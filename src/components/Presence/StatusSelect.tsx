@@ -28,7 +28,11 @@ export default function StatusSelect({ field, selectedStatus }: Props) {
       >
         <SelectValue placeholder='Select your status' />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        style={{
+          maxHeight: 'min(var(--radix-select-content-available-height), 380px)',
+        }}
+      >
         <SelectGroup>
           <SelectLabel>
             <div className='flex flex-row justify-between items-center'>
