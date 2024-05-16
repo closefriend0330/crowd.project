@@ -76,20 +76,21 @@ async function newUserNotification(user: UserData) {
 
 type ReturnErrorParams = {
   connection?: Party.Connection<unknown>;
-  err: Error | unknown;
+  err?: Error | unknown;
   source: string;
+  message?: string;
 };
-export function processError({ err, connection, source }: ReturnErrorParams) {
-  const message = getErrorMessage(err);
+export function processError({ err, connection, source, message }: ReturnErrorParams) {
+  const errorMessage = message || err ? getErrorMessage(err) : 'No further information';
 
-  console.error(`Error in ${source}: `, message);
+  console.error(`Error in ${source}: `, errorMessage);
 
   if (connection)
     connection.send(
       buildServerMessage<ServerMessageErrorEncountered>({
         type: 'errorEncountered',
         source,
-        message,
+        message: errorMessage,
       })
     );
 }

@@ -66,7 +66,7 @@ export default class Server implements Party.Server {
     const userId = request.headers.get('X-User-ID');
 
     if (!userId) {
-      console.error('User was missing in onConnect');
+      processError({ connection, source: 'onConnect', message: 'User was missing' });
 
       connection.close();
       return;
@@ -91,7 +91,7 @@ export default class Server implements Party.Server {
   }
 
   onError(connection: Party.Connection<unknown>, error: Error): void {
-    console.error('Connection error: ', { errorMessage: getErrorMessage(error), connection });
+    processError({ err: error, connection, source: 'onError (connection error)' });
   }
 
   async onMessage(message: string, sender: Party.Connection) {
