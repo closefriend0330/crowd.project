@@ -1,3 +1,4 @@
+import { boolean } from 'boolean';
 import { clsx, type ClassValue } from 'clsx';
 import humanizeDuration from 'humanize-duration';
 import { twMerge } from 'tailwind-merge';
@@ -17,7 +18,8 @@ export function getErrorMessage(error: unknown) {
 }
 
 export function debug(...message: unknown[]) {
-  if (process.env.LOGGING || process.env.NEXT_PUBLIC_LOGGING) console.log(...message);
+  if (boolean(process.env.LOGGING) || boolean(process.env.NEXT_PUBLIC_LOGGING))
+    console.log(...message);
 }
 
 export const humanizeDurationShort = humanizeDuration.humanizer({

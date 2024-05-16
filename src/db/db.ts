@@ -1,4 +1,5 @@
 import { createClient } from '@libsql/client/web';
+import { boolean } from 'boolean';
 import { drizzle } from 'drizzle-orm/libsql';
 
 import * as schema from '@/db/schema';
@@ -19,4 +20,7 @@ const client = createClient({
   authToken,
 });
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(client, {
+  schema,
+  logger: boolean(process.env.DATABASE_DEBUG),
+});
