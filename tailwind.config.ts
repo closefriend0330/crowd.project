@@ -79,6 +79,9 @@ const config = {
     'bg-pink-500',
     'bg-lime-700',
     'bg-violet-700',
+    'bg-green-600',
+    'bg-teal-500',
+    'bg-sky-500',
   ],
   prefix: '',
   theme: {
