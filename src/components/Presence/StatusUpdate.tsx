@@ -18,14 +18,16 @@ import useConfetti from '@/hooks/useConfetti';
 import useSoundEffects from '@/hooks/useSoundEffects';
 import useUserData from '@/hooks/useUserData';
 
-import { MAX_TAGLINE_LENGTH } from '@/config';
+import { MAX_UPDATE_LENGTH } from '@/config';
 import { cn } from '@/lib/utils';
 
+import type { User } from '@/lib/types';
+
 const statusFormSchema = z.object({
-  tagline: z
+  update: z
     .string()
-    .max(MAX_TAGLINE_LENGTH, {
-      message: `Max tagline length is ${MAX_TAGLINE_LENGTH} characters.`,
+    .max(MAX_UPDATE_LENGTH, {
+      message: `Max update length is ${MAX_UPDATE_LENGTH} characters.`,
     })
     .optional(),
   status: z.string().optional(),
@@ -38,17 +40,17 @@ type Props = {
 
 export default function StatusUpdate({ className }: Props) {
   const { playUserUpdatePosted } = useSoundEffects();
-  const { updateUserData, userData } = useUserData();
-  const status = userData?.status || 'online';
+  const { updateUser, user } = useUserData();
+  const status = user?.status || 'online';
   const form = useForm({
     resolver: zodResolver(statusFormSchema),
     defaultValues: {
-      tagline: '',
-      status: userData?.status,
+      update: '',
+      status: user?.status,
     },
   });
   const { shootConfetti } = useConfetti();
-  const update = form.watch('tagline');
+  const update = form.watch('update');
 
   useEffect(() => {
     form.setValue('status', status);
@@ -56,25 +58,36 @@ export default function StatusUpdate({ className }: Props) {
 
   const onSubmit = useCallback(
     (values: StatusFormValues) => {
+      if (!user) return;
+
       const updatedValues: Partial<StatusFormValues> = pickBy(
         values,
         (_: any, key: keyof typeof values) => form.formState.dirtyFields?.[key]
       );
-      updateUserData({ data: updatedValues });
 
-      form.reset({ status: values.status, tagline: '' });
+      let updatedData: Partial<User> = updatedValues;
+
+      // in case the away status got out of sync
+      if (user.away) {
+        updatedData.away = false;
+        updatedData.awayChangedAt = new Date();
+      }
+
+      updateUser({ data: updatedValues });
+
+      form.reset({ status: values.status, update: '' });
 
       posthog.capture('status update', {
-        updateLength: updatedValues?.tagline?.length,
+        updateLength: updatedValues?.update?.length,
         status: updatedValues?.status,
       });
 
-      if (updatedValues.tagline) {
+      if (updatedValues.update) {
         playUserUpdatePosted();
         shootConfetti({ source: 'status update' });
       }
     },
-    [form, playUserUpdatePosted, shootConfetti, updateUserData]
+    [form, playUserUpdatePosted, shootConfetti, updateUser, user]
   );
 
   const handleKeyDown = useCallback(
@@ -97,15 +110,15 @@ export default function StatusUpdate({ className }: Props) {
             <div>
               <FormField
                 control={form.control}
-                name='tagline'
+                name='update'
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Textarea
-                        className='bg-white'
+                        className='bg-white min-h-[1em] [field-sizing:content]'
                         onKeyDown={handleKeyDown}
                         placeholder={`what's happening?`}
-                        maxLength={MAX_TAGLINE_LENGTH}
+                        maxLength={MAX_UPDATE_LENGTH}
                         autoFocus
                         autoComplete='off'
                         {...field}
@@ -133,7 +146,7 @@ export default function StatusUpdate({ className }: Props) {
                   )}
                 />
               </div>
-              <CharactersLeft monitor={update} maxLength={MAX_TAGLINE_LENGTH} className='w-full' />
+              <CharactersLeft monitor={update} maxLength={MAX_UPDATE_LENGTH} className='w-full' />
               <Button variant='outline' type='submit' disabled={!form.formState.isDirty}>
                 Post
               </Button>

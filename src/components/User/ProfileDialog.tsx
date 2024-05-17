@@ -47,22 +47,22 @@ function maskApiKey(apiKey: string | undefined | null) {
 }
 
 export default function ProfileDialog() {
-  const { userData, updateUserData } = useUserData();
+  const { user, updateUser } = useUserData();
   const { isOpen, close, setIsOpen } = useDialog('profile');
-  const apiKey = userData?.apiKey || '';
+  const apiKey = user?.apiKey || '';
 
   const { copy, setCopied, CopyIcon, copied } = useCopyIcon();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     values: {
-      name: userData?.name || '',
+      name: user?.name || '',
       apiKey: maskApiKey(apiKey),
     },
   });
 
   function copyApiKey() {
-    copy(userData?.apiKey || '');
+    copy(user?.apiKey || '');
     setCopied(true);
     toast.success('API key copied to clipboard');
   }
@@ -75,7 +75,7 @@ export default function ProfileDialog() {
       );
 
       if (Object.keys(updatedValues).length > 0) {
-        updateUserData({ data: updatedValues, successMessage: 'Profile updated' });
+        updateUser({ data: updatedValues, successMessage: 'Profile updated' });
       } else toast.info('No changes to update');
 
       close();

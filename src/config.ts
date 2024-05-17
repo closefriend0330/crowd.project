@@ -16,7 +16,7 @@ export const CONFETTI_RESET_DELAY = 2000;
 export const RANDOM_LOGO_INTERVAL = 5 * 60 * 1000;
 
 // length of the status update 'update' field
-export const MAX_TAGLINE_LENGTH = parseInt(process.env.NEXT_PUBLIC_MAX_TAGLINE_LENGTH || '') || 200;
+export const MAX_UPDATE_LENGTH = parseInt(process.env.NEXT_PUBLIC_MAX_UPDATE_LENGTH || '') || 200;
 
 // length of individual todo item 'title' text
 export const MAX_TODO_ITEM_LENGTH =

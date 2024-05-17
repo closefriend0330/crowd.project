@@ -1,12 +1,12 @@
 import type * as Party from 'partykit/server';
 
-import { clearConnectionData, getUserDataList } from '@/db/queries';
+import { clearConnectionData, getUsersByUsersIds } from '@/db/queries';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { parseApiRequest } from '@/party/api';
-import { buildServerMessage, processClientMessage } from '@/party/messages';
-
 import { getNextAuthSession } from '@/party/auth';
 import { processError } from '@/party/lib';
+import { buildServerMessage, processClientMessage } from '@/party/messages';
+
 import { ServerMessageServerMetaData } from '@/party/serverMessages';
 import { UserList } from '@/party/userList';
 
@@ -28,9 +28,9 @@ export default class Server implements Party.Server {
       const connectedUserIds = await this.room.storage.get<string[]>('connectedUserIds');
 
       if (connectedUserIds && connectedUserIds.length > 0) {
-        const usersData = await getUserDataList(connectedUserIds);
+        const connectedUsers = await getUsersByUsersIds(connectedUserIds);
 
-        this.users.list = usersData;
+        this.users.list = connectedUsers;
 
         debug(`Restored ${connectedUserIds.length} users from storage after restart`);
       }
@@ -38,6 +38,7 @@ export default class Server implements Party.Server {
       console.error('Error in onStart:', getErrorMessage(err));
     }
   }
+
   static async onBeforeConnect(request: Party.Request) {
     try {
       // identify the user via the NextAuth session
@@ -72,7 +73,7 @@ export default class Server implements Party.Server {
       return;
     }
 
-    await this.users.addUser({ userId, connection });
+    await this.users.addUserToList({ userId, connection });
 
     connection.send(
       buildServerMessage<ServerMessageServerMetaData>({
@@ -86,6 +87,8 @@ export default class Server implements Party.Server {
 
   async onClose(connection: Party.Connection) {
     debug('Connection closed: ', { connectionId: connection.id });
+
+    // TODO: set their status to 'offline'
 
     await this.users.removeUser({ connection });
   }

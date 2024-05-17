@@ -1,7 +1,7 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { userData, users } from '@/db/schema';
+import { users } from '@/db/schema';
 
 import { TablerIcon } from '@/statusOptions';
 
@@ -17,39 +17,31 @@ export type UserStatusConfig = Record<
   }
 >;
 
-const userDataSchemaOptions = {
-  away: z.coerce.boolean(),
-  awayStartedAt: z.coerce.date(),
-  statusChangedAt: z.coerce.date(),
+const userSchemaOptions = {
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
   sessionStartedAt: z.coerce.date(),
   lastConnectedAt: z.coerce.date(),
   lastSessionEndedAt: z.coerce.date(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  updateChangedAt: z.coerce.date(),
+  statusChangedAt: z.coerce.date(),
+  away: z.coerce.boolean(),
+  awayChangedAt: z.coerce.date(),
   connections: z.array(z.string()).default([]),
 };
 
-const authUserSchema = createSelectSchema(users).pick({ email: true, name: true, image: true });
-const authPublicUserSchema = authUserSchema.omit({ email: true });
-export type AuthUser = z.infer<typeof authUserSchema>;
-export type AuthUserPublic = z.infer<typeof authPublicUserSchema>;
-
-export const userDataSchema = createSelectSchema(userData, userDataSchemaOptions).merge(
-  authUserSchema
-);
-export type UserData = z.infer<typeof userDataSchema>;
-export const userDataInsertSchema = createInsertSchema(userData, userDataSchemaOptions);
-export type UserDataInsert = z.infer<typeof userDataInsertSchema>;
+export const userSchema = createSelectSchema(users, userSchemaOptions);
+export type User = z.infer<typeof userSchema>;
+export const userInsertSchema = createInsertSchema(users, userSchemaOptions);
+export type UserInsert = z.infer<typeof userInsertSchema>;
 
 // public data gets sent to other users in the same room
-export const userPublicDataSchema = userDataSchema
-  .omit({
-    apiKey: true,
-    connections: true,
-    email: true,
-  })
-  .merge(authPublicUserSchema);
-export type UserPublicData = z.infer<typeof userPublicDataSchema>;
+export const userPublicSchema = userSchema.omit({
+  apiKey: true,
+  connections: true,
+  email: true,
+});
+export type UserPublic = z.infer<typeof userPublicSchema>;
 
 type ConfettiShootParams = {
   delay?: number;

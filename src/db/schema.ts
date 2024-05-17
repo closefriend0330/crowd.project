@@ -1,9 +1,10 @@
-import { relations, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 
 export const users = sqliteTable('user', {
+  // Auth.js fields
   id: text('id')
     .primaryKey()
     .$defaultFn(() => uuidv4()),
@@ -11,6 +12,33 @@ export const users = sqliteTable('user', {
   email: text('email').notNull().unique(),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
   image: text('image'),
+
+  // custom public fields
+  createdAt: integer('createdAt', { mode: 'timestamp_ms' })
+    .notNull()
+    .default(sql`(unixepoch() * 1000)`),
+  updatedAt: integer('updatedAt', { mode: 'timestamp_ms' })
+    .default(sql`(unixepoch() * 1000)`)
+    .notNull(),
+
+  sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp_ms' }),
+  lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp_ms' }),
+  lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp_ms' }),
+
+  update: text('update'),
+  status: text('status').notNull().default('offline'),
+  updateChangedAt: integer('updateChangedAt', { mode: 'timestamp_ms' }),
+  statusChangedAt: integer('statusChangedAt', { mode: 'timestamp_ms' }),
+
+  away: integer('away', { mode: 'boolean' }).notNull().default(false),
+  awayChangedAt: integer('awayChangedAt', { mode: 'timestamp_ms' }),
+
+  // custom private fields
+  apiKey: text('apiKey')
+    .notNull()
+    .unique()
+    .$defaultFn(() => uuidv4()),
+  connections: text('connections', { mode: 'json' }).$type<string[]>().notNull().default([]),
 });
 
 export const accounts = sqliteTable(
@@ -54,63 +82,3 @@ export const sessions = sqliteTable(
     userIdIdx: index('Session_userId_index').on(s.userId),
   })
 );
-
-export const verificationTokens = sqliteTable(
-  'verificationToken',
-  {
-    identifier: text('identifier').notNull(),
-    token: text('token').notNull(),
-    expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
-  },
-  (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
-);
-
-export const userData = sqliteTable(
-  'userData',
-  {
-    userId: text('userId')
-      .primaryKey()
-      .$defaultFn(() => uuidv4())
-      .references(() => users.id, { onDelete: 'cascade' }),
-    tagline: text('tagline'),
-    status: text('status').notNull().default('online'),
-    statusChangedAt: integer('statusChangedAt', { mode: 'timestamp_ms' }),
-    away: integer('away', { mode: 'boolean' }).notNull().default(false),
-    awayStartedAt: integer('awayStartedAt', { mode: 'timestamp_ms' }),
-    createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
-    updatedAt: integer('updatedAt', { mode: 'timestamp_ms' })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp_ms' }),
-    lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp_ms' }),
-    lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp_ms' }),
-    // private data
-    apiKey: text('apiKey')
-      .notNull()
-      .unique()
-      .$defaultFn(() => uuidv4()),
-    connections: text('connections', { mode: 'json' })
-      .$type<string[]>()
-      .notNull()
-      .default(sql`[]`),
-  },
-  (ud) => ({
-    userIdIdx: index('UserData_userId_index').on(ud.userId),
-  })
-);
-
-export const userDataRelations = relations(userData, ({ one }) => ({
-  user: one(users, {
-    fields: [userData.userId],
-    references: [users.id],
-  }),
-}));
-
-export const usersRelations = relations(users, ({ one }) => ({
-  userData: one(userData, {
-    fields: [users.id],
-    references: [userData.userId],
-  }),
-}));

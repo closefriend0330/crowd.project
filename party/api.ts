@@ -4,9 +4,9 @@ import posthog from 'posthog-js';
 import { z } from 'zod';
 import { fromError } from 'zod-validation-error';
 
-import { MAX_TAGLINE_LENGTH } from '@/config';
-import { getUserDataByApiKey } from '@/db/queries';
-import { userPublicDataSchema } from '@/lib/types';
+import { MAX_UPDATE_LENGTH } from '@/config';
+import { getUserByApiKey } from '@/db/queries';
+import { userPublicSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { userSelectableStatusOptions } from '@/statusOptions';
 
@@ -16,7 +16,7 @@ import { UserList } from '@/party/userList';
 const statusUpdateSchema = z
   .object({
     apiKey: z.string().min(1),
-    update: z.string().min(1).max(MAX_TAGLINE_LENGTH).optional(),
+    update: z.string().min(1).max(MAX_UPDATE_LENGTH).optional(),
     status: z
       .string()
       .refine((status: string) => userSelectableStatusOptions.includes(status), {
@@ -46,7 +46,7 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
       posthog.capture('api request', { type: 'users api request' });
 
       return new Response(
-        JSON.stringify({ users: users.list.map((user) => userPublicDataSchema.parse(user)) })
+        JSON.stringify({ users: users.list.map((user) => userPublicSchema.parse(user)) })
       );
     }
 
@@ -92,7 +92,7 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
       );
     }
 
-    const user = await getUserDataByApiKey(result.data.apiKey);
+    const user = await getUserByApiKey(result.data.apiKey);
     if (!user) {
       posthog.capture('status api request error', { type: 'user/API key not found' });
 
@@ -101,13 +101,13 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
       });
     }
 
-    const { wasConnected } = await users.updateUserData({
-      userId: user.userId,
-      data: { tagline: result.data.update, status: result.data.status },
+    const { wasConnected } = await users.updateUserInList({
+      userId: user.id,
+      data: { update: result.data.update, status: result.data.status },
     });
 
     posthog.capture('status api request success', {
-      userId: user.userId,
+      userId: user.id,
       name: user.name,
       wasConnected,
     });

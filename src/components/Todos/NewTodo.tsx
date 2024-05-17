@@ -33,7 +33,7 @@ type Props = {
 };
 
 export default function NewTodo({ className }: Props) {
-  const { addTodo, todos, completedTodos, openTodos, todoSlotsLeft, allCompleted } = useTodos();
+  const { addTodo, todos, openTodos, todoSlotsLeft, allCompleted } = useTodos();
   const form = useForm({
     resolver: zodResolver(todoFormSchema),
     defaultValues: {

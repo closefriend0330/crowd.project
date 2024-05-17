@@ -29,7 +29,7 @@ export default function Providers({ children, session }: Props) {
       <SessionProvider session={session}>
         <JotaiProvider>
           <TodoStoreProvider>
-            <Toaster richColors position='bottom-center' offset='40px' />
+            <Toaster richColors position='bottom-center' offset='50px' />
             <TooltipProvider>{children}</TooltipProvider>
           </TodoStoreProvider>
         </JotaiProvider>

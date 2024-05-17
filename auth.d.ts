@@ -1,13 +1,12 @@
-import 'next-auth';
+import { User as ExtendedUser } from '@/lib/types';
+import { type DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
-  // interface User {
-  //   id: number;
-  //   data: UserData;
-  // }
+  interface User extends ExtendedUser {}
 
   interface Session {
-    user: User;
-    // data: UserData;
+    user: {
+      id: string;
+    } & DefaultSession['user'];
   }
 }

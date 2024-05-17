@@ -1,15 +1,15 @@
+import { merge } from 'lodash';
 import Party from 'partykit/server';
 import pluralize from 'pluralize';
 
-import { updateUserData } from '@/db/queries';
-import { userPublicDataSchema } from '@/lib/types';
+import { SESSION_RECONNECT_GRACE_PERIOD } from '@/config';
+import { getUserByUserId, updateUser } from '@/db/queries';
+import { userPublicSchema } from '@/lib/types';
 import { debug } from '@/lib/utils';
-import { getUserData, processError } from '@/party/lib';
+import { processError } from '@/party/lib';
 import { buildServerMessage } from '@/party/messages';
 
-import { SESSION_RECONNECT_GRACE_PERIOD } from '@/config';
-
-import type { UserData } from '@/lib/types';
+import type { User } from '@/lib/types';
 import type Server from '@/party/server';
 import type {
   ServerMessageAddUser,
@@ -19,23 +19,23 @@ import type {
   ServerMessageUserList,
 } from '@/party/serverMessages';
 
-type AddUserParams = {
+type AddUserToListParams = {
   userId: string;
   connection: Party.Connection<unknown>;
 };
 
-type UpdateUserDataParams = {
-  data: Partial<UserData>;
+type UpdateUserInListParams = {
+  data: Partial<User>;
   userId: string;
   connection?: Party.Connection<unknown>;
 };
 
-type RemoveUserParams = {
+type RemoveUserFromListParams = {
   connection: Party.Connection<unknown>;
 };
 
 export class UserList {
-  users: Array<UserData> = [];
+  users: Array<User> = [];
   partyServer: Server;
 
   constructor(partyServer: Server) {
@@ -46,22 +46,24 @@ export class UserList {
     return this.users;
   }
 
-  set list(users: Array<UserData>) {
+  set list(users: Array<User>) {
     this.users = users;
   }
 
-  async addUser({ userId, connection }: AddUserParams) {
+  async addUserToList({ userId, connection }: AddUserToListParams) {
     try {
       const now = new Date();
       const connectionId = connection.id;
-      let userUpdates: Partial<UserData> = {};
-      let updatedUserData: UserData;
+      let userUpdates: Partial<User> = {};
+      let updatedUserData: User;
 
-      const userIndex = this.users.findIndex((u) => u.userId === userId);
+      const userIndex = this.users.findIndex((u) => u.id === userId);
       const wasConnected = Boolean(userIndex !== -1);
       const connectedUser = this.users[userIndex];
 
       if (connectedUser) {
+        userUpdates.lastConnectedAt = now;
+
         if (connectedUser.connections.includes(connectionId))
           debug('Existing user reusing connection ID:', { userId, connectionId });
         else {
@@ -70,16 +72,17 @@ export class UserList {
           userUpdates.connections = [...new Set([...connectedUser.connections, connectionId])];
         }
 
+        // TODO: handle away status if they reconnected from a hidden tab
+
         // merge in updated data
         updatedUserData = {
           ...connectedUser,
           ...userUpdates,
-          lastConnectedAt: now,
         };
         this.users[userIndex] = updatedUserData;
 
         // get only the public data that was updated
-        const userUpdatesPublicData = userPublicDataSchema.partial().parse(userUpdates);
+        const userUpdatesPublicData = userPublicSchema.partial().parse(userUpdates);
 
         // broadcast the updated public data to all users...
         if (userUpdatesPublicData && Object.keys(userUpdatesPublicData).length > 0)
@@ -92,19 +95,24 @@ export class UserList {
           );
 
         // ...but save any updated data to the database
-        await updateUserData(userId, userUpdates);
+        await updateUser(userId, userUpdates);
       } else {
         // user didn't have an active connection
         debug('New user connected: ', { userId, connectionId });
 
-        const userData = await getUserData(userId);
-        const lastSessionEndedAt = userData?.lastSessionEndedAt;
+        const user = await getUserByUserId(userId);
+
+        if (!user) throw new Error(`User not found in database: ${userId}`);
 
         // always reset these at the start of a new session
-        userUpdates = {
+        merge(userUpdates, {
           connections: [connectionId],
+          away: false,
+          awayChangedAt: now,
           lastConnectedAt: now,
-        };
+        });
+
+        const lastSessionEndedAt = user?.lastSessionEndedAt;
 
         // check if users were offline for more than a certain amount of time
         if (
@@ -114,33 +122,40 @@ export class UserList {
           // user was offline passed the grace period, reset some session fields
           debug('New session started past grace period:', { userId, connectionId });
 
-          userUpdates.sessionStartedAt = now;
-          userUpdates.tagline = null;
-          userUpdates.status = 'online';
+          merge(userUpdates, {
+            sessionStartedAt: now,
+            update: null,
+            updateChangedAt: now,
+            status: 'online',
+            statusChangedAt: now,
+          });
         } else {
           debug('Reconnecting user was within grace period:', { userId, connectionId });
+
+          if (user.status === 'offline') {
+            merge(userUpdates, {
+              status: 'online',
+              statusChangedAt: now,
+            });
+          }
         }
 
         // add the updated data to the server's list of connected users
         updatedUserData = {
-          ...userData,
+          ...user,
           ...userUpdates,
-          // no longer away, since they just reconnected
-          // TODO: handle edge case where they reconnected in an away state (is this likely?)
-          away: false,
-          awayStartedAt: null,
         };
         this.users.push(updatedUserData);
 
         // broadcast the new user to others in the room
-        const userPublicData = userPublicDataSchema.parse(updatedUserData);
+        const userPublicData = userPublicSchema.parse(updatedUserData);
 
         this.partyServer.room.broadcast(
           buildServerMessage<ServerMessageAddUser>({ type: 'addUser', data: userPublicData }),
           [connectionId]
         );
 
-        await updateUserData(userId, userUpdates);
+        await updateUser(userId, userUpdates);
 
         await this.persistUserList({ connection });
       }
@@ -152,7 +167,7 @@ export class UserList {
       connection.send(
         buildServerMessage<ServerMessageUserList>({
           type: 'userList',
-          users: this.users.map((u) => userPublicDataSchema.parse(u)),
+          users: this.users.map((u) => userPublicSchema.parse(u)),
         })
       );
 
@@ -164,20 +179,22 @@ export class UserList {
     }
   }
 
-  async updateUserData({ data, userId, connection }: UpdateUserDataParams) {
+  async updateUserInList({ data, userId, connection }: UpdateUserInListParams) {
     try {
-      if (!userId) throw new Error('No userId provided for updateUserData');
+      if (!userId) throw new Error('No userId provided for updateUserInList');
 
       if (connection) {
         // make sure user is only updating their own data
         // these should be non API updates
         const userIdByConnection = this.users.find((u) =>
           u.connections.includes(connection.id)
-        )?.userId;
+        )?.id;
 
         if (!userIdByConnection || userIdByConnection !== userId)
           throw new Error(
-            `User ID mismatch in updatedUserData: ${JSON.stringify({
+            `User ID ${
+              userIdByConnection ? 'mismatch' : 'not found'
+            } in updateUserInList: ${JSON.stringify({
               userId,
               userIdByConnection,
               connectionId: connection.id,
@@ -185,12 +202,13 @@ export class UserList {
           );
       }
 
-      const userIndex = this.users.findIndex((u) => u.userId === userId);
+      const userIndex = this.users.findIndex((u) => u.id === userId);
       const wasConnected = Boolean(userIndex !== -1);
 
       // update the connected user's data on the server
       if (wasConnected) {
         if (data.status) data.statusChangedAt = new Date();
+        if (data.update) data.updateChangedAt = new Date();
 
         this.users[userIndex] = { ...this.users[userIndex], ...data };
 
@@ -204,19 +222,19 @@ export class UserList {
       }
 
       // persist the update to the database, even if they weren't connected
-      await updateUserData(userId, data);
+      await updateUser(userId, data);
 
       return { wasConnected, success: true };
     } catch (err) {
-      processError({ err, connection, source: 'updateUserData' });
+      processError({ err, connection, source: 'updateUser' });
 
       return { wasConnected: false };
     }
   }
 
-  async removeUser({ connection }: RemoveUserParams) {
+  async removeUser({ connection }: RemoveUserFromListParams) {
     const connectionId = connection.id;
-    let updatedUserData: Partial<UserData> = {};
+    let updatedUserData: Partial<User> = {};
 
     try {
       const connectedUser = this.users.find((u) => u.connections.includes(connectionId));
@@ -232,7 +250,7 @@ export class UserList {
               true
             )} remaining: `,
             {
-              userId: connectedUser.userId,
+              userId: connectedUser.id,
               connectionId,
               remainingConnections,
             }
@@ -244,16 +262,16 @@ export class UserList {
         } else {
           // this was rhe last connection from that user
           debug('User disconnected entirely: ', {
-            userId: connectedUser.userId,
+            userId: connectedUser.id,
             connectionId: connection.id,
           });
 
-          this.users = this.users.filter((u) => u.userId !== connectedUser.userId);
+          this.users = this.users.filter((u) => u.id !== connectedUser.id);
 
           this.partyServer.room.broadcast(
             buildServerMessage<ServerMessageRemoveUser>({
               type: 'removeUser',
-              userId: connectedUser.userId,
+              userId: connectedUser.id,
             })
           );
 
@@ -267,7 +285,7 @@ export class UserList {
           };
         }
 
-        await updateUserData(connectedUser.userId, updatedUserData);
+        await updateUser(connectedUser.id, updatedUserData);
       } else
         console.error(
           'Attempted to remove user that was not found in the list of connected users:',
@@ -281,7 +299,7 @@ export class UserList {
   // save the list of user IDs to restore them on server restart
   async persistUserList({ connection }: { connection?: Party.Connection<unknown> }) {
     try {
-      const connectedUserIds = this.users.map((u) => u.userId);
+      const connectedUserIds = this.users.map((u) => u.id);
 
       await this.partyServer.room.storage.put('connectedUserIds', connectedUserIds);
 

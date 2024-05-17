@@ -5,8 +5,10 @@ import { AvatarFallback, AvatarImage, Avatar as AvatarRoot } from '@/components/
 
 import { cn } from '@/lib/utils';
 
+import { UserPublic } from '@/lib/types';
+
 type Props = {
-  user: User;
+  user: User | UserPublic;
   className?: string;
 };
 

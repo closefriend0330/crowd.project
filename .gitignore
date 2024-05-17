@@ -44,7 +44,7 @@ next-env.d.ts
 
 certificates
 
-db/dev.db*
+db/dev*.db*
 db/exports/*
 !db/exports/.gitkeep
 

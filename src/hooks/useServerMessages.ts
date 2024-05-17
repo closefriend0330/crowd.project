@@ -5,10 +5,10 @@ import { toast } from 'sonner';
 import userSoundEffects from '@/hooks/useSoundEffects';
 import useUserListStore from '@/hooks/useUserListStore';
 
-import { userDataSchema } from '@/lib/types';
+import { userSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { serverMessageSchema } from '@/party/serverMessages';
-import { connectionStatusAtom, errorAtom, serverMetaDataAtom, userDataAtom } from '@/stores/jotai';
+import { connectionStatusAtom, errorAtom, serverMetaDataAtom, userAtom } from '@/stores/jotai';
 
 import {
   ServerMessageAddUser,
@@ -28,7 +28,7 @@ type Props = {
 };
 
 export default function useServerMessages({ ws }: Props) {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [user, setUser] = useAtom(userAtom);
   const setServerMetaData = useSetAtom(serverMetaDataAtom);
   const setError = useSetAtom(errorAtom);
   const setConnectionStatus = useSetAtom(connectionStatusAtom);
@@ -40,12 +40,12 @@ export default function useServerMessages({ ws }: Props) {
   const processUsersFullDataMessage = ({ data }: ServerMessageUserData) => {
     debug('usersFullData client message');
 
-    const result = userDataSchema.safeParse(data);
+    const result = userSchema.safeParse(data);
 
     setConnectionStatus('fully connected');
     setError(null);
 
-    if (result.success) setUserData(result.data);
+    if (result.success) setUser(result.data);
     else {
       const message = `Error parsing user data from usersFullData: ${getErrorMessage(
         result.error
@@ -75,7 +75,7 @@ export default function useServerMessages({ ws }: Props) {
   const processRemoveUserMessage = ({ userId }: ServerMessageRemoveUser) => {
     debug('removeUser client message', { userId: userId });
 
-    setUserList(users.filter((user) => user.userId !== userId));
+    setUserList(users.filter((user) => user.id !== userId));
     playUserLeft();
   };
 
@@ -98,17 +98,17 @@ export default function useServerMessages({ ws }: Props) {
     updateUser(userId, data);
 
     // react to other people's updates
-    if (userData) {
-      if (userId !== userData.userId) {
-        if (data.tagline) {
-          shootConfetti({ source: 'list tagline update' });
+    if (user) {
+      if (userId !== user.id) {
+        if (data.update) {
+          shootConfetti({ source: 'list update update' });
           playListStatusUpdated();
         } else if (data.status) {
           playListStatusUpdated();
         }
       } else {
         // update your own user data if it's you (at least the public data)
-        setUserData({ ...userData, ...data });
+        setUser({ ...user, ...data });
       }
     }
   };

@@ -6,32 +6,32 @@ import Avatar from '@/components/Presence/Avatar';
 import TimeAgo from '@/components/Presence/TimeAgo';
 import StatusBadge from '@/components/Site/StatusBadge';
 
-import { UserPublicData } from '@/lib/types';
+import { UserPublic } from '@/lib/types';
 
 type Props = {
-  user: UserPublicData;
+  user: UserPublic;
 };
 
-function UserListTagline({ user }: { user: UserPublicData }) {
+function UserListUpdate({ user }: { user: UserPublic }) {
   const linkifyOptions = {
     target: '_blank',
     truncate: 30,
   };
   return (
     <div className='text-sm text-slate-500 break-words'>
-      <Linkify options={linkifyOptions}>{user.tagline || ''}</Linkify>
+      <Linkify options={linkifyOptions}>{user.update || ''}</Linkify>
     </div>
   );
 }
 
-function UserListTimestamp({ user, className }: { user: UserPublicData; className?: string }) {
+function UserListTimestamp({ user, className }: { user: UserPublic; className?: string }) {
   return (
     <div className={className}>
-      {user.away && user.awayStartedAt && (
+      {user.away && user.awayChangedAt && (
         <TimeAgo
           className='text-xs text-slate-700 self-end'
           tooltipPrefix={`Connected at ${user?.sessionStartedAt?.toLocaleString()}, away since `}
-          date={user.awayStartedAt}
+          date={user.awayChangedAt}
         />
       )}
     </div>
@@ -46,7 +46,7 @@ export default function UserListEntry({ user }: Props) {
         <div className='text-base sm:text-lg grow'>{user.name}</div>
         <UserListTimestamp className='flex flex-col items-start' user={user} />
       </div>
-      <UserListTagline user={user} />
+      <UserListUpdate user={user} />
       <StatusBadge className='flex justify-end' user={user} />
     </div>
   );

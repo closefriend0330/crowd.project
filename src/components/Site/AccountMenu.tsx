@@ -22,7 +22,7 @@ type Props = {
 };
 
 export default function AccountMenu({ children, user }: Props) {
-  const { userData } = useUserData();
+  const { user: connectedUser } = useUserData();
   const { open } = useDialog('profile');
 
   return (
@@ -33,10 +33,10 @@ export default function AccountMenu({ children, user }: Props) {
         </DropdownMenuTrigger>
         <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()} align='end'>
           <DropdownMenuLabel className='flex flex-col'>
-            <div>{userData?.name || user.name}</div>
+            <div>{connectedUser?.name || user.name}</div>
             <div className='text-[7pt] text-slate-500 font-normal'>{user.email}</div>
           </DropdownMenuLabel>
-          {userData && (
+          {connectedUser && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => open()}>Edit Profile</DropdownMenuItem>
@@ -46,7 +46,7 @@ export default function AccountMenu({ children, user }: Props) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {userData && <ProfileDialog />}
+      {connectedUser && <ProfileDialog />}
     </>
   );
 }

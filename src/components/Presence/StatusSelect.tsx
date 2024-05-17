@@ -1,3 +1,5 @@
+import { IconWifiOff } from '@tabler/icons-react';
+
 import {
   Select,
   SelectContent,
@@ -40,6 +42,13 @@ export default function StatusSelect({ field, selectedStatus }: Props) {
               <div className='font-normal'>({userSelectableStatusOptions.length})</div>
             </div>
           </SelectLabel>
+          <SelectItem disabled key={'offline'} value={'offline'}>
+            <div className='flex items-center gap-4'>
+              <div className='w-5 hidden xs:block'>{<IconWifiOff className='size-5' />}</div>
+              <div className='text-sm'>offline</div>
+            </div>
+          </SelectItem>
+
           {userSelectableStatusOptions.map((status) => {
             const Icon = userStatusConfig[status].icon;
 

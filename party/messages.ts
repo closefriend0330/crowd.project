@@ -28,9 +28,9 @@ export async function processClientMessage({ message, users, sender }: processCl
       const { data, userId, successMessage } = msg;
 
       // update the user's data
-      debug('updateUserData: ', { userId, data });
+      debug('updateUserData server message: ', { userId, data });
 
-      const { success } = await users.updateUserData({
+      const { success } = await users.updateUserInList({
         data,
         userId,
         connection: sender,

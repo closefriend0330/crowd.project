@@ -5,10 +5,10 @@ import TimeAgo from '@/components/Presence/TimeAgo';
 import { cn } from '@/lib/utils';
 import { userStatusConfig } from '@/statusOptions';
 
-import { UserPublicData } from '@/lib/types';
+import { UserPublic } from '@/lib/types';
 
 type Props = {
-  user: UserPublicData;
+  user: UserPublic;
   className?: string;
 };
 export default function StatusBadge({ user, className }: Props) {

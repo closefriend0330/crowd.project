@@ -1,80 +1,38 @@
 import { eq, inArray, ne } from 'drizzle-orm';
 
 import { db } from '@/db/db';
-import { accounts, userData, users } from '@/db/schema';
+import { accounts, users } from '@/db/schema';
 
-import { UserData, UserDataInsert } from '@/lib/types';
+import type { User } from '@/lib/types';
 
-export async function getUserDataByApiKey(apiKey: string) {
-  const res = await db.query.userData.findFirst({
-    where: (users, { eq }) => eq(users.apiKey, apiKey),
-    with: { user: true },
-  });
-
-  if (!res) return null;
-
-  const { user, ...userData } = res;
-
-  return { ...userData, name: res.user.name };
+export function getUserByApiKey(apiKey: string) {
+  return db.query.users.findFirst({ where: (users, { eq }) => eq(users.apiKey, apiKey) });
 }
 
-export async function getUserDataByUserId(userId: string): Promise<UserData | null> {
-  const res = await db.query.userData.findFirst({
-    where: eq(userData.userId, userId),
-    with: { user: true },
-  });
-
-  if (!res) return null;
-
-  const { user, ...data } = res;
-
-  return { ...data, image: res.user.image, name: res.user.name, email: res.user.email };
+export async function getUserByUserId(userId: string) {
+  return db.query.users.findFirst({ where: eq(users.id, userId) });
 }
 
-export function setUserData(userId: string, data: UserDataInsert) {
+export function updateUser(userId: string, data: Partial<User>) {
   return db
-    .insert(userData)
-    .values({ userId, ...data, updatedAt: new Date() })
-    .returning();
-}
-
-export async function updateUserData(userId: string, data: Partial<UserData>) {
-  const { name, ...rest } = data;
-
-  await db
-    .update(userData)
-    .set({ ...rest, updatedAt: new Date() })
-    .where(eq(userData.userId, userId));
-
-  if (name) await db.update(users).set({ name }).where(eq(users.id, userId));
+    .update(users)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(users.id, userId));
 }
 
 export function getUser(userId: string) {
   return db.query.users.findFirst({ where: eq(users.id, userId) });
 }
 
-export async function getUserDataList(userIds: string[]) {
-  const res = await db.query.userData.findMany({
-    where: inArray(userData.userId, userIds),
-    with: { user: true },
-  });
-
-  if (!res || res.length === 0) return [];
-
-  return res.map((r) => {
-    const { user, ...data } = r;
-
-    return { ...data, name: user.name, image: user.image, email: user.email };
-  });
+export function getUsersByUsersIds(userIds: string[]) {
+  return db.query.users.findMany({ where: inArray(users.id, userIds) });
 }
 
 export function clearConnectionData() {
-  const now = new Date();
-
   return db
-    .update(userData)
-    .set({ connections: [], updatedAt: now })
-    .where(ne(userData.connections, []));
+    .update(users)
+    .set({ connections: [], updatedAt: new Date() })
+    .where(ne(users.connections, []));
 }
 
 export function getUserAccounts(userId: string) {

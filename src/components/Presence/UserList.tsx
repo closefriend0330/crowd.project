@@ -10,10 +10,10 @@ import useUserListStore from '@/hooks/useUserListStore';
 
 import { CONFETTI_DELAY_MAX, CONFETTI_DELAY_MIN } from '@/config';
 
-import { UserPublicData } from '@/lib/types';
+import { UserPublic } from '@/lib/types';
 
 type UserListSegmentProps = {
-  users: UserPublicData[];
+  users: UserPublic[];
   title: string;
   className?: string;
 };
@@ -28,7 +28,7 @@ function UserListSegment({ users, title, className }: UserListSegmentProps) {
       </h2>
       <div>
         {users.map((user) => (
-          <UserListEntry key={user.userId} user={user} />
+          <UserListEntry key={user.id} user={user} />
         ))}
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function useConfetti() {
 
       setTimeout(() => {
         setRecentlyShot(false);
-      }, CONFETTI_RESET_DELAY);
+      }, resetDelay);
     }, delay);
 
     posthog.capture('confetti shot', { source });

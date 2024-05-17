@@ -2,10 +2,10 @@ import { atom } from 'jotai';
 import { PartySocket } from 'partysocket';
 import { TConductorInstance } from 'react-canvas-confetti/dist/types';
 
-import { ConnectionStatus, ServerMetaData, UserData, UserPublicData } from '@/lib/types';
+import { ConnectionStatus, ServerMetaData, User, UserPublic } from '@/lib/types';
 
-export const userListAtom = atom<UserPublicData[]>([]);
-export const userDataAtom = atom<UserData | null>(null);
+export const userListAtom = atom<UserPublic[]>([]);
+export const userAtom = atom<User | null>(null);
 
 export const connectionStatusAtom = atom<ConnectionStatus>('disconnected');
 export const partySocketAtom = atom<PartySocket | null>(null);

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { userDataSchema } from '@/lib/types';
+import { userSchema } from '@/lib/types';
 
 // client messages sent FROM a client TO the server
 
@@ -8,7 +8,7 @@ import { userDataSchema } from '@/lib/types';
 export const clientMessageUpdateUserDataSchema = z.object({
   type: z.literal('updateUserData'),
   userId: z.string(),
-  data: userDataSchema.partial(),
+  data: userSchema.partial(),
   successMessage: z.string().optional(),
 });
 export type ClientMessageUpdateUserData = z.infer<typeof clientMessageUpdateUserDataSchema>;

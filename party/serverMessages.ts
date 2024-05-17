@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { serverMetaDataSchema, userDataSchema, userPublicDataSchema } from '@/lib/types';
+import { serverMetaDataSchema, userPublicSchema, userSchema } from '@/lib/types';
 
 // server messages sent FROM the server TO a client
 
@@ -19,14 +19,14 @@ export type ServerMessageType = (typeof serverMessageTypes)[number];
 // send the full list of connected users
 const serverMessageUserListSchema = z.object({
   type: z.literal('userList'),
-  users: z.array(userPublicDataSchema),
+  users: z.array(userPublicSchema),
 });
 export type ServerMessageUserList = z.infer<typeof serverMessageUserListSchema>;
 
 // a new user has connected
 const serverMessageAddUserSchema = z.object({
   type: z.literal('addUser'),
-  data: userPublicDataSchema,
+  data: userPublicSchema,
 });
 export type ServerMessageAddUser = z.infer<typeof serverMessageAddUserSchema>;
 
@@ -40,7 +40,7 @@ export type ServerMessageRemoveUser = z.infer<typeof serverMessageRemoveUserSche
 // the server is sending the full data for a connected user
 const serverMessageUserDataSchema = z.object({
   type: z.literal('usersFullData'),
-  data: userDataSchema,
+  data: userSchema,
 });
 export type ServerMessageUserData = z.infer<typeof serverMessageUserDataSchema>;
 
@@ -48,7 +48,7 @@ export type ServerMessageUserData = z.infer<typeof serverMessageUserDataSchema>;
 const serverMessageUpdatePublicDataSchema = z.object({
   type: z.literal('updateUsersPublicData'),
   userId: z.string(),
-  data: userPublicDataSchema.partial(),
+  data: userPublicSchema.partial(),
 });
 export type ServerMessageUpdatePublicData = z.infer<typeof serverMessageUpdatePublicDataSchema>;
 

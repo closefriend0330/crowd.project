@@ -3,24 +3,24 @@ import { toast } from 'sonner';
 
 import { buildClientMessage } from '@/lib/messages';
 import { debug } from '@/lib/utils';
-import { partySocketAtom, userDataAtom } from '@/stores/jotai';
+import { partySocketAtom, userAtom } from '@/stores/jotai';
 
 import type { ClientMessageUpdateUserData } from '@/lib/clientMessages';
-import type { UserData } from '@/lib/types';
+import type { User } from '@/lib/types';
 
 export default function useUserData() {
-  const [userData, setUserData] = useAtom(userDataAtom);
+  const [user, setUser] = useAtom(userAtom);
   const ws = useAtomValue(partySocketAtom);
 
   type UpdateUserDataParams = {
-    data: Partial<UserData>;
+    data: Partial<User>;
     successMessage?: string;
   };
-  function updateUserData({ data, successMessage }: UpdateUserDataParams) {
-    debug('updateUserData in useUserData', data);
+  function updateUser({ data, successMessage }: UpdateUserDataParams) {
+    debug('updateUser in useUserData', { data });
 
     if (!data || Object.keys(data).length === 0) {
-      const message = `No data passed to updateUserData ${JSON.stringify({ data })}`;
+      const message = `No data passed to updateUser ${JSON.stringify({ data })}`;
 
       toast.warning(message);
       console.warn(message);
@@ -28,12 +28,12 @@ export default function useUserData() {
       return;
     }
 
-    setUserData((prev) => {
+    setUser((prev) => {
       return prev ? { ...prev, ...data } : prev;
     });
 
     if (!ws) {
-      const message = `No ws available for updateUserData (${JSON.stringify({ data })})`;
+      const message = `No ws available for updateUser (${JSON.stringify({ data })})`;
 
       toast.error(message);
       console.warn(message);
@@ -41,8 +41,8 @@ export default function useUserData() {
       return;
     }
 
-    if (!userData || Object.keys(userData).length === 0) {
-      const message = `No userData for updateUserData ${JSON.stringify({ userData, data })}`;
+    if (!user || Object.keys(user).length === 0) {
+      const message = `No user for updateUser ${JSON.stringify({ user, data })}`;
 
       toast.error(message);
       console.warn(message);
@@ -53,12 +53,12 @@ export default function useUserData() {
     ws.send(
       buildClientMessage<ClientMessageUpdateUserData>({
         type: 'updateUserData',
-        userId: userData.userId,
+        userId: user.id,
         data,
         successMessage,
       })
     );
   }
 
-  return { userData, updateUserData };
+  return { user, updateUser };
 }
