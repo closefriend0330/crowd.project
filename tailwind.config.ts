@@ -82,6 +82,12 @@ const config = {
     'bg-green-600',
     'bg-teal-500',
     'bg-sky-500',
+    'bg-fuchsia-900',
+    'bg-emerald-500',
+    'bg-emerald-400',
+    'bg-cyan-700',
+    'bg-blue-800',
+    'bg-pink-800',
   ],
   prefix: '',
   theme: {

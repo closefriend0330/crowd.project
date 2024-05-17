@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import TimeAgo from '@/components/Presence/TimeAgo';
 
 import { cn } from '@/lib/utils';
-import { userStatusConfig } from '@/statusConfig';
+import { userStatusConfig } from '@/statusOptions';
 
 import { UserPublicData } from '@/lib/types';
 

@@ -8,7 +8,7 @@ Very much a work in progress. Post your bugs and ideas to the [issues](https://g
 
 ## API
 
-Currently, you can post a status update via the API with at least one of a free text 'update' field (up to 200 characters) or a 'status' option from the [userSelectableStatusOptions](./src/statusConfig.ts) list of options plus your 'apiKey'.
+Currently, you can post a status update via the API with at least one of a free text 'update' field (up to 200 characters) or a 'status' option from the [userSelectableStatusOptions](./src/statusOptions.ts) list of options plus your 'apiKey'.
 
 Make a POST request to `https://coworking-party-party.jschuur.partykit.dev/party/main/status` with a raw JSON body like this:
 

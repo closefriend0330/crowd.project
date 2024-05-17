@@ -8,7 +8,7 @@ import { MAX_TAGLINE_LENGTH } from '@/config';
 import { getUserDataByApiKey } from '@/db/queries';
 import { userPublicDataSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
-import { userSelectableStatusOptions } from '@/statusConfig';
+import { userSelectableStatusOptions } from '@/statusOptions';
 
 import type Server from '@/party/server';
 import { UserList } from '@/party/userList';

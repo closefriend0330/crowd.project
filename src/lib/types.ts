@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { userData, users } from '@/db/schema';
 
-import { TablerIcon } from '@/statusConfig';
+import { TablerIcon } from '@/statusOptions';
 
 export type UserStatus = keyof UserStatusConfig;
 export type UserSelectableStatus = Omit<UserStatus, 'offline'>;

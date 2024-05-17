@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select';
 
 import { cn } from '@/lib/utils';
-import { userSelectableStatusOptions, userStatusConfig } from '@/statusConfig';
+import { userSelectableStatusOptions, userStatusConfig } from '@/statusOptions';
 
 type Props = {
   field: any;
