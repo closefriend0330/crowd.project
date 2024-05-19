@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { pickBy } from 'lodash';
 import posthog from 'posthog-js';
 import { KeyboardEvent, useCallback, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type ControllerRenderProps, type UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -37,6 +37,16 @@ type StatusFormValues = z.infer<typeof statusFormSchema>;
 type Props = {
   className?: string;
 };
+
+export type StatusUpdateForm = UseFormReturn<
+  { update: string; status: string | undefined },
+  any,
+  undefined
+>;
+export type StatusUpdateFormField<T extends 'update' | 'status'> = ControllerRenderProps<
+  { update: string; status: string | undefined },
+  T
+>;
 
 export default function StatusUpdate({ className }: Props) {
   const { playUserUpdatePosted } = useSoundEffects();
@@ -136,12 +146,11 @@ export default function StatusUpdate({ className }: Props) {
                   name='status'
                   render={({ field }) => (
                     <FormControl>
-                      <FormItem>
-                        <StatusSelect
-                          field={field}
-                          selectedStatus={form.watch('status') || 'online'}
-                        />
-                      </FormItem>
+                      <StatusSelect
+                        field={field}
+                        form={form}
+                        selectedStatus={form.watch('status') || 'online'}
+                      />
                     </FormControl>
                   )}
                 />

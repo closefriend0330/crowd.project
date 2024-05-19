@@ -99,6 +99,10 @@ const config = {
       },
     },
     extend: {
+      maxHeight: {
+        'status-popover-list':
+          'min(calc(var(--radix-popover-content-available-height) - 64px), 300px)',
+      },
       screens: {
         xs: '480px',
         pwa: { raw: '(display-mode: fullscreen)' },
