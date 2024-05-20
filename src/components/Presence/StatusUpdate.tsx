@@ -5,6 +5,7 @@ import { pickBy } from 'lodash';
 import posthog from 'posthog-js';
 import { KeyboardEvent, useCallback, useEffect } from 'react';
 import { useForm, type ControllerRenderProps, type UseFormReturn } from 'react-hook-form';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -62,6 +63,14 @@ export default function StatusUpdate({ className }: Props) {
   const { shootConfetti } = useConfetti();
   const update = form.watch('update');
 
+  useHotkeys(
+    '/',
+    () => {
+      form.setFocus('update');
+    },
+    { preventDefault: true }
+  );
+
   useEffect(() => {
     form.setValue('status', status);
   }, [form, status]);
@@ -101,10 +110,11 @@ export default function StatusUpdate({ className }: Props) {
   );
 
   const handleKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    (event: KeyboardEvent<HTMLTextAreaElement | HTMLButtonElement>) => {
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
-        form.handleSubmit(onSubmit)();
+
+        if (form.formState.isDirty) form.handleSubmit(onSubmit)();
       }
     },
     [form, onSubmit]
@@ -150,6 +160,7 @@ export default function StatusUpdate({ className }: Props) {
                         field={field}
                         form={form}
                         selectedStatus={form.watch('status') || 'online'}
+                        handleKeyDown={handleKeyDown}
                       />
                     </FormControl>
                   )}

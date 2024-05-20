@@ -1,5 +1,6 @@
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -37,9 +38,20 @@ type Props = {
   field: StatusUpdateFormField<'status'>;
   selectedStatus: string;
   form: StatusUpdateForm;
+  handleKeyDown: (event: KeyboardEvent<HTMLTextAreaElement | HTMLButtonElement>) => void;
 };
-export default function StatusSelect({ field, selectedStatus, form }: Props) {
+export default function StatusSelect({ field, selectedStatus, form, handleKeyDown }: Props) {
   const [statusOpen, setStatusOpen] = useState(false);
+
+  useHotkeys(
+    's',
+    () => {
+      console.log('status focus');
+      setStatusOpen(true);
+    },
+    { preventDefault: true }
+  );
+
   return (
     <FormItem className='flex flex-col'>
       <Popover open={statusOpen} onOpenChange={setStatusOpen}>
@@ -55,6 +67,7 @@ export default function StatusSelect({ field, selectedStatus, form }: Props) {
                   : 'text-black bg-white',
                 !field.value && 'text-muted-foreground'
               )}
+              onKeyDown={handleKeyDown}
             >
               {field.value ? <StatusOption status={field.value} /> : 'Select your status'}
               <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />

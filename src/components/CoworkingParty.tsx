@@ -16,9 +16,10 @@ export default function CoworkingParty() {
   if (connectionStatus === 'fully connected')
     return (
       <div className='flex flex-col items-center max-w-xl'>
-        <NewsCallout title='Todo List Preview' className='mb-4'>
-          Try out the new, local-only todo list to track your most important priorities for the day
-          and see if you can break it. Coming soon: shared progress tracking. 🚀
+        <NewsCallout title='Status update form improvements' className='mb-4'>
+          Status dropdown now has search and keyboard shortcuts are available to focus on the update
+          (/) and status (s) fields. Hit Cmd-Enter (or Windows-Enter) to submit directly from either
+          field.
         </NewsCallout>
 
         <div className='w-full xs:w-[450px]'>
