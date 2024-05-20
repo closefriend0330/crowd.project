@@ -199,14 +199,14 @@ importers:
         specifier: ^0.21.2
         version: 0.21.2
       eslint:
-        specifier: ^8
+        specifier: ^8.57.0
         version: 8.57.0
       eslint-config-next:
         specifier: 14.2.3
         version: 14.2.3(eslint@8.57.0)(typescript@5.4.5)
       partykit:
-        specifier: 0.0.104
-        version: 0.0.104
+        specifier: 0.0.105
+        version: 0.0.105
       postcss:
         specifier: ^8.4.38
         version: 8.4.38
@@ -3921,8 +3921,8 @@ packages:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
 
-  partykit@0.0.104:
-    resolution: {integrity: sha512-cuXweoZzb6ZCeyKVXAFYOiz/GTXFBAcQZz5gHgTbiifaEPP+hKMn/zK67JHR54s5ATpzEAnb5U7YlODId+6rSg==}
+  partykit@0.0.105:
+    resolution: {integrity: sha512-pTP/HWKBbNIYtE8oNtnnYL71uwCMvni2dIX/UeHaPJOH/P4lmOVB7HC1jviZe879ndeHOxDD9FpuCdCG7cjl4Q==}
     hasBin: true
 
   partysocket@1.0.1:
@@ -9316,7 +9316,7 @@ snapshots:
     dependencies:
       callsites: 3.1.0
 
-  partykit@0.0.104:
+  partykit@0.0.105:
     dependencies:
       '@cloudflare/workers-types': 4.20240320.1
       clipboardy: 4.0.0
