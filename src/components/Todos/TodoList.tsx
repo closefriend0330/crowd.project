@@ -22,7 +22,7 @@ import useTodoList from '@/hooks/useTodoList';
 import { Todo } from '@/lib/types';
 
 export default function TodoList() {
-  const { todos, moveTodo } = useTodoList();
+  const { todos, moveTodoItem } = useTodoList();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -33,7 +33,7 @@ export default function TodoList() {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
-    moveTodo(active, over);
+    moveTodoItem(active, over);
   }
 
   return (

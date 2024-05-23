@@ -33,7 +33,7 @@ type Props = {
 };
 
 export default function NewTodo({ className }: Props) {
-  const { addTodo, todos, openTodos, todoSlotsLeft, allCompleted } = useTodos();
+  const { addTodoItem, todos, openTodos, todoSlotsLeft, allCompleted } = useTodos();
   const form = useForm({
     resolver: zodResolver(todoFormSchema),
     defaultValues: {
@@ -43,7 +43,7 @@ export default function NewTodo({ className }: Props) {
   const title = form.watch('title');
 
   function onSubmit({ title }: TodoFormValues) {
-    addTodo(title.trim());
+    addTodoItem(title.trim());
 
     form.reset();
   }

@@ -19,6 +19,8 @@ export default function VisibilityEvents() {
   const awayStartTimeRef = useRef<number | null>(null);
 
   usePageVisibility((isVisible: boolean) => {
+    if (!user) return;
+
     let awayTimeout: NodeJS.Timeout | undefined = undefined;
     const now = new Date();
 
@@ -32,12 +34,14 @@ export default function VisibilityEvents() {
     if (isVisible) {
       if (awayTimeout) clearTimeout(awayTimeout);
 
-      updateUser({ data: { away: false, awayChangedAt: now } });
+      if (user.away) {
+        updateUser({ data: { away: false, awayChangedAt: now } });
 
-      const awayTime = awayStartTimeRef.current
-        ? new Date().getTime() - awayStartTimeRef.current
-        : null;
-      posthog.capture('user no longer away', { userId: user?.id, awayTime });
+        const awayTime = awayStartTimeRef.current
+          ? new Date().getTime() - awayStartTimeRef.current
+          : null;
+        posthog.capture('user no longer away', { userId: user?.id, awayTime });
+      }
 
       awayStartTimeRef.current = null;
     } else {

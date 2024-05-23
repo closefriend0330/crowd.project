@@ -1,83 +1,33 @@
-import { useAtom, useSetAtom } from 'jotai';
-import { PartySocket } from 'partysocket';
+import { useSetAtom } from 'jotai';
 import { toast } from 'sonner';
 
-import userSoundEffects from '@/hooks/useSoundEffects';
-import useUserListStore from '@/hooks/useUserListStore';
+import useTodoList from '@/hooks/useTodoList';
+import useUserData from '@/hooks/useUserData';
+import useUserList from '@/hooks/useUserList';
 
-import { userSchema } from '@/lib/types';
-import { debug, getErrorMessage } from '@/lib/utils';
-import { serverMessageSchema } from '@/party/serverMessages';
-import { connectionStatusAtom, errorAtom, serverMetaDataAtom, userAtom } from '@/stores/jotai';
+import { getErrorMessage } from '@/lib/utils';
+import { ServerMessageRoomData, serverMessageSchema } from '@/party/serverMessages';
+import { errorAtom, roomDataAtom, serverMetaDataAtom } from '@/stores/jotai';
 
 import {
-  ServerMessageAddUser,
   ServerMessageErrorEncountered,
-  ServerMessageRemoveUser,
   ServerMessageServerMetaData,
-  ServerMessageUpdatePublicData,
   ServerMessageUpdateSuccess,
-  ServerMessageUserData,
-  ServerMessageUserList,
 } from '@/party/serverMessages';
 
-import useConfetti from '@/hooks/useConfetti';
-
-type Props = {
-  ws: PartySocket;
-};
-
-export default function useServerMessages({ ws }: Props) {
-  const [user, setUser] = useAtom(userAtom);
+export default function useServerMessages() {
   const setServerMetaData = useSetAtom(serverMetaDataAtom);
+  const setRoomData = useSetAtom(roomDataAtom);
   const setError = useSetAtom(errorAtom);
-  const setConnectionStatus = useSetAtom(connectionStatusAtom);
-  const { users, updateUser, setUserList } = useUserListStore();
-  const { shootConfetti } = useConfetti();
-  const { playListStatusUpdated, playUserJoined, playUserLeft } = userSoundEffects();
-
-  // update the logged in user's data locally
-  const processUsersFullDataMessage = ({ data }: ServerMessageUserData) => {
-    debug('usersFullData client message');
-
-    const result = userSchema.safeParse(data);
-
-    setConnectionStatus('fully connected');
-    setError(null);
-
-    if (result.success) setUser(result.data);
-    else {
-      const message = `Error parsing user data from usersFullData: ${getErrorMessage(
-        result.error
-      )}`;
-
-      console.error(message);
-      toast.error(message);
-    }
-  };
-
-  // get the full list of current users in the room
-  const processUserListMessage = ({ users }: ServerMessageUserList) => {
-    debug('usersList client message', { users: users });
-
-    setUserList(users);
-  };
-
-  // add a user to the list
-  const processAddUserMessage = ({ data }: ServerMessageAddUser) => {
-    debug('addUser client message', { data });
-
-    setUserList([...users, data]);
-    playUserJoined();
-  };
-
-  // remove a user from the list
-  const processRemoveUserMessage = ({ userId }: ServerMessageRemoveUser) => {
-    debug('removeUser client message', { userId: userId });
-
-    setUserList(users.filter((user) => user.id !== userId));
-    playUserLeft();
-  };
+  const { processUpdateUserTodosMessage, processAddUserTodoMessage, processUserTodosMessage } =
+    useTodoList();
+  const { processUsersFullDataMessage } = useUserData();
+  const {
+    processUserListMessage,
+    processAddUserMessage,
+    processRemoveUserMessage,
+    processUpdateUsersPublicDataMessage,
+  } = useUserList();
 
   // report a server error processing previous message
   const processErrorEncounteredMessage = ({ message }: ServerMessageErrorEncountered) => {
@@ -91,31 +41,14 @@ export default function useServerMessages({ ws }: Props) {
     toast.success(message);
   };
 
-  // update a user's data in a local list
-  const processUpdateUsersPublicDataMessage = ({ userId, data }: ServerMessageUpdatePublicData) => {
-    debug('updateUsersPublicData client message', userId, data);
-
-    updateUser(userId, data);
-
-    // react to other people's updates
-    if (user) {
-      if (userId !== user.id) {
-        if (data.update) {
-          shootConfetti({ source: 'list update update' });
-          playListStatusUpdated();
-        } else if (data.status) {
-          playListStatusUpdated();
-        }
-      } else {
-        // update your own user data if it's you (at least the public data)
-        setUser({ ...user, ...data });
-      }
-    }
-  };
-
   // get latest server meta data (e.g. time since last onStart)
   const processServerMetaDataMessage = ({ data }: ServerMessageServerMetaData) => {
     setServerMetaData(data);
+  };
+
+  // get latest server meta data (e.g. time since last onStart)
+  const processRoomDataMessage = ({ data }: ServerMessageRoomData) => {
+    setRoomData(data);
   };
 
   async function processSeverMessage({ message }: { message: string }) {
@@ -146,6 +79,18 @@ export default function useServerMessages({ ws }: Props) {
           break;
         case 'serverMetaData':
           processServerMetaDataMessage(msg);
+          break;
+        case 'roomData':
+          processRoomDataMessage(msg);
+          break;
+        case 'userTodos':
+          processUserTodosMessage(msg);
+          break;
+        case 'addUserTodo':
+          processAddUserTodoMessage(msg);
+          break;
+        case 'updateUserTodos':
+          processUpdateUserTodosMessage(msg);
           break;
       }
     } catch (err) {

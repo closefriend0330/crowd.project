@@ -1,16 +1,20 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { toast } from 'sonner';
 
 import { buildClientMessage } from '@/lib/messages';
-import { debug } from '@/lib/utils';
-import { partySocketAtom, userAtom } from '@/stores/jotai';
+import { userSchema } from '@/lib/types';
+import { debug, getErrorMessage } from '@/lib/utils';
+import { connectionStatusAtom, errorAtom, partySocketAtom, userAtom } from '@/stores/jotai';
 
 import type { ClientMessageUpdateUserData } from '@/lib/clientMessages';
 import type { User } from '@/lib/types';
+import type { ServerMessageUserData } from '@/party/serverMessages';
 
 export default function useUserData() {
   const [user, setUser] = useAtom(userAtom);
   const ws = useAtomValue(partySocketAtom);
+  const setError = useSetAtom(errorAtom);
+  const setConnectionStatus = useSetAtom(connectionStatusAtom);
 
   type UpdateUserDataParams = {
     data: Partial<User>;
@@ -53,12 +57,31 @@ export default function useUserData() {
     ws.send(
       buildClientMessage<ClientMessageUpdateUserData>({
         type: 'updateUserData',
-        userId: user.id,
         data,
         successMessage,
       })
     );
   }
 
-  return { user, updateUser };
+  // update the logged in user's data locally
+  function processUsersFullDataMessage({ data }: ServerMessageUserData) {
+    debug('usersFullData client message');
+
+    const result = userSchema.safeParse(data);
+
+    setConnectionStatus('fully connected');
+    setError(null);
+
+    if (result.success) setUser(result.data);
+    else {
+      const message = `Error parsing user data from usersFullData: ${getErrorMessage(
+        result.error
+      )}`;
+
+      console.error(message);
+      toast.error(message);
+    }
+  }
+
+  return { user, updateUser, processUsersFullDataMessage };
 }

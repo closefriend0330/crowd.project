@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-import { serverMetaDataSchema, userPublicSchema, userSchema } from '@/lib/types';
+import {
+  roomDataSchema,
+  serverMetaDataSchema,
+  todoSchema,
+  userPublicSchema,
+  userSchema,
+} from '@/lib/types';
 
 // server messages sent FROM the server TO a client
 
@@ -13,6 +19,10 @@ const serverMessageTypes = [
   'serverMetaData',
   'errorEncountered',
   'updateSuccess',
+  'roomData',
+  'userTodos',
+  'addUserTodo',
+  'updateUserTodos',
 ] as const;
 export type ServerMessageType = (typeof serverMessageTypes)[number];
 
@@ -73,6 +83,31 @@ const serverMessageServerMetaDataSchema = z.object({
 });
 export type ServerMessageServerMetaData = z.infer<typeof serverMessageServerMetaDataSchema>;
 
+const serverMessageRoomDataSchema = z.object({
+  type: z.literal('roomData'),
+  data: roomDataSchema,
+});
+export type ServerMessageRoomData = z.infer<typeof serverMessageRoomDataSchema>;
+
+const serverMessageUserTodosSchema = z.object({
+  type: z.literal('userTodos'),
+  todos: z.array(todoSchema),
+});
+export type ServerMessageUserTodos = z.infer<typeof serverMessageUserTodosSchema>;
+
+const serverMessageAddTodoSchema = z.object({
+  type: z.literal('addUserTodo'),
+  todo: todoSchema,
+});
+export type ServerMessageAddUserTodo = z.infer<typeof serverMessageAddTodoSchema>;
+
+const serverMessageUpdateUserTodosSchema = z.object({
+  type: z.literal('updateUserTodos'),
+  todoIds: z.array(z.string()),
+  data: todoSchema.partial(),
+});
+export type ServerMessageUpdateUserTodos = z.infer<typeof serverMessageUpdateUserTodosSchema>;
+
 export const serverMessageSchema = z.union([
   serverMessageUserListSchema,
   serverMessageAddUserSchema,
@@ -81,6 +116,10 @@ export const serverMessageSchema = z.union([
   serverMessageUpdatePublicDataSchema,
   serverMessageServerMetaDataSchema,
   serverMessageErrorEncounteredSchema,
+  serverMessageRoomDataSchema,
   serverMessageUpdateSuccessSchema,
+  serverMessageUserTodosSchema,
+  serverMessageAddTodoSchema,
+  serverMessageUpdateUserTodosSchema,
 ]);
 export type ServerMessage = z.infer<typeof serverMessageSchema>;

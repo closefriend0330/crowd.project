@@ -1,9 +1,9 @@
-import { eq, inArray, ne } from 'drizzle-orm';
+import { and, eq, inArray, ne } from 'drizzle-orm';
 
 import { db } from '@/db/db';
-import { accounts, users } from '@/db/schema';
+import { accounts, todos, users } from '@/db/schema';
 
-import type { User } from '@/lib/types';
+import type { Todo, TodoInsert, User } from '@/lib/types';
 
 export function getUserByApiKey(apiKey: string) {
   return db.query.users.findFirst({ where: (users, { eq }) => eq(users.apiKey, apiKey) });
@@ -26,6 +26,23 @@ export function getUser(userId: string) {
 
 export function getUsersByUsersIds(userIds: string[]) {
   return db.query.users.findMany({ where: inArray(users.id, userIds) });
+}
+
+export function insertTodo(todo: TodoInsert) {
+  return db.insert(todos).values(todo);
+}
+
+export function updateTodo({ ids, data }: { ids: string[]; data: Partial<Todo> }) {
+  return db
+    .update(todos)
+    .set({ ...data })
+    .where(inArray(todos.id, ids));
+}
+
+export function getTodosByUserId(userId: string) {
+  return db.query.todos.findMany({
+    where: and(eq(todos.userId, userId), ne(todos.status, 'deleted')),
+  });
 }
 
 export function clearConnectionData() {

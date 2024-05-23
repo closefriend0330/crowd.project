@@ -29,11 +29,13 @@ export default function PartyKit({ sessionToken }: Props) {
 
       setConnectionStatusAtom('partially connected');
     },
+
     async onMessage(event: MessageEvent) {
       debug('Server message received: ', event.data);
 
       await processSeverMessage({ message: event.data });
     },
+
     onClose() {
       debug('Connection closed');
       toast.warning('Connection closed');
@@ -42,6 +44,7 @@ export default function PartyKit({ sessionToken }: Props) {
 
       playConnectionChange();
     },
+
     onError(e) {
       const message = JSON.stringify(e);
 
@@ -53,7 +56,7 @@ export default function PartyKit({ sessionToken }: Props) {
     setPartySocket(ws);
   }, [ws, setPartySocket]);
 
-  const processSeverMessage = useUserList({ ws });
+  const processSeverMessage = useUserList();
 
   return null;
 }

@@ -110,7 +110,7 @@
     "@types/uuid": "^9.0.8",
     "concurrently": "^8.2.2",
     "dotenv-cli": "^7.4.2",
-    "drizzle-kit": "^0.21.2",
+    "drizzle-kit": "^0.21.4",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
     "partykit": "0.0.105",

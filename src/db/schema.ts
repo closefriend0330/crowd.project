@@ -3,6 +3,8 @@ import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlit
 import type { AdapterAccount } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 
+import { randomTodoTitle } from '@/lib/todos';
+
 export const users = sqliteTable('user', {
   // Auth.js fields
   id: text('id')
@@ -32,13 +34,13 @@ export const users = sqliteTable('user', {
 
   away: integer('away', { mode: 'boolean' }).notNull().default(false),
   awayChangedAt: integer('awayChangedAt', { mode: 'timestamp_ms' }),
+  connections: text('connections', { mode: 'json' }).$type<string[]>().notNull().default([]),
 
   // custom private fields
   apiKey: text('apiKey')
     .notNull()
     .unique()
     .$defaultFn(() => uuidv4()),
-  connections: text('connections', { mode: 'json' }).$type<string[]>().notNull().default([]),
 });
 
 export const accounts = sqliteTable(
@@ -82,3 +84,24 @@ export const sessions = sqliteTable(
     userIdIdx: index('Session_userId_index').on(s.userId),
   })
 );
+
+export const todos = sqliteTable('todo', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv4()),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  title: text('title')
+    .notNull()
+    .$defaultFn(() => randomTodoTitle()),
+  alias: text('alias'),
+  status: text('status', { enum: ['open', 'completed', 'stale', 'deleted'] })
+    .notNull()
+    .default('open'),
+  createdAt: integer('createdAt', { mode: 'timestamp_ms' })
+    .notNull()
+    .default(sql`(unixepoch() * 1000)`),
+  completedAt: integer('completedAt', { mode: 'timestamp_ms' }),
+  deletedAt: integer('deletedAt', { mode: 'timestamp_ms' }),
+});

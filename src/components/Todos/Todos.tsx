@@ -20,7 +20,7 @@ type Props = {
 };
 
 export default function Todos({ className }: Props) {
-  const { todos, removeAllTodos } = useTodoList();
+  const { todos, removeAllTodoItems } = useTodoList();
   const [showTodos, setShowTodos] = useState(true);
 
   return (
@@ -31,7 +31,7 @@ export default function Todos({ className }: Props) {
           <NewTodo className='grow' />
           {todos.length > 5 && showTodos && (
             <Tooltip tooltip='Delete all items'>
-              <IconTrash className='size-4 cursor-pointer' onClick={removeAllTodos} />
+              <IconTrash className='size-4 cursor-pointer' onClick={removeAllTodoItems} />
             </Tooltip>
           )}
         </div>
@@ -39,10 +39,7 @@ export default function Todos({ className }: Props) {
           {todos.length === 0 ? (
             <div className='text-xs text-slate-700 pt-4 flex flex-row items-center gap-2'>
               <IconLock className='size-6 inline-block mb-0.5' />
-              <div>
-                Your priorities are private and stored on your device. Only the completion rate is
-                shared with the room.
-              </div>
+              <div>Your priorities are not shared with the room, only the completion rate is.</div>
             </div>
           ) : (
             <>

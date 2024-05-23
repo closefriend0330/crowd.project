@@ -6,8 +6,7 @@ import { SESSION_RECONNECT_GRACE_PERIOD } from '@/config';
 import { getUserByUserId, updateUser } from '@/db/queries';
 import { userPublicSchema } from '@/lib/types';
 import { debug } from '@/lib/utils';
-import { processError } from '@/party/lib';
-import { buildServerMessage } from '@/party/messages';
+import { processError, sendServerMessage } from '@/party/lib';
 
 import type { User } from '@/lib/types';
 import type Server from '@/party/server';
@@ -86,13 +85,11 @@ export class UserList {
 
         // broadcast the updated public data to all users...
         if (userUpdatesPublicData && Object.keys(userUpdatesPublicData).length > 0)
-          this.partyServer.room.broadcast(
-            buildServerMessage<ServerMessageUpdatePublicData>({
-              type: 'updateUsersPublicData',
-              userId,
-              data: userUpdatesPublicData,
-            })
-          );
+          sendServerMessage<ServerMessageUpdatePublicData>(this.partyServer.room, {
+            type: 'updateUsersPublicData',
+            userId,
+            data: userUpdatesPublicData,
+          });
 
         // ...but save any updated data to the database
         await updateUser(userId, userUpdates);
@@ -150,8 +147,12 @@ export class UserList {
         // broadcast the new user to others in the room
         const userPublicData = userPublicSchema.parse(updatedUserData);
 
-        this.partyServer.room.broadcast(
-          buildServerMessage<ServerMessageAddUser>({ type: 'addUser', data: userPublicData }),
+        sendServerMessage<ServerMessageAddUser>(
+          this.partyServer.room,
+          {
+            type: 'addUser',
+            data: userPublicData,
+          },
           [connectionId]
         );
 
@@ -161,15 +162,14 @@ export class UserList {
       }
 
       // send user their full data and the full user list (even for additional connection)
-      connection.send(
-        buildServerMessage<ServerMessageUserData>({ type: 'usersFullData', data: updatedUserData })
-      );
-      connection.send(
-        buildServerMessage<ServerMessageUserList>({
-          type: 'userList',
-          users: this.users.map((u) => userPublicSchema.parse(u)),
-        })
-      );
+      sendServerMessage<ServerMessageUserData>(connection, {
+        type: 'usersFullData',
+        data: updatedUserData,
+      });
+      sendServerMessage<ServerMessageUserList>(connection, {
+        type: 'userList',
+        users: this.users.map((u) => userPublicSchema.parse(u)),
+      });
 
       return { user: updatedUserData, wasConnected };
     } catch (err) {
@@ -190,11 +190,18 @@ export class UserList {
           u.connections.includes(connection.id)
         )?.id;
 
-        if (!userIdByConnection || userIdByConnection !== userId)
+        if (!userIdByConnection)
           throw new Error(
-            `User ID ${
-              userIdByConnection ? 'mismatch' : 'not found'
-            } in updateUserInList: ${JSON.stringify({
+            `User ID not found in updateUserInList: ${JSON.stringify({
+              userId,
+              userIdByConnection,
+              connectionId: connection.id,
+            })}`
+          );
+
+        if (userIdByConnection !== userId)
+          throw new Error(
+            `User ID mismatch in updateUserInList: ${JSON.stringify({
               userId,
               userIdByConnection,
               connectionId: connection.id,
@@ -212,13 +219,11 @@ export class UserList {
 
         this.users[userIndex] = { ...this.users[userIndex], ...data };
 
-        this.partyServer.room.broadcast(
-          buildServerMessage<ServerMessageUpdatePublicData>({
-            type: 'updateUsersPublicData',
-            userId,
-            data,
-          })
-        );
+        sendServerMessage<ServerMessageUpdatePublicData>(this.partyServer.room, {
+          type: 'updateUsersPublicData',
+          userId,
+          data,
+        });
       }
 
       // persist the update to the database, even if they weren't connected
@@ -268,12 +273,10 @@ export class UserList {
 
           this.users = this.users.filter((u) => u.id !== connectedUser.id);
 
-          this.partyServer.room.broadcast(
-            buildServerMessage<ServerMessageRemoveUser>({
-              type: 'removeUser',
-              userId: connectedUser.id,
-            })
-          );
+          sendServerMessage<ServerMessageRemoveUser>(this.partyServer.room, {
+            type: 'removeUser',
+            userId: connectedUser.id,
+          });
 
           await this.persistUserList({ connection });
 
@@ -286,6 +289,8 @@ export class UserList {
         }
 
         await updateUser(connectedUser.id, updatedUserData);
+
+        return { lastConnection: Boolean(updatedUserData?.connections?.length === 0) };
       } else
         console.error(
           'Attempted to remove user that was not found in the list of connected users:',
@@ -294,6 +299,8 @@ export class UserList {
     } catch (err) {
       processError({ err, connection, source: 'removeUser' });
     }
+
+    return { lastConnection: false };
   }
 
   // save the list of user IDs to restore them on server restart
@@ -316,5 +323,9 @@ export class UserList {
     } catch (err) {
       processError({ err, connection, source: 'persistUserList' });
     }
+  }
+
+  connectionsByUserId(userId: string) {
+    return this.users.find((u) => u.id === userId)?.connections || [];
   }
 }

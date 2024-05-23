@@ -46,7 +46,6 @@ export default function StatusSelect({ field, selectedStatus, form, handleKeyDow
   useHotkeys(
     's',
     () => {
-      console.log('status focus');
       setStatusOpen(true);
     },
     { preventDefault: true }

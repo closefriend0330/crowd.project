@@ -6,7 +6,7 @@ import { fromError } from 'zod-validation-error';
 
 import { MAX_UPDATE_LENGTH } from '@/config';
 import { getUserByApiKey } from '@/db/queries';
-import { userPublicSchema } from '@/lib/types';
+import { todoPublicSchema, userPublicSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { userSelectableStatusOptions } from '@/statusOptions';
 
@@ -43,26 +43,54 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
     posthog.capture('api request', { method, path });
 
     if (method === 'GET' && path === '/users') {
+      debug('users api request');
       posthog.capture('api request', { type: 'users api request' });
 
-      return new Response(
-        JSON.stringify({ users: users.list.map((user) => userPublicSchema.parse(user)) })
-      );
-    }
+      return Response.json({ users: users.list.map((user) => userPublicSchema.parse(user)) });
+    } else if (method === 'GET' && path === '/todos') {
+      const todos = partyServer.todos.list.map((todo) => todoPublicSchema.parse(todo));
 
-    if (method === 'POST' && path === '/status') {
+      debug('todos api request');
+      posthog.capture('api request', { type: 'todos api request' });
+
+      return Response.json({ todos });
+    } else if (method === 'POST' && path === '/status') {
       return await statusUpdate({ request, users });
-    }
-
-    if (method === 'GET' && path === '/debug') {
+    } else if (method === 'GET' && path === '/debug') {
       return debugInfo(partyServer);
-    }
-
-    if (method === 'GET' && path === '/reset') {
-      return await resetStorage({ partyServer, request });
+    } else if (method === 'GET' && path === '/resetConnectedUsers') {
+      return await adminRequest({
+        request,
+        handler: () => resetConnectedUsers({ partyServer, request }),
+      });
+    } else if (method === 'GET' && path === '/resetTodos') {
+      return await resetTodos({ partyServer, request });
     }
 
     return new Response(null, { status: 405 });
+  } catch (err) {
+    return new Response(JSON.stringify({ status: 'error', message: getErrorMessage(err) }), {
+      status: 500,
+    });
+  }
+}
+
+type AdminRequestParams = {
+  request: Party.Request;
+  handler: (request: Party.Request) => Promise<Response>;
+};
+
+async function adminRequest({ request, handler }: AdminRequestParams) {
+  try {
+    const url = new URL(request.url);
+    const adminSecret = url.searchParams.get('secret');
+
+    if (adminSecret !== process.env.ADMIN_SECRET)
+      return new Response(JSON.stringify({ status: 'error', message: 'Unauthorized access' }), {
+        status: 403,
+      });
+
+    return await handler(request);
   } catch (err) {
     return new Response(JSON.stringify({ status: 'error', message: getErrorMessage(err) }), {
       status: 500,
@@ -106,6 +134,12 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
       data: { update: result.data.update, status: result.data.status },
     });
 
+    debug('API status update:', {
+      user: user.name,
+      wasConnected,
+      update: result.data?.update?.length,
+      status: result.data?.status,
+    });
     posthog.capture('status api request success', {
       userId: user.id,
       name: user.name,
@@ -126,12 +160,15 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
 }
 
 export async function debugInfo(partyServer: Server) {
+  debug('debug info api request');
   posthog.capture('debug api request');
+
   const connectedUserIds = await partyServer.room.storage.get<string[]>('connectedUserIds');
 
   let debugData: Record<string, any> = {
     environment: process.env.ENV || process.env.NODE_ENV,
     connectedUsersCount: partyServer.users.list.length,
+    roomTodosCount: partyServer.todos.list.length,
     userConnections: partyServer.users.list.reduce((acc, user) => acc + user.connections.length, 0),
     storageConnectedUserIdCount: connectedUserIds?.length,
     storageConnectedUserIds: connectedUserIds,
@@ -150,11 +187,11 @@ export async function debugInfo(partyServer: Server) {
   return new Response(JSON.stringify(debugData, null, 2), { status: 200 });
 }
 
-type ResetStorageParams = {
+type ResetConnectedUsersParams = {
   partyServer: Server;
   request: Party.Request;
 };
-async function resetStorage({ partyServer, request }: ResetStorageParams) {
+async function resetConnectedUsers({ partyServer, request }: ResetConnectedUsersParams) {
   try {
     const url = new URL(request.url);
     const adminSecret = url.searchParams.get('secret');
@@ -164,7 +201,7 @@ async function resetStorage({ partyServer, request }: ResetStorageParams) {
         status: 403,
       });
 
-    const connectedUserIds =
+    const previousUserIds =
       (await partyServer.room.storage.get<string[]>('connectedUserIds')) || [];
     await partyServer.room.storage.put('connectedUserIds', []);
     partyServer.users.list = [];
@@ -172,8 +209,38 @@ async function resetStorage({ partyServer, request }: ResetStorageParams) {
     return new Response(
       JSON.stringify({
         status: 'success',
-        removedUserIds: connectedUserIds,
-        removedUserIdCount: connectedUserIds?.length,
+        previousUserIds,
+        previousUserIdCount: previousUserIds?.length,
+      }),
+      { status: 200 }
+    );
+  } catch (err) {
+    return new Response(JSON.stringify({ status: 'error', message: getErrorMessage(err) }), {
+      status: 500,
+    });
+  }
+}
+
+async function resetTodos({ partyServer, request }: ResetConnectedUsersParams) {
+  try {
+    const url = new URL(request.url);
+    const adminSecret = url.searchParams.get('secret');
+
+    if (adminSecret !== process.env.ADMIN_SECRET)
+      return new Response(JSON.stringify({ status: 'error', message: 'Unauthorized access' }), {
+        status: 403,
+      });
+
+    const previousUserIds =
+      (await partyServer.room.storage.get<string[]>('connectedUserIds')) || [];
+    await partyServer.room.storage.put('connectedUserIds', []);
+    partyServer.users.list = [];
+
+    return new Response(
+      JSON.stringify({
+        status: 'success',
+        previousUserIds,
+        previousUserIdCount: previousUserIds?.length,
       }),
       { status: 200 }
     );

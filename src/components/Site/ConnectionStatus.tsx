@@ -6,11 +6,12 @@ import { useAtomValue } from 'jotai';
 import Tooltip from '@/components/Site/Tooltip';
 
 import { cn, humanizeDurationShort } from '@/lib/utils';
-import { connectionStatusAtom, serverMetaDataAtom } from '@/stores/jotai';
+import { connectionStatusAtom, partySocketAtom, serverMetaDataAtom } from '@/stores/jotai';
 
 export default function ConnectionStatus() {
   const connectionStatus = useAtomValue(connectionStatusAtom);
   const { timeSinceOnStart } = useAtomValue(serverMetaDataAtom) || {};
+  const ws = useAtomValue(partySocketAtom);
 
   const color =
     connectionStatus === 'disconnected'
@@ -27,6 +28,8 @@ export default function ConnectionStatus() {
         round: true,
       })} ago`;
     }
+
+    if (ws) tooltip += ` (${ws._pk})`;
 
     return tooltip;
   };

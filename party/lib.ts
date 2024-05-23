@@ -1,9 +1,8 @@
-import Party from 'partykit/server';
+import Party, { type Room } from 'partykit/server';
 
 import { getErrorMessage } from '@/lib/utils';
-import { buildServerMessage } from '@/party/messages';
 
-import { ServerMessageErrorEncountered } from '@/party/serverMessages';
+import { ServerMessageErrorEncountered, serverMessageSchema } from '@/party/serverMessages';
 
 type ProcessErrorParams = {
   connection?: Party.Connection<unknown>;
@@ -16,12 +15,25 @@ export function processError({ err, connection, source, message }: ProcessErrorP
 
   console.error(`Error in ${source}: `, errorMessage);
 
-  if (connection)
-    connection.send(
-      buildServerMessage<ServerMessageErrorEncountered>({
-        type: 'errorEncountered',
-        source,
-        message: errorMessage,
-      })
-    );
+  sendServerMessage<ServerMessageErrorEncountered>(connection, {
+    type: 'errorEncountered',
+    source,
+    message: errorMessage,
+  });
+}
+
+export function sendServerMessage<T>(
+  sender: Room | Party.Connection<unknown> | undefined,
+  message: T,
+  exclude?: string[]
+) {
+  if (!sender) {
+    console.error('sendServerMessage: sender is missing', { message });
+
+    return;
+  }
+  const payload = JSON.stringify(serverMessageSchema.parse(message));
+
+  if ('broadcast' in sender) sender.broadcast(payload, exclude);
+  else if ('send' in sender) sender.send(payload);
 }

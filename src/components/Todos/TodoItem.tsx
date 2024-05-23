@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function TodoItem({ todo }: Props) {
-  const { toggleTodo, removeTodo, openTodos } = useTodoList();
+  const { updateTodoItem, removeTodoItem, openTodos } = useTodoList();
   const { playCheckCompleted, playUnCheck } = useSoundEffects();
   const { attributes, listeners, setNodeRef, transform, transition, active } = useSortable({
     id: todo.id,
@@ -29,10 +29,13 @@ export default function TodoItem({ todo }: Props) {
   };
 
   function handleToggle() {
-    if (!todo.completed) playCheckCompleted();
-    else playUnCheck();
-
-    toggleTodo(todo.id);
+    if (todo.status !== 'completed') {
+      playCheckCompleted();
+      updateTodoItem({ id: todo.id, data: { status: 'completed', completedAt: new Date() } });
+    } else {
+      playUnCheck();
+      updateTodoItem({ id: todo.id, data: { status: 'open', completedAt: null } });
+    }
   }
 
   return (
@@ -47,15 +50,15 @@ export default function TodoItem({ todo }: Props) {
       <label className='flex flex-row items-center gap-2 grow' htmlFor={`todo-${todo.id}`}>
         <Checkbox
           id={`todo-${todo.id}`}
-          checked={todo.completed}
+          checked={todo.status === 'completed'}
           onCheckedChange={handleToggle}
-          disabled={openTodos >= MAX_OPEN_TODO_LIST_ITEMS && todo.completed}
+          disabled={openTodos >= MAX_OPEN_TODO_LIST_ITEMS && todo.status === 'completed'}
           className='size-5 cursor-pointer'
         />
         <div
           className={cn(
             'text-base text-slate-600 px-2',
-            todo.completed && 'line-through text-slate-400'
+            todo.status === 'completed' && 'line-through text-slate-400'
           )}
         >
           {todo.title}
@@ -64,7 +67,7 @@ export default function TodoItem({ todo }: Props) {
       <div>
         <IconTrash
           className={cn('size-4 hidden cursor-pointer', !active && 'group-hover:inline-block')}
-          onClick={() => removeTodo(todo.id)}
+          onClick={() => removeTodoItem({ id: todo.id })}
         />
       </div>
     </div>
