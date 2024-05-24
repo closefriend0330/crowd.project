@@ -78,6 +78,9 @@ export const roomDataSchema = z.object({
   openTodos: z.number().int(),
   completedTodos: z.number().int(),
   todoUserCount: z.number().int(),
+  userProgress: z.record(
+    z.object({ openTodos: z.number().int(), completedTodos: z.number().int() })
+  ),
 });
 export type RoomData = z.infer<typeof roomDataSchema>;
 

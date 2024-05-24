@@ -23,6 +23,7 @@ type RemoveUserTodosFromRoomParams = {
 
 export class RoomTodos {
   todos: Array<Todo> = [];
+  userProgress: Record<string, { openTodos: number; completedTodos: number }> = {};
   partyServer: Server;
 
   get list() {
@@ -51,6 +52,20 @@ export class RoomTodos {
     this.partyServer = partyServer;
   }
 
+  updateUserProgress() {
+    this.userProgress = {};
+
+    for (const todo of this.todos) {
+      if (!this.userProgress[todo.userId])
+        this.userProgress[todo.userId] = { openTodos: 0, completedTodos: 0 };
+
+      const userProgress = this.userProgress[todo.userId];
+
+      if (todo.status === 'open') userProgress.openTodos++;
+      if (todo.status === 'completed') userProgress.completedTodos++;
+    }
+  }
+
   // add one (todo form) or more (connecting client) todos
   addRoomTodos({ todos }: AddRoomTodoParams) {
     for (const todo of todos) {
@@ -64,12 +79,14 @@ export class RoomTodos {
       }
     }
 
+    this.updateUserProgress();
     this.sendUpdatedRoomData();
   }
 
   removeRoomTodos({ todoIds }: { todoIds: string[] }) {
     this.todos = this.todos.filter((t) => !todoIds.includes(t.id));
 
+    this.updateUserProgress();
     this.sendUpdatedRoomData();
   }
 
@@ -83,12 +100,14 @@ export class RoomTodos {
         this.todos[todoIndex] = { ...this.todos[todoIndex], ...data };
       }
 
+    this.updateUserProgress();
     this.sendUpdatedRoomData();
   }
 
   removeUserTodosFromRoom({ userId }: RemoveUserTodosFromRoomParams) {
     this.todos = this.todos.filter((t) => t.userId !== userId);
 
+    this.updateUserProgress();
     this.sendUpdatedRoomData();
   }
 
@@ -99,6 +118,7 @@ export class RoomTodos {
         openTodos: this.openTodos || 0,
         completedTodos: this.completedTodos || 0,
         todoUserCount: new Set(this.todos.map((todo) => todo.userId)).size || 0,
+        userProgress: this.userProgress,
       },
     });
   }

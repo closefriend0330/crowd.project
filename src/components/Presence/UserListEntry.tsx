@@ -4,6 +4,7 @@ import Linkify from 'linkify-react';
 
 import Avatar from '@/components/Presence/Avatar';
 import TimeAgo from '@/components/Presence/TimeAgo';
+import UserCompletionRate from '@/components/Presence/UserCompletionRate';
 import StatusBadge from '@/components/Site/StatusBadge';
 
 import { UserPublic } from '@/lib/types';
@@ -47,7 +48,10 @@ export default function UserListEntry({ user }: Props) {
         <UserListTimestamp className='flex flex-col items-start' user={user} />
       </div>
       <UserListUpdate user={user} />
-      <StatusBadge className='flex justify-end' user={user} />
+      <div className='flex flex-row justify-between items-center gap-2'>
+        <UserCompletionRate user={user} />
+        <StatusBadge className='' user={user} />
+      </div>
     </div>
   );
 }
