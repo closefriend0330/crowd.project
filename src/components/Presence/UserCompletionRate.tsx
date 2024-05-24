@@ -85,14 +85,16 @@ export default function UserCompletionRate({ user }: Props) {
   const CompletionIcon = ProgressIcon(completionRate);
   const completionIconColor = completionColorClass(completionRate);
 
-  if (totalTodos === 0) return null;
-
   return (
-    <Tooltip tooltip={generateTooltip} delayDuration={0}>
-      <CompletionIcon
-        strokeWidth={1}
-        className={cn('size-6 sm:size-7 ml-1 sm:ml-[6px]', completionIconColor)}
-      />
-    </Tooltip>
+    <div>
+      {totalTodos > 0 && (
+        <Tooltip tooltip={generateTooltip} delayDuration={0}>
+          <CompletionIcon
+            strokeWidth={1}
+            className={cn('size-6 sm:size-7 ml-1 sm:ml-[6px]', completionIconColor)}
+          />
+        </Tooltip>
+      )}
+    </div>
   );
 }
