@@ -3,7 +3,7 @@ export const SITE_STRAPLINE = 'Have fun getting stuff done';
 
 // reconnect within 2 minutes to keep the session alive
 export const SESSION_RECONNECT_GRACE_PERIOD =
-  parseInt(process.env.NEXT_PUBLIC_SESSION_RECONNECT_GRACE_PERIOD || '') || 2 * 60 * 1000;
+  parseInt(process.env.NEXT_PUBLIC_SESSION_RECONNECT_GRACE_PERIOD || '') || 5 * 60 * 1000;
 // time a browser tab must be inactive before the user is considered away
 export const AWAY_TIME_THRESHOLD =
   parseInt(process.env.NEXT_PUBLIC_AWAY_TIME_THRESHOLD || '') || 15 * 60 * 1000;
