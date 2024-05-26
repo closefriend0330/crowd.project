@@ -1,6 +1,7 @@
 import { useSetAtom } from 'jotai';
 import { toast } from 'sonner';
 
+import useNotifications from '@/hooks/useNotifications';
 import useTodoList from '@/hooks/useTodoList';
 import useUserData from '@/hooks/useUserData';
 import useUserList from '@/hooks/useUserList';
@@ -21,13 +22,14 @@ export default function useServerMessages() {
   const setError = useSetAtom(errorAtom);
   const { processUpdateUserTodosMessage, processAddUserTodoMessage, processUserTodosMessage } =
     useTodoList();
-  const { processUsersFullDataMessage } = useUserData();
+  const { processUsersFullDataMessage, user } = useUserData();
   const {
     processUserListMessage,
     processAddUserMessage,
     processRemoveUserMessage,
     processUpdateUsersPublicDataMessage,
   } = useUserList();
+  const { notify } = useNotifications();
 
   // report a server error processing previous message
   const processErrorEncounteredMessage = ({ message }: ServerMessageErrorEncountered) => {
@@ -47,8 +49,13 @@ export default function useServerMessages() {
   };
 
   // get latest server meta data (e.g. time since last onStart)
-  const processRoomDataMessage = ({ data }: ServerMessageRoomData) => {
+  const processRoomDataMessage = ({ data, notification }: ServerMessageRoomData) => {
     setRoomData(data);
+    const { title, body, updatingUserId } = notification || {};
+
+    if (user && updatingUserId && updatingUserId !== user.id) {
+      if (title) notify(title, { body });
+    }
   };
 
   async function processSeverMessage({ message }: { message: string }) {

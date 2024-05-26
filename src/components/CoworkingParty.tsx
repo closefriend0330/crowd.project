@@ -16,9 +16,8 @@ export default function CoworkingParty() {
   if (connectionStatus === 'fully connected')
     return (
       <div className='flex flex-col items-center max-w-xl'>
-        <NewsCallout title='Shared progress for online users' className='mb-4'>
-          Your priorities task list is now synced across devices and a community progress bar for
-          connected users shown. More to come for this feature soon.
+        <NewsCallout title='Introducing update notifications' className='mb-4'>
+          Activate/toggle web push notifications with the message icon in the footer.
         </NewsCallout>
 
         <div className='w-full xs:w-[450px]'>

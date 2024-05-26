@@ -88,7 +88,7 @@ export async function processClientMessage({
 
     await updateTodo({ ids: todoIds, data });
 
-    todos.updateRoomTodos({ todoIds, data, connection: sender });
+    todos.updateRoomTodos({ todoIds, data, connection: sender, userId });
 
     syncUpdates<ServerMessageUpdateUserTodos>({
       type: 'updateUserTodos',

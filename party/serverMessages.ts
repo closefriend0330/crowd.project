@@ -83,9 +83,16 @@ const serverMessageServerMetaDataSchema = z.object({
 });
 export type ServerMessageServerMetaData = z.infer<typeof serverMessageServerMetaDataSchema>;
 
+export const notificationSchema = z.object({
+  title: z.string(),
+  body: z.string().optional(),
+  updatingUserId: z.string().optional(),
+});
+
 const serverMessageRoomDataSchema = z.object({
   type: z.literal('roomData'),
   data: roomDataSchema,
+  notification: notificationSchema.optional(),
 });
 export type ServerMessageRoomData = z.infer<typeof serverMessageRoomDataSchema>;
 

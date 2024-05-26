@@ -7,7 +7,7 @@ import Tooltip from '@/components/Site/Tooltip';
 
 import useSoundEffects from '@/hooks/useSoundEffects';
 
-export default function MuteButton() {
+export default function AudioNotificationsToggle() {
   const { playClick, soundEffects, toggleSoundEffects } = useSoundEffects();
   const isClient = useIsClient();
 
@@ -21,7 +21,7 @@ export default function MuteButton() {
   };
 
   return (
-    <Tooltip tooltip='Mute sound effects'>
+    <Tooltip tooltip='Audio notifications' delayDuration={2000}>
       {soundEffects ? (
         <IconVolume onClick={toggle} className='size-4' />
       ) : (

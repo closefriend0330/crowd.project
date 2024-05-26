@@ -5,6 +5,7 @@ import usePartySocket from 'partysocket/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 
+import useNotifications from '@/hooks/useNotifications';
 import useUserList from '@/hooks/useServerMessages';
 import useSoundEffects from '@/hooks/useSoundEffects';
 
@@ -18,6 +19,7 @@ export default function PartyKit({ sessionToken }: Props) {
   const setConnectionStatusAtom = useSetAtom(connectionStatusAtom);
   const setPartySocket = useSetAtom(partySocketAtom);
   const { playConnectionChange } = useSoundEffects();
+  const { notify } = useNotifications();
 
   const ws = usePartySocket({
     host: process.env.NEXT_PUBLIC_PARTYKIT_URL,
@@ -26,6 +28,7 @@ export default function PartyKit({ sessionToken }: Props) {
 
     onOpen() {
       debug('Connection created');
+      notify('Connection established');
 
       setConnectionStatusAtom('partially connected');
     },
@@ -39,6 +42,7 @@ export default function PartyKit({ sessionToken }: Props) {
     onClose() {
       debug('Connection closed');
       toast.warning('Connection closed');
+      notify('Connection closed');
 
       setConnectionStatusAtom('disconnected');
 

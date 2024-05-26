@@ -37,7 +37,7 @@ export default function TodoProgress() {
             <div>🎉</div>
             <div className='text-xs text-balance text-center'>
               You completed everything on the list! Congrats, that&apos;s amazing! Don&apos;t forget
-              to take breaks,
+              to take breaks!
             </div>
             <span>🎉</span>
           </div>

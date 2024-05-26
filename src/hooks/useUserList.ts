@@ -1,6 +1,8 @@
 import { useAtom } from 'jotai';
+import { toast } from 'sonner';
 
 import useConfetti from '@/hooks/useConfetti';
+import useNotifications from '@/hooks/useNotifications';
 import userSoundEffects from '@/hooks/useSoundEffects';
 import useUserListStore from '@/hooks/useUserListStore';
 
@@ -15,11 +17,12 @@ import {
 } from '@/party/serverMessages';
 
 export default function useUserList() {
-  const { users, setUserList } = useUserListStore();
+  const { users, lookupUser, setUserList } = useUserListStore();
   const [user, setUser] = useAtom(userAtom);
   const { updateUser } = useUserListStore();
   const { playUserJoined, playUserLeft, playListStatusUpdated } = userSoundEffects();
   const { shootConfetti } = useConfetti();
+  const { notify } = useNotifications();
 
   // get the full list of current users in the room
   const processUserListMessage = ({ users }: ServerMessageUserList) => {
@@ -32,6 +35,8 @@ export default function useUserList() {
   const processAddUserMessage = ({ data }: ServerMessageAddUser) => {
     debug('addUser client message', { data });
 
+    notify(`${data.name} has joined the party!`);
+
     setUserList([...users, data]);
     playUserJoined();
   };
@@ -40,28 +45,61 @@ export default function useUserList() {
   const processRemoveUserMessage = ({ userId }: ServerMessageRemoveUser) => {
     debug('removeUser client message', { userId: userId });
 
+    const name = users.find((user) => user.id === userId)?.name;
+    if (!name) return;
+
     setUserList(users.filter((user) => user.id !== userId));
     playUserLeft();
+
+    notify(`${name} has left the party!`);
   };
   // update a user's data in a local list
   const processUpdateUsersPublicDataMessage = ({ userId, data }: ServerMessageUpdatePublicData) => {
+    if (!user) return;
+
     debug('updateUsersPublicData client message', userId, data);
 
     updateUser(userId, data);
 
-    // react to other people's updates
-    if (user) {
-      if (userId !== user.id) {
-        if (data.update) {
-          shootConfetti({ source: 'list update update' });
-          playListStatusUpdated();
-        } else if (data.status) {
-          playListStatusUpdated();
-        }
-      } else {
-        // update your own user data if it's you (at least the public data)
-        setUser({ ...user, ...data });
+    // update your own user data if it's you (at least the public data)
+    if (userId === user.id) {
+      setUser({ ...user, ...data });
+
+      return;
+    }
+
+    // audio effects and confetti
+    if (data.update) {
+      shootConfetti({ source: 'list update update' });
+      playListStatusUpdated();
+    } else if (data.status) {
+      playListStatusUpdated();
+    }
+
+    // browser notifications
+    const updatingUser = lookupUser(userId);
+
+    if (updatingUser) {
+      if (data.status || data.update) {
+        const title = data.status
+          ? `${updatingUser.name} updated to ${data.status}`
+          : `${updatingUser.name} posted an update`;
+        const body = data.update ?? undefined;
+
+        notify(title, { body });
       }
+
+      if ('away' in data)
+        if (data.away) {
+          notify(`${updatingUser.name} has been marked as away`);
+        } else {
+          notify(`${updatingUser.name} is no longer away`);
+        }
+    } else {
+      const message = `Could not identify user ID ${userId} from processUpdateUsersPublicDataMessage`;
+
+      console.warn(message);
+      toast.warning(message);
     }
   };
 

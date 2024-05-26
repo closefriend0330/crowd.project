@@ -8,9 +8,10 @@ type UserListStore = {
   addUser: (user: UserPublic) => void;
   removeUser: (userId: string) => void;
   updateUser: (userId: string, data: Partial<UserPublic>) => void;
+  lookupUser: (userId: string) => UserPublic | undefined;
 };
 
-const useUserStore = create<UserListStore>((set) => ({
+const useUserStore = create<UserListStore>((set, get) => ({
   users: [] as UserPublic[],
 
   setUserList: (users) => set({ users }),
@@ -23,6 +24,11 @@ const useUserStore = create<UserListStore>((set) => ({
     set((state) => ({
       users: state.users.map((user) => (user.id === userId ? { ...user, ...data } : user)),
     })),
+  lookupUser: (userId) => {
+    const { users } = get();
+
+    return users.find((u) => u.id === userId);
+  },
 }));
 
 export default useUserStore;

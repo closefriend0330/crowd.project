@@ -2,6 +2,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { todos, users } from '@/db/schema';
+import { notificationSchema } from '@/party/serverMessages';
 
 import { TablerIcon } from '@/statusOptions';
 
@@ -87,3 +88,5 @@ export type RoomData = z.infer<typeof roomDataSchema>;
 export type ConnectionData = {
   userId: string;
 };
+
+export type Notification = z.infer<typeof notificationSchema>;

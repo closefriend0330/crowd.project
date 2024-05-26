@@ -328,4 +328,8 @@ export class UserList {
   connectionsByUserId(userId: string) {
     return this.users.find((u) => u.id === userId)?.connections || [];
   }
+
+  lookupUser(userId: string) {
+    return this.users.find((u) => u.id === userId);
+  }
 }

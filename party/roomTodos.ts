@@ -4,7 +4,7 @@ import { sendServerMessage } from '@/party/lib';
 
 import { ServerMessageRoomData } from '@/party/serverMessages';
 
-import { Todo } from '@/lib/types';
+import { Notification, Todo } from '@/lib/types';
 import type Server from '@/party/server';
 
 type AddRoomTodoParams = {
@@ -15,10 +15,15 @@ type UpdateRoomTodosParams = {
   todoIds: string[];
   data: Partial<Todo>;
   connection?: Party.Connection<unknown>;
+  userId: string;
 };
 type RemoveUserTodosFromRoomParams = {
   userId: string;
   connection?: Party.Connection<unknown>;
+};
+type SendUpdatedRoomDataParams = {
+  connection?: Party.Connection<unknown>;
+  notification?: Notification;
 };
 
 export class RoomTodos {
@@ -80,7 +85,20 @@ export class RoomTodos {
     }
 
     this.updateUserProgress();
-    this.sendUpdatedRoomData();
+
+    const updatingUserId = todos[0].userId;
+    const updatingUser = this.partyServer.users.lookupUser(updatingUserId);
+
+    this.sendUpdatedRoomData(
+      updatingUser
+        ? {
+            notification: {
+              title: `${updatingUser.name} added a new priority`,
+              updatingUserId,
+            },
+          }
+        : {}
+    );
   }
 
   removeRoomTodos({ todoIds }: { todoIds: string[] }) {
@@ -90,7 +108,10 @@ export class RoomTodos {
     this.sendUpdatedRoomData();
   }
 
-  updateRoomTodos({ todoIds, data }: UpdateRoomTodosParams) {
+  updateRoomTodos({ todoIds, data, connection, userId: updatingUserId }: UpdateRoomTodosParams) {
+    let title: string | undefined;
+    let body: string | undefined;
+
     if (data.status === 'deleted') this.removeRoomTodos({ todoIds });
     else
       for (const todoId of todoIds) {
@@ -101,7 +122,21 @@ export class RoomTodos {
       }
 
     this.updateUserProgress();
-    this.sendUpdatedRoomData();
+
+    const updatingUser = this.partyServer.users.lookupUser(updatingUserId);
+    if (updatingUser) {
+      if (data.status === 'completed') title = `${updatingUser.name} completed a priority`;
+      else if (data.status === 'open') title = `${updatingUser.name} reopened a priority`;
+    }
+
+    const userProgress = this.userProgress[updatingUserId];
+    const totalTodos = userProgress ? userProgress.openTodos + userProgress.completedTodos : 0;
+
+    if (userProgress && totalTodos > 0) {
+      body = `${userProgress.completedTodos}/${totalTodos} completed`;
+    }
+
+    this.sendUpdatedRoomData(title ? { notification: { title, body, updatingUserId } } : {});
   }
 
   removeUserTodosFromRoom({ userId }: RemoveUserTodosFromRoomParams) {
@@ -111,7 +146,7 @@ export class RoomTodos {
     this.sendUpdatedRoomData();
   }
 
-  sendUpdatedRoomData(connection?: Party.Connection<unknown>) {
+  sendUpdatedRoomData({ connection, notification }: SendUpdatedRoomDataParams = {}) {
     sendServerMessage<ServerMessageRoomData>(connection || this.partyServer.room, {
       type: 'roomData',
       data: {
@@ -120,6 +155,7 @@ export class RoomTodos {
         todoUserCount: new Set(this.todos.map((todo) => todo.userId)).size || 0,
         userProgress: this.userProgress,
       },
+      notification,
     });
   }
 }
