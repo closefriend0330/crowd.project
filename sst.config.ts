@@ -39,6 +39,10 @@ export default $config({
       console.warn('Warning; NEXT_PUBLIC_SENTRY_DSN is not set for non dev environment');
     }
 
+    if (!process.env.SENTRY_AUTH_TOKEN && !$dev) {
+      console.warn('Warning; SENTRY_AUTH_TOKEN is not set for non dev environment');
+    }
+
     new sst.aws.Nextjs('Site', {
       openNextVersion: '3.0.0-rc.16',
       domain: $dev ? undefined : process.env.SITE_DOMAIN,
@@ -56,6 +60,7 @@ export default $config({
         AUTH_TWITCH_ID: process.env.AUTH_TWITCH_ID || '',
         AUTH_TWITCH_SECRET: process.env.AUTH_TWITCH_SECRET || '',
         DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL || '',
+        SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN || '',
         NEXT_PUBLIC_PARTYKIT_PROJECT: process.env.NEXT_PUBLIC_PARTYKIT_URL,
         NEXT_PUBLIC_SITENAME: process.env.NEXT_PUBLIC_SITENAME || DEFAULT_SITENAME,
         NEXT_PUBLIC_LOGGING: process.env.LOGGING || '',

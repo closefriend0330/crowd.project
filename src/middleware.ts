@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 const { auth } = NextAuth(authConfigEdge);
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|monitoring|manifest.json).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|manifest.json).*)'],
 };
 
 export const middleware = auth(function middleware(request: NextRequest) {
