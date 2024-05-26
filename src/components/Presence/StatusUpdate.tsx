@@ -96,15 +96,23 @@ export default function StatusUpdate({ className }: Props) {
 
       form.reset({ status: values.status, update: '' });
 
-      posthog.capture('status update', {
-        updateLength: updatedValues?.update?.length,
-        status: updatedValues?.status,
-      });
-
       if (updatedValues.update) {
         playUserUpdatePosted();
         shootConfetti({ source: 'status update' });
-      }
+
+        if (updatedValues.status)
+          posthog.capture('Status update (combo)', {
+            updateLength: updatedValues.update.length,
+            status: updatedValues.status,
+          });
+        else
+          posthog.capture('Status update (update)', {
+            updateLength: updatedValues?.update?.length,
+          });
+      } else
+        posthog.capture('Status update (status)', {
+          status: updatedValues.status,
+        });
     },
     [form, playUserUpdatePosted, shootConfetti, updateUser, user]
   );

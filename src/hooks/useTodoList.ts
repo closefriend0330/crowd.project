@@ -1,6 +1,7 @@
 import { useTodoStore } from '@/components/Providers/ZustandStoreProvider';
 import { Active, Over } from '@dnd-kit/core';
 import { useAtom, useAtomValue } from 'jotai';
+import posthog from 'posthog-js';
 import { v4 as uuidv4 } from 'uuid';
 
 import { MAX_OPEN_TODO_LIST_ITEMS } from '@/config';
@@ -55,6 +56,8 @@ export default function useTodoList() {
         todo: { ...todo, alias: randomTodoTitle() },
       })
     );
+
+    posthog.capture('Todo created');
   };
 
   type UpdateTodoItemParams = {
@@ -71,6 +74,11 @@ export default function useTodoList() {
       ws.send(
         buildClientMessage<ClientMessageUpdateTodos>({ type: 'updateTodos', todoIds: [id], data })
       );
+
+    if ('status' in data) {
+      if (data.status === 'completed') posthog.capture('Todo completed');
+      if (data.status === 'open') posthog.capture('Todo reopened');
+    }
   };
 
   const moveTodoItem = (active: Active, over: Over | null) => {
@@ -97,6 +105,8 @@ export default function useTodoList() {
           },
         })
       );
+
+    posthog.capture('Todo deleted');
   };
 
   const removeAllTodoItems = () => {
@@ -116,6 +126,8 @@ export default function useTodoList() {
         },
       })
     );
+
+    posthog.capture('Todos deleted (all)');
   };
 
   const processUserTodosMessage = ({ todos }: ServerMessageUserTodos) => {

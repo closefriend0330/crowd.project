@@ -40,18 +40,16 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
     const path = new URL(url).pathname.replace('/party/main', '');
     debug('API request:', { method, path });
 
-    posthog.capture('api request', { method, path });
+    posthog.capture('API request', { method, path });
 
     if (method === 'GET' && path === '/users') {
       debug('users api request');
-      posthog.capture('api request', { type: 'users api request' });
 
       return Response.json({ users: users.list.map((user) => userPublicSchema.parse(user)) });
     } else if (method === 'GET' && path === '/todos') {
       const todos = partyServer.todos.list.map((todo) => todoPublicSchema.parse(todo));
 
       debug('todos api request');
-      posthog.capture('api request', { type: 'todos api request' });
 
       return Response.json({ todos });
     } else if (method === 'POST' && path === '/status') {
@@ -107,7 +105,7 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
     const result = statusUpdateSchema.safeParse(await request.json());
 
     if (!result.success) {
-      posthog.capture('status api request error', { type: 'invalid request' });
+      posthog.capture('Status API request (error)', { type: 'invalid request' });
 
       return new Response(
         JSON.stringify({
@@ -122,7 +120,7 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
 
     const user = await getUserByApiKey(result.data.apiKey);
     if (!user) {
-      posthog.capture('status api request error', { type: 'user/API key not found' });
+      posthog.capture('Status API request (error)', { type: 'user/API key not found' });
 
       return new Response(JSON.stringify({ status: 'error', message: 'User/API key not found' }), {
         status: 404,
@@ -140,7 +138,7 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
       update: result.data?.update?.length,
       status: result.data?.status,
     });
-    posthog.capture('status api request success', {
+    posthog.capture('Status API request (success)', {
       userId: user.id,
       name: user.name,
       wasConnected,
@@ -150,7 +148,7 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
       status: 200,
     });
   } catch (err) {
-    posthog.capture('status api request error', { type: 'other' });
+    posthog.capture('Status API request (error)', { type: 'other' });
 
     return new Response(
       JSON.stringify({ status: 'error', message: `Error: ${getErrorMessage(err)}` }),
@@ -161,7 +159,6 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
 
 export async function debugInfo(partyServer: Server) {
   debug('debug info api request');
-  posthog.capture('debug api request');
 
   const connectedUserIds = await partyServer.room.storage.get<string[]>('connectedUserIds');
 

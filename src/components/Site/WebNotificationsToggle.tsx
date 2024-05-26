@@ -6,6 +6,7 @@ import {
   IconMessageOff,
   IconMessagePlus,
 } from '@tabler/icons-react';
+import posthog from 'posthog-js';
 
 import Tooltip from '@/components/Site/Tooltip';
 
@@ -15,6 +16,8 @@ export default function NotificationsButton() {
   const { supported, permission, enabled, setEnabled, requestPermission } = useNotifications();
 
   const toggleNotifications = () => {
+    posthog.capture('Web push notifications toggled', { enabled: !enabled });
+
     setEnabled(!enabled);
   };
 

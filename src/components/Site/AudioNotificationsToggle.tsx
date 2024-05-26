@@ -1,6 +1,7 @@
 'use client';
 
 import { IconVolume, IconVolumeOff } from '@tabler/icons-react';
+import posthog from 'posthog-js';
 import { useIsClient } from 'usehooks-ts';
 
 import Tooltip from '@/components/Site/Tooltip';
@@ -14,6 +15,8 @@ export default function AudioNotificationsToggle() {
   if (!isClient) return null;
 
   const toggle = () => {
+    posthog.capture('Audio notifications toggled', { enabled: !soundEffects });
+
     // play sound to confirm sound effects are enabled
     if (!soundEffects) playClick({ forceSoundEnabled: true });
 

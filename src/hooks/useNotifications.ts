@@ -1,3 +1,4 @@
+import posthog from 'posthog-js';
 import { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -13,9 +14,13 @@ export default function useNotifications() {
       setSupported(true);
 
       if (Notification.permission === 'granted') {
+        posthog.capture('Web push notifications access granted');
+
         setPermission('granted');
         setEnabled(true);
       } else if (Notification.permission === 'denied') {
+        posthog.capture('Web push notifications access denied');
+
         setPermission('denied');
       }
     }

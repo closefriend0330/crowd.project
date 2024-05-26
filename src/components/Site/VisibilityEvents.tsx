@@ -40,7 +40,7 @@ export default function VisibilityEvents() {
         const awayTime = awayStartTimeRef.current
           ? new Date().getTime() - awayStartTimeRef.current
           : null;
-        posthog.capture('user no longer away', { userId: user?.id, awayTime });
+        posthog.capture('User no longer away', { userId: user?.id, awayTime });
       }
 
       awayStartTimeRef.current = null;
@@ -54,7 +54,7 @@ export default function VisibilityEvents() {
           updateUser({ data: { away: true, awayChangedAt: now } });
           awayStartTimeRef.current = now.getTime();
 
-          posthog.capture('user away', {
+          posthog.capture('User away', {
             userId: user?.id,
             threshold: AWAY_TIME_THRESHOLD,
           });

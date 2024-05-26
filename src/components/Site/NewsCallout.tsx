@@ -12,7 +12,7 @@ type Props = {
   children: ReactNode;
   className?: string;
 };
-export function NewsCallout({ title, children, className }: Props) {
+export default function NewsCallout({ title, children, className }: Props) {
   const [closedCallouts, setClosedCallouts] = useLocalStorage<string[]>('closedCallouts', []);
   const hash = useMemo(
     () => crypto.createHash('md5').update(`${title}-${children}`).digest('hex'),

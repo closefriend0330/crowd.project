@@ -62,7 +62,7 @@ export default function Account() {
         <DropdownMenuItem
           onClick={() => {
             setIsLoggingIn(true);
-            posthog.capture('twitch login attempt');
+            posthog.capture('Twitch login attempt');
             signIn('twitch');
           }}
           className='flex gap-2 items-center'
@@ -73,7 +73,7 @@ export default function Account() {
         <DropdownMenuItem
           onClick={() => {
             setIsLoggingIn(true);
-            posthog.capture('discord login attempt');
+            posthog.capture('Discord login attempt');
             signIn('discord');
           }}
           className='flex gap-2 items-center'

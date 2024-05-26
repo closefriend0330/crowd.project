@@ -1,5 +1,4 @@
 import { useAtom, useAtomValue } from 'jotai';
-import posthog from 'posthog-js';
 import { useState } from 'react';
 
 import { CONFETTI_DELAY_MIN, CONFETTI_RESET_DELAY } from '@/config';
@@ -25,8 +24,6 @@ export default function useConfetti() {
         setRecentlyShot(false);
       }, resetDelay);
     }, delay);
-
-    posthog.capture('confetti shot', { source });
   };
 
   return { confetti: confettiConductor, shootConfetti, setConfettiConductor };

@@ -20,6 +20,7 @@ import {
   IconShredder,
 } from '@tabler/icons-react';
 import { motion, useAnimation } from 'framer-motion';
+import posthog from 'posthog-js';
 import { useCallback, useEffect, useState } from 'react';
 
 import { RANDOM_LOGO_INTERVAL } from '@/config';
@@ -67,6 +68,8 @@ export default function Logo() {
   }, [controls]);
 
   const updateLogo = useCallback(() => {
+    posthog.capture('Logo clicked');
+
     setIcon((prev: TablerIcon) => randomIcon(prev));
 
     animate();
