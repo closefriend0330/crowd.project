@@ -2,7 +2,7 @@ import posthog from 'posthog-js';
 import { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
-type NotificationPermission = 'default' | 'granted' | 'denied' | 'disabled';
+type NotificationPermission = 'default' | 'granted' | 'denied';
 
 export default function useNotifications() {
   const [supported, setSupported] = useState<boolean>(false);
@@ -22,6 +22,7 @@ export default function useNotifications() {
         posthog.capture('Web push notifications access denied');
 
         setPermission('denied');
+        setEnabled(false);
       }
     }
   }, [setEnabled]);
@@ -37,7 +38,12 @@ export default function useNotifications() {
 
   const notify = (title: string, options?: NotificationOptions) => {
     if (permission === 'granted' && enabled) {
-      new Notification(title, options);
+      const notification = new Notification(title, options);
+
+      notification.onclick = () => {
+        window.focus();
+        notification.close();
+      };
     }
   };
 
