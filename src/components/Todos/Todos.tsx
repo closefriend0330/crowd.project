@@ -1,6 +1,7 @@
 'use client';
 
 import { IconLock, IconTrash } from '@tabler/icons-react';
+import posthog from 'posthog-js';
 import { useState } from 'react';
 
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
@@ -23,9 +24,15 @@ export default function Todos({ className }: Props) {
   const { todos, removeAllTodoItems } = useTodoList();
   const [showTodos, setShowTodos] = useState(true);
 
+  const toggleTodos = () => {
+    posthog.capture('Todo visibility toggled', { showTodos: !showTodos });
+
+    setShowTodos((prev) => !prev);
+  };
+
   return (
     <div className={cn('py-4', className)}>
-      <Collapsible open={showTodos} onOpenChange={setShowTodos}>
+      <Collapsible open={showTodos} onOpenChange={toggleTodos}>
         <TodoHeader showTodos={showTodos} setShowTodos={setShowTodos} />
         <div className='flex flex-row items-center gap-4 w-full'>
           <NewTodo className='grow' />
