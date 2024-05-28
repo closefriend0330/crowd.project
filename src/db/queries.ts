@@ -45,13 +45,6 @@ export function getTodosByUserId(userId: string) {
   });
 }
 
-export function clearConnectionData() {
-  return db
-    .update(users)
-    .set({ connections: [], updatedAt: new Date() })
-    .where(ne(users.connections, []));
-}
-
 export function getUserAccounts(userId: string) {
   return db.query.accounts.findMany({
     where: eq(accounts.userId, userId),

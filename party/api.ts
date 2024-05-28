@@ -1,4 +1,5 @@
 import humanizeDuration from 'humanize-duration';
+import { merge } from 'lodash';
 import type * as Party from 'partykit/server';
 import posthog from 'posthog-js';
 import { z } from 'zod';
@@ -10,8 +11,9 @@ import { todoPublicSchema, userPublicSchema } from '@/lib/types';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { userSelectableStatusOptions } from '@/statusOptions';
 
+import { User } from '@/lib/types';
+import { ConnectedUsers } from '@/party/connectedUsers';
 import type Server from '@/party/server';
-import { UserList } from '@/party/userList';
 
 const statusUpdateSchema = z
   .object({
@@ -34,7 +36,7 @@ type parseApiRequestParams = {
 };
 export async function parseApiRequest({ request, partyServer }: parseApiRequestParams) {
   try {
-    const users = partyServer.users;
+    const connectedUsers = partyServer.connectedUsers;
 
     const { method, url } = request;
     const path = new URL(url).pathname.replace('/party/main', '');
@@ -45,7 +47,12 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
     if (method === 'GET' && path === '/users') {
       debug('users api request');
 
-      return Response.json({ users: users.list.map((user) => userPublicSchema.parse(user)) });
+      return Response.json({
+        users: connectedUsers.list.map(({ data, connections }) => ({
+          data: userPublicSchema.parse(data),
+          connections,
+        })),
+      });
     } else if (method === 'GET' && path === '/todos') {
       const todos = partyServer.todos.list.map((todo) => todoPublicSchema.parse(todo));
 
@@ -53,7 +60,7 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
 
       return Response.json({ todos });
     } else if (method === 'POST' && path === '/status') {
-      return await statusUpdate({ request, users });
+      return await statusUpdate({ request, connectedUsers });
     } else if (method === 'GET' && path === '/debug') {
       return debugInfo(partyServer);
     } else if (method === 'GET' && path === '/resetConnectedUsers') {
@@ -61,8 +68,6 @@ export async function parseApiRequest({ request, partyServer }: parseApiRequestP
         request,
         handler: () => resetConnectedUsers({ partyServer, request }),
       });
-    } else if (method === 'GET' && path === '/resetTodos') {
-      return await resetTodos({ partyServer, request });
     }
 
     return new Response(null, { status: 405 });
@@ -98,9 +103,9 @@ async function adminRequest({ request, handler }: AdminRequestParams) {
 
 type StatusUpdateParams = {
   request: Party.Request;
-  users: UserList;
+  connectedUsers: ConnectedUsers;
 };
-export async function statusUpdate({ request, users }: StatusUpdateParams) {
+export async function statusUpdate({ request, connectedUsers }: StatusUpdateParams) {
   try {
     const result = statusUpdateSchema.safeParse(await request.json());
 
@@ -126,10 +131,24 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
         status: 404,
       });
     }
+    const updatedData: Partial<User> = {};
+    const now = new Date();
 
-    const { wasConnected } = await users.updateUserInList({
+    if ('update' in result.data)
+      merge(updatedData, {
+        update: result.data.update,
+        updateChangedAt: now,
+      });
+
+    if ('status' in result.data)
+      merge(updatedData, {
+        status: result.data.status,
+        statusChangedAt: now,
+      });
+
+    const { wasConnected } = await connectedUsers.updateConnectedUser({
       userId: user.id,
-      data: { update: result.data.update, status: result.data.status },
+      data: updatedData,
     });
 
     debug('API status update:', {
@@ -160,15 +179,14 @@ export async function statusUpdate({ request, users }: StatusUpdateParams) {
 export async function debugInfo(partyServer: Server) {
   debug('debug info api request');
 
-  const connectedUserIds = await partyServer.room.storage.get<string[]>('connectedUserIds');
-
   let debugData: Record<string, any> = {
     environment: process.env.ENV || process.env.NODE_ENV,
-    connectedUsersCount: partyServer.users.list.length,
+    connectedUsersCount: partyServer.connectedUsers.list.length,
     roomTodosCount: partyServer.todos.list.length,
-    userConnections: partyServer.users.list.reduce((acc, user) => acc + user.connections.length, 0),
-    storageConnectedUserIdCount: connectedUserIds?.length,
-    storageConnectedUserIds: connectedUserIds,
+    userConnections: partyServer.connectedUsers.list.reduce(
+      (acc, user) => acc + user.connections.length,
+      0
+    ),
     dbUrl: process.env.DATABASE_URL?.slice(0, 15) + '...',
     dbAuth: '...' + process.env.DATABASE_AUTH_TOKEN?.slice(-5),
   };
@@ -198,40 +216,8 @@ async function resetConnectedUsers({ partyServer, request }: ResetConnectedUsers
         status: 403,
       });
 
-    const previousUserIds =
-      (await partyServer.room.storage.get<string[]>('connectedUserIds')) || [];
-    await partyServer.room.storage.put('connectedUserIds', []);
-    partyServer.users.list = [];
-
-    return new Response(
-      JSON.stringify({
-        status: 'success',
-        previousUserIds,
-        previousUserIdCount: previousUserIds?.length,
-      }),
-      { status: 200 }
-    );
-  } catch (err) {
-    return new Response(JSON.stringify({ status: 'error', message: getErrorMessage(err) }), {
-      status: 500,
-    });
-  }
-}
-
-async function resetTodos({ partyServer, request }: ResetConnectedUsersParams) {
-  try {
-    const url = new URL(request.url);
-    const adminSecret = url.searchParams.get('secret');
-
-    if (adminSecret !== process.env.ADMIN_SECRET)
-      return new Response(JSON.stringify({ status: 'error', message: 'Unauthorized access' }), {
-        status: 403,
-      });
-
-    const previousUserIds =
-      (await partyServer.room.storage.get<string[]>('connectedUserIds')) || [];
-    await partyServer.room.storage.put('connectedUserIds', []);
-    partyServer.users.list = [];
+    const previousUserIds = partyServer.connectedUsers.list.map((u) => u.data.id);
+    partyServer.connectedUsers.clearList();
 
     return new Response(
       JSON.stringify({

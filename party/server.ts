@@ -1,6 +1,6 @@
 import type * as Party from 'partykit/server';
 
-import { clearConnectionData, getTodosByUserId, getUsersByUsersIds } from '@/db/queries';
+import { getTodosByUserId } from '@/db/queries';
 import { debug, getErrorMessage } from '@/lib/utils';
 import { parseApiRequest } from '@/party/api';
 import { getNextAuthSession } from '@/party/auth';
@@ -8,13 +8,13 @@ import { processError, sendServerMessage } from '@/party/lib';
 import { processClientMessage } from '@/party/processClientMessages';
 
 import { ConnectionData } from '@/lib/types';
+import { ConnectedUsers } from '@/party/connectedUsers';
 import { RoomTodos } from '@/party/roomTodos';
 import { ServerMessageUserTodos } from '@/party/serverMessages';
-import { UserList } from '@/party/userList';
 import pluralize from 'pluralize';
 
 export default class Server implements Party.Server {
-  users: UserList = new UserList(this);
+  connectedUsers: ConnectedUsers = new ConnectedUsers(this);
   todos: RoomTodos = new RoomTodos(this);
   // can't set this in global scope: https://stackoverflow.com/a/58491358/122864
   timeSinceOnStart: Date = new Date();
@@ -27,22 +27,7 @@ export default class Server implements Party.Server {
 
       this.timeSinceOnStart = new Date();
 
-      // reset any lingering connections since the server has restarted.
-      // currently connected clients will auto reconnect.
-      await clearConnectionData();
-
-      // load previously connected users to use in reconnect grace period logic
-      const connectedUserIds = await this.room.storage.get<string[]>('connectedUserIds');
-      if (connectedUserIds && connectedUserIds.length > 0) {
-        const connectedUsers = await getUsersByUsersIds(connectedUserIds);
-
-        this.users.list = connectedUsers;
-
-        debug(`Restored ${connectedUserIds.length} users from storage after restart`);
-      }
-
-      // let reconnecting users (re)populate this list
-      this.todos.list = [];
+      this.todos.resetList();
     } catch (err) {
       console.error('Error in onStart:', getErrorMessage(err));
     }
@@ -58,7 +43,11 @@ export default class Server implements Party.Server {
 
         return new Response('Access denied', { status: 403 });
       } else {
+        const { searchParams } = new URL(request.url);
+        const visible = searchParams.get('visible') || 'false';
+
         request.headers.set('X-User-ID', user.id);
+        request.headers.set('X-Page-Visibility', visible);
 
         return request;
       }
@@ -72,6 +61,7 @@ export default class Server implements Party.Server {
   async onConnect(connection: Party.Connection<unknown>, ctx: Party.ConnectionContext) {
     const { request } = ctx;
     const userId = request.headers.get('X-User-ID');
+    const visible = request.headers.get('X-Page-Visibility') === 'true';
 
     if (!userId) {
       processError({ connection, source: 'onConnect', message: 'User was missing' });
@@ -81,16 +71,18 @@ export default class Server implements Party.Server {
     }
     connection.setState({ userId });
 
-    await this.users.addUserToList({ userId, connection });
+    const { wasConnected } = await this.connectedUsers.addConnectedUser({
+      visible,
+      userId,
+      connection,
+    });
 
     const todos = await getTodosByUserId(userId);
 
     if (todos.length > 0) {
       debug(`Connecting user has ${pluralize('todo', todos.length, true)}:`, { userId });
 
-      // TODO: eventually add this check back, when we don't care about reconnection grace period
-      // if (!wasConnected)
-      this.todos.addRoomTodos({ todos });
+      if (!wasConnected) this.todos.addRoomTodos({ todos });
 
       // send connecting client their todos
       sendServerMessage<ServerMessageUserTodos>(connection, {
@@ -107,11 +99,9 @@ export default class Server implements Party.Server {
 
     debug('Connection closed: ', { connectionId: connection.id });
 
-    // TODO: set their status to 'offline'
+    const { lastConnection } = await this.connectedUsers.removeConnectedUser({ connection });
 
-    const { lastConnection } = await this.users.removeUser({ connection });
-
-    if (lastConnection && userId) await this.todos.removeUserTodosFromRoom({ userId });
+    if (lastConnection && userId) this.todos.removeUserTodosFromRoom({ userId });
   }
 
   onError(connection: Party.Connection<unknown>, error: Error): void {

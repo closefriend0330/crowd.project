@@ -35,10 +35,6 @@ export class RoomTodos {
     return this.todos;
   }
 
-  set list(todos: Array<Todo>) {
-    this.todos = todos;
-  }
-
   get openTodos() {
     return this.todos.filter((t) => t.status === 'open').length || 0;
   }
@@ -55,6 +51,10 @@ export class RoomTodos {
 
   constructor(partyServer: Server) {
     this.partyServer = partyServer;
+  }
+
+  resetList() {
+    this.todos = [];
   }
 
   updateUserProgress() {
@@ -87,7 +87,7 @@ export class RoomTodos {
     this.updateUserProgress();
 
     const updatingUserId = todos[0].userId;
-    const updatingUser = this.partyServer.users.lookupUser(updatingUserId);
+    const updatingUser = this.partyServer.connectedUsers.lookupUser(updatingUserId);
 
     this.sendUpdatedRoomData(
       updatingUser
@@ -123,7 +123,7 @@ export class RoomTodos {
 
     this.updateUserProgress();
 
-    const updatingUser = this.partyServer.users.lookupUser(updatingUserId);
+    const updatingUser = this.partyServer.connectedUsers.lookupUser(updatingUserId);
     if (updatingUser) {
       if (data.status === 'completed') title = `${updatingUser.name} completed a priority`;
       else if (data.status === 'open') title = `${updatingUser.name} reopened a priority`;

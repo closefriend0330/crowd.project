@@ -1,6 +1,6 @@
 'use client';
 
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import usePartySocket from 'partysocket/react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -10,21 +10,23 @@ import useUserList from '@/hooks/useServerMessages';
 import useSoundEffects from '@/hooks/useSoundEffects';
 
 import { debug } from '@/lib/utils';
-import { connectionStatusAtom, partySocketAtom } from '@/stores/jotai';
+import { connectionStatusAtom, partySocketAtom, visibilityAtom } from '@/stores/jotai';
 
 type Props = {
   sessionToken: string;
 };
 export default function PartyKit({ sessionToken }: Props) {
   const setConnectionStatusAtom = useSetAtom(connectionStatusAtom);
+  const isVisible = useAtomValue(visibilityAtom);
   const setPartySocket = useSetAtom(partySocketAtom);
   const { playConnectionChange } = useSoundEffects();
   const { notify } = useNotifications();
+  const queryData = () => ({ sessionToken, visible: isVisible ? 'true' : 'false' });
 
   const ws = usePartySocket({
     host: process.env.NEXT_PUBLIC_PARTYKIT_URL,
     room: 'main',
-    query: { sessionToken },
+    query: queryData,
 
     onOpen() {
       debug('Connection created');

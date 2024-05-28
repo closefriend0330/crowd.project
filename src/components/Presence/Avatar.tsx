@@ -12,6 +12,12 @@ type Props = {
   className?: string;
 };
 
+const statusStyle = {
+  online: 'border-green-500',
+  away: 'border-yellow-500',
+  offline: 'border-white',
+};
+
 export default function Avatar({ user, className }: Props) {
   const initials = user?.name
     ? user?.name
@@ -22,8 +28,20 @@ export default function Avatar({ user, className }: Props) {
     : '';
 
   return (
-    <AvatarRoot className={cn('size-8 sm:size-10 border-white border-[1px]', className)}>
-      <AvatarImage className='select-none  pointer-events-none' src={user.image || undefined} />
+    <AvatarRoot
+      className={cn(
+        'size-8 sm:size-10 border-white-500 border-[3px]',
+        statusStyle[user.connectionStatus],
+        className
+      )}
+    >
+      <AvatarImage
+        className={cn(
+          'select-none pointer-events-none',
+          user.connectionStatus === 'away' && 'opacity-50'
+        )}
+        src={user.image || undefined}
+      />
       <AvatarFallback className='text-black text-sm sm:text-base'>
         {initials || <IconUser className='size-4 sm:size-5' />}
       </AvatarFallback>

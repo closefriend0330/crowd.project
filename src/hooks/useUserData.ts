@@ -63,7 +63,7 @@ export default function useUserData() {
     );
   }
 
-  // update the logged in user's data locally
+  // set the logged in user's data locally
   function processUsersFullDataMessage({ data }: ServerMessageUserData) {
     debug('usersFullData client message');
 

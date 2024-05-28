@@ -44,7 +44,7 @@ export default function UserList({ className }: Props) {
   const { shootConfetti } = useConfetti();
   const [shot, setShot] = useState(false);
 
-  const [awayUsers, connectedUsers] = partition(users, (user) => user.away);
+  const [awayUsers, connectedUsers] = partition(users, (user) => user.connectionStatus === 'away');
 
   useEffect(() => {
     if (!shot) {

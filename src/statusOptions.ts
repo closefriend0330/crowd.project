@@ -6,7 +6,6 @@ import {
   IconBed,
   IconBook,
   IconBook2,
-  IconSpeakerphone,
   IconBrain,
   IconBrandLeetcode,
   IconBrowser,
@@ -31,7 +30,6 @@ import {
   IconDeviceLaptop,
   IconDeviceMobile,
   IconDog,
-  IconGift,
   IconEar,
   IconEdit,
   IconEye,
@@ -39,9 +37,11 @@ import {
   IconFirstAidKit,
   IconFlask,
   IconFrame,
+  IconGift,
   IconHammer,
   IconHeart,
   IconHearts,
+  IconLineDashed,
   IconListDetails,
   IconListTree,
   IconLoader,
@@ -66,13 +66,13 @@ import {
   IconShoppingBag,
   IconSofa,
   IconSoup,
+  IconSpeakerphone,
   IconStethoscope,
   IconSunrise,
   IconTool,
   IconTrees,
   IconTriangle,
   IconTypography,
-  IconUser,
   IconUserSearch,
   IconUsers,
   IconUsersGroup,
@@ -85,9 +85,10 @@ import { UserStatusConfig } from '@/lib/types';
 
 export type TablerIcon = typeof IconBed;
 
+export const DEFAULT_STATUS = 'none';
+
 export const userStatusConfig: UserStatusConfig = {
-  offline: { color: 'bg-gray-500', nonSelectable: true },
-  online: { color: 'bg-green-500', icon: IconUser },
+  [DEFAULT_STATUS]: { color: 'bg-gray-400', icon: IconLineDashed },
   admin: { color: 'bg-amber-700', icon: IconListDetails },
   analyzing: { color: 'bg-cyan-800', icon: IconDatabase },
   announcing: { color: 'bg-pink-800', icon: IconSpeakerphone },

@@ -20,6 +20,7 @@ import useSoundEffects from '@/hooks/useSoundEffects';
 import useUserData from '@/hooks/useUserData';
 
 import { MAX_UPDATE_LENGTH } from '@/config';
+import { DEFAULT_STATUS } from '@/statusOptions';
 import { cn } from '@/lib/utils';
 
 import type { User } from '@/lib/types';
@@ -52,7 +53,7 @@ export type StatusUpdateFormField<T extends 'update' | 'status'> = ControllerRen
 export default function StatusUpdate({ className }: Props) {
   const { playUserUpdatePosted } = useSoundEffects();
   const { updateUser, user } = useUserData();
-  const status = user?.status || 'online';
+  const status = user?.status || DEFAULT_STATUS;
   const form = useForm({
     resolver: zodResolver(statusFormSchema),
     defaultValues: {
@@ -78,21 +79,21 @@ export default function StatusUpdate({ className }: Props) {
   const onSubmit = useCallback(
     (values: StatusFormValues) => {
       if (!user) return;
+      const now = new Date();
 
       const updatedValues: Partial<StatusFormValues> = pickBy(
         values,
         (_: any, key: keyof typeof values) => form.formState.dirtyFields?.[key]
       );
 
-      let updatedData: Partial<User> = updatedValues;
+      const updatedData: Partial<User> = {
+        ...updatedValues,
+      };
 
-      // in case the away status got out of sync
-      if (user.away) {
-        updatedData.away = false;
-        updatedData.awayChangedAt = new Date();
-      }
+      if (updatedData.update) updatedData.updateChangedAt = now;
+      if (updatedData.status) updatedData.statusChangedAt = now;
 
-      updateUser({ data: updatedValues });
+      updateUser({ data: updatedData });
 
       form.reset({ status: values.status, update: '' });
 
@@ -167,7 +168,7 @@ export default function StatusUpdate({ className }: Props) {
                       <StatusSelect
                         field={field}
                         form={form}
-                        selectedStatus={form.watch('status') || 'online'}
+                        selectedStatus={form.watch('status') || DEFAULT_STATUS}
                         handleKeyDown={handleKeyDown}
                       />
                     </FormControl>

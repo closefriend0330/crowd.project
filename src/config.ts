@@ -1,12 +1,12 @@
 export const DEFAULT_SITENAME = 'Coworking Party';
 export const SITE_STRAPLINE = 'Have fun getting stuff done';
 
-// reconnect within 2 minutes to keep the session alive
-export const SESSION_RECONNECT_GRACE_PERIOD =
-  parseInt(process.env.NEXT_PUBLIC_SESSION_RECONNECT_GRACE_PERIOD || '') || 5 * 60 * 1000;
 // time a browser tab must be inactive before the user is considered away
 export const AWAY_TIME_THRESHOLD =
   parseInt(process.env.NEXT_PUBLIC_AWAY_TIME_THRESHOLD || '') || 15 * 60 * 1000;
+// time after which the status/update is reset on reconnect
+export const STATUS_RESET_THRESHOLD =
+  parseInt(process.env.STATUS_RESET_THRESHOLD || '') | (8 * 60 * 60 * 1000);
 
 export const CONFETTI_DELAY_MIN = 300;
 export const CONFETTI_DELAY_MAX = 1200;

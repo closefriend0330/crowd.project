@@ -12,6 +12,13 @@ export const clientMessageUpdateUserDataSchema = z.object({
 });
 export type ClientMessageUpdateUserData = z.infer<typeof clientMessageUpdateUserDataSchema>;
 
+// client changed visibility status
+export const clientMessageVisibilityStatusSchema = z.object({
+  type: z.literal('visibilityStatus'),
+  visible: z.boolean(),
+});
+export type ClientMessageVisibilityStatus = z.infer<typeof clientMessageVisibilityStatusSchema>;
+
 export const clientMessageCreateTodoSchema = z.object({
   type: z.literal('createTodo'),
   todo: todoSchema,
@@ -28,6 +35,7 @@ export type ClientMessageUpdateTodos = z.infer<typeof clientMessageUpdateTodosSc
 export const clientMessageSchema = z.union([
   clientMessageUpdateUserDataSchema,
   clientMessageCreateTodoSchema,
+  clientMessageVisibilityStatusSchema,
   clientMessageUpdateTodosSchema,
 ]);
 export type ClientMessage = z.infer<typeof clientMessageSchema>;

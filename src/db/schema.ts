@@ -4,6 +4,7 @@ import type { AdapterAccount } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 
 import { randomTodoTitle } from '@/lib/todos';
+import { DEFAULT_STATUS } from '@/statusOptions';
 
 export const users = sqliteTable('user', {
   // Auth.js fields
@@ -23,18 +24,15 @@ export const users = sqliteTable('user', {
     .default(sql`(unixepoch() * 1000)`)
     .notNull(),
 
-  sessionStartedAt: integer('sessionStartedAt', { mode: 'timestamp_ms' }),
-  lastConnectedAt: integer('lastConnectedAt', { mode: 'timestamp_ms' }),
-  lastSessionEndedAt: integer('lastSessionEndedAt', { mode: 'timestamp_ms' }),
-
   update: text('update'),
-  status: text('status').notNull().default('offline'),
+  status: text('status').notNull().default(DEFAULT_STATUS),
   updateChangedAt: integer('updateChangedAt', { mode: 'timestamp_ms' }),
   statusChangedAt: integer('statusChangedAt', { mode: 'timestamp_ms' }),
 
-  away: integer('away', { mode: 'boolean' }).notNull().default(false),
-  awayChangedAt: integer('awayChangedAt', { mode: 'timestamp_ms' }),
-  connections: text('connections', { mode: 'json' }).$type<string[]>().notNull().default([]),
+  connectionStatus: text('connectionStatus', { enum: ['offline', 'online', 'away'] })
+    .notNull()
+    .default('offline'),
+  connectionStatusChangedAt: integer('connectionStatusChangedAt', { mode: 'timestamp_ms' }),
 
   // custom private fields
   apiKey: text('apiKey')

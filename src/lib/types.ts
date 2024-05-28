@@ -21,14 +21,9 @@ export type UserStatusConfig = Record<
 const userSchemaOptions = {
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-  sessionStartedAt: z.coerce.date(),
-  lastConnectedAt: z.coerce.date(),
-  lastSessionEndedAt: z.coerce.date(),
   updateChangedAt: z.coerce.date(),
   statusChangedAt: z.coerce.date(),
-  away: z.coerce.boolean(),
-  awayChangedAt: z.coerce.date(),
-  connections: z.array(z.string()).default([]),
+  connectionStatusChangedAt: z.coerce.date(),
 };
 
 export const userSchema = createSelectSchema(users, userSchemaOptions);

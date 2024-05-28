@@ -88,6 +88,7 @@ const config = {
     'bg-cyan-700',
     'bg-blue-800',
     'bg-pink-800',
+    'bg-gray-400',
   ],
   prefix: '',
   theme: {

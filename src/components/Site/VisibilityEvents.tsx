@@ -9,8 +9,11 @@ import usePageVisibility from '@/hooks/usePageVisibility';
 import useUserData from '@/hooks/useUserData';
 
 import { AWAY_TIME_THRESHOLD } from '@/config';
+import { buildClientMessage } from '@/lib/messages';
 import { debug } from '@/lib/utils';
 import { partySocketAtom } from '@/stores/jotai';
+
+import { ClientMessageVisibilityStatus } from '@/lib/clientMessages';
 
 export default function VisibilityEvents() {
   const { data: session } = useSession();
@@ -29,19 +32,23 @@ export default function VisibilityEvents() {
       return;
     }
 
-    debug('Page visibility changed', { isVisible, AWAY_TIME_THRESHOLD });
+    debug('Page visibility changed', { isVisible, AWAY_TIME_THRESHOLD, userStatus: user.status });
 
     if (isVisible) {
       if (awayTimeout) clearTimeout(awayTimeout);
 
-      if (user.away) {
-        updateUser({ data: { away: false, awayChangedAt: now } });
+      // let the server report back if the user is fully away or not based on all connections
+      ws.send(
+        buildClientMessage<ClientMessageVisibilityStatus>({
+          type: 'visibilityStatus',
+          visible: true,
+        })
+      );
 
-        const awayTime = awayStartTimeRef.current
-          ? new Date().getTime() - awayStartTimeRef.current
-          : null;
-        posthog.capture('User no longer away', { userId: user?.id, awayTime });
-      }
+      const awayTime = awayStartTimeRef.current
+        ? new Date().getTime() - awayStartTimeRef.current
+        : null;
+      posthog.capture('User no longer away', { userId: user?.id, awayTime });
 
       awayStartTimeRef.current = null;
     } else {
@@ -51,9 +58,15 @@ export default function VisibilityEvents() {
         if (document.visibilityState === 'hidden') {
           debug('Away status threshold reached');
 
-          updateUser({ data: { away: true, awayChangedAt: now } });
+          ws.send(
+            buildClientMessage<ClientMessageVisibilityStatus>({
+              type: 'visibilityStatus',
+              visible: false,
+            })
+          );
           awayStartTimeRef.current = now.getTime();
 
+          // TODO: this isn't technically accurate because it's tab specific
           posthog.capture('User away', {
             userId: user?.id,
             threshold: AWAY_TIME_THRESHOLD,

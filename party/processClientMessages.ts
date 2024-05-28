@@ -13,6 +13,7 @@ import {
   ClientMessageCreateTodo,
   ClientMessageUpdateTodos,
   ClientMessageUpdateUserData,
+  ClientMessageVisibilityStatus,
 } from '@/lib/clientMessages';
 import { ConnectionData, todoPublicSchema } from '@/lib/types';
 import {
@@ -34,7 +35,7 @@ export async function processClientMessage({
   partyServer,
 }: processClientMessageParams) {
   const { userId } = sender.state || {};
-  const users = partyServer.users;
+  const connectedUsers = partyServer.connectedUsers;
   const todos = partyServer.todos;
 
   async function processClientMessageUpdateUserData(
@@ -44,7 +45,7 @@ export async function processClientMessage({
     // update the user's data
     debug('updateUserData client message: ', { userId, data });
 
-    const { success } = await users.updateUserInList({
+    const { success } = await connectedUsers.updateConnectedUser({
       data,
       userId,
       connection: sender,
@@ -57,6 +58,15 @@ export async function processClientMessage({
         message: successMessage,
       });
     }
+  }
+
+  async function processClientMessageVisibilityStatus(
+    { visible }: ClientMessageVisibilityStatus,
+    userId: string
+  ) {
+    debug('visibilityStatus client message: ', { userId, visible });
+
+    await connectedUsers.updateVisibilityStatus({ userId, visible, connection: sender });
   }
 
   async function processClientMessageCreateTodo({ todo }: ClientMessageCreateTodo, userId: string) {
@@ -101,13 +111,13 @@ export async function processClientMessage({
   function syncUpdates<T>(msg: T) {
     if (!userId) return;
 
-    const otherConnectionIds = partyServer.users
+    const otherConnectionIds = partyServer.connectedUsers
       .connectionsByUserId(userId)
-      .filter((c) => c !== sender.id);
+      .filter((c) => c.connectionId !== sender.id);
 
     if (otherConnectionIds.length > 0) {
-      otherConnectionIds.forEach((connectionId) => {
-        sendServerMessage<T>(partyServer.room.getConnection(connectionId), msg);
+      otherConnectionIds.forEach((c) => {
+        sendServerMessage<T>(partyServer.room.getConnection(c.connectionId), msg);
       });
     }
   }
@@ -125,6 +135,9 @@ export async function processClientMessage({
     switch (msg.type) {
       case 'updateUserData':
         await processClientMessageUpdateUserData(msg, userId);
+        break;
+      case 'visibilityStatus':
+        await processClientMessageVisibilityStatus(msg, userId);
         break;
       case 'createTodo':
         await processClientMessageCreateTodo(msg, userId);
