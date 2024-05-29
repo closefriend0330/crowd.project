@@ -93,7 +93,7 @@ export class RoomTodos {
       updatingUser
         ? {
             notification: {
-              title: `${updatingUser.name} added a new priority`,
+              title: `${updatingUser.name} added a new task`,
               updatingUserId,
             },
           }
@@ -125,8 +125,8 @@ export class RoomTodos {
 
     const updatingUser = this.partyServer.connectedUsers.lookupUser(updatingUserId);
     if (updatingUser) {
-      if (data.status === 'completed') title = `${updatingUser.name} completed a priority`;
-      else if (data.status === 'open') title = `${updatingUser.name} reopened a priority`;
+      if (data.status === 'completed') title = `${updatingUser.name} completed a task`;
+      else if (data.status === 'open') title = `${updatingUser.name} reopened a task`;
     }
 
     const userProgress = this.userProgress[updatingUserId];

@@ -15,6 +15,8 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 
+import { Separator } from '@/components/ui/separator';
+
 import TodoItem from '@/components/Todos/TodoItem';
 
 import useTodoList from '@/hooks/useTodoList';
@@ -36,12 +38,29 @@ export default function TodoList() {
     moveTodoItem(active, over);
   }
 
+  const prioritiesCompleted = todos.slice(0, 3).every((t) => t.status === 'completed');
+  const allCompleted = todos.every((t) => t.status === 'completed');
+
   return (
-    <div className='py-4'>
+    <div className='py-6'>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={todos} strategy={verticalListSortingStrategy}>
-          {todos.map((todo: Todo) => (
-            <TodoItem key={todo.id} todo={todo} />
+          {todos.map((todo: Todo, index: number) => (
+            <>
+              {index === 3 && (
+                <>
+                  {prioritiesCompleted && (todos.length <= 3 || !allCompleted) && (
+                    <div className='flex justify-center w-full text-sm text-slate-500 pt-2'>
+                      Well done on getting your important tasks done! 😀
+                    </div>
+                  )}
+                  <div className='flex justify-center w-full'>
+                    <Separator className='mt-5 mb-4 bg-zinc-300 w-4/5 bg-center' key='separator' />
+                  </div>
+                </>
+              )}
+              <TodoItem key={todo.id} todo={todo} index={index} />
+            </>
           ))}
         </SortableContext>
       </DndContext>

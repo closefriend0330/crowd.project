@@ -46,7 +46,7 @@ export default function Todos({ className }: Props) {
           {todos.length === 0 ? (
             <div className='text-xs text-slate-700 pt-4 flex flex-row items-center gap-2'>
               <IconLock className='size-6 inline-block mb-0.5' />
-              <div>Your priorities are not shared with the room, only the completion rate is.</div>
+              <div>Your tasks are not shared with the room, only the completion rate is.</div>
             </div>
           ) : (
             <>

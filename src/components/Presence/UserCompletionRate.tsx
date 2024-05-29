@@ -79,7 +79,7 @@ export default function UserCompletionRate({ user }: Props) {
   }, [roomData, user.id]);
 
   const generateTooltip = () => {
-    return `${completionRate}% complete with ${pluralize('priority', totalTodos, true)}`;
+    return `${completionRate}% complete with ${pluralize('task', totalTodos, true)}`;
   };
 
   const CompletionIcon = ProgressIcon(completionRate);

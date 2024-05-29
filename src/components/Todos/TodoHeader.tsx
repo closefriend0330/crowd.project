@@ -20,7 +20,7 @@ export default function TodoHeader({ showTodos, setShowTodos }: Props) {
   return (
     <div className='flex flex-row items-center gap-2 pb-2 group'>
       <h2 className='text-lg sm:text-xl font-header font-bold' onClick={toggleItems}>
-        Current Priorities
+        Tasks
       </h2>
       <div className='invisible group-hover:visible grow'>
         {showTodos ? (

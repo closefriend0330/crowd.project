@@ -24,11 +24,11 @@ export default function CoworkingParty() {
     else posthog.reset();
   }, [userId, name, email]);
 
-  if (connectionStatus === 'fully connected')
+  if (connectionStatus === 'fully connected' && user)
     return (
       <div className='flex flex-col items-center max-w-xl'>
-        <NewsCallout title='Introducing update notifications' className='mb-4'>
-          Activate/toggle web push notifications with the message icon in the footer.
+        <NewsCallout title='Top task highlighting' className='mb-4'>
+          Made a few tweaks to emphasize the most important tasks in the list.
         </NewsCallout>
 
         <div className='w-full xs:w-[450px]'>

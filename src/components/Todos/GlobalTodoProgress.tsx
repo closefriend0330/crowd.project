@@ -13,7 +13,7 @@ import { connectionStatusAtom, roomDataAtom } from '@/stores/jotai';
 
 export default function GlobalTodoProgress() {
   const [progress, setProgress] = useState(0);
-  const [tooltip, setTooltip] = useState('No online users with priorities yet.');
+  const [tooltip, setTooltip] = useState('No online users with tasks yet.');
   const roomData = useAtomValue(roomDataAtom);
   const connectionStatus = useAtomValue(connectionStatusAtom);
 
@@ -34,7 +34,7 @@ export default function GlobalTodoProgress() {
 
     let tooltip = `${pluralize('online user', todoUserCount, true)} ${
       todoUserCount === 1 ? 'has' : 'have'
-    }  completed ${completionRate}% of ${pluralize('priority', totalTodos, true)}`;
+    }  completed ${completionRate}% of ${pluralize('task', totalTodos, true)}`;
     if (completionRate === 100) tooltip += ' 🎉';
     setTooltip(tooltip);
 

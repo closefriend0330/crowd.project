@@ -55,7 +55,7 @@ export default function NewTodo({ className }: Props) {
       ? 'slow down! finish some items first!'
       : todos.length === 0
       ? "what's your #1 priority today?"
-      : 'any more priorities for today?';
+      : 'any more tasks for today?';
 
   if (todoSlotsLeft > 0 && pastWarningThreshold)
     placeholder += ` (${MAX_OPEN_TODO_LIST_ITEMS - openTodos} left)`;
