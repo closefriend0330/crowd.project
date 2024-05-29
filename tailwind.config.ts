@@ -102,6 +102,9 @@ const config = {
     'bg-orange-400',
     'bg-indigo-700',
     'bg-sky-800',
+    'bg-violet-600',
+    'bg-blue-600',
+    'bg-sky-300',
   ],
   prefix: '',
   theme: {
