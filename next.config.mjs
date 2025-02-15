@@ -15,6 +15,7 @@ export default withSentryConfig(nextConfig, {
   transpileClientSDK: false,
   tunnelRoute: '/monitoring',
   hideSourceMaps: true,
+  //eeeffsffdsfsfsfsfsf
   disableLogger: true,
   automaticVercelMonitors: false,
 });
