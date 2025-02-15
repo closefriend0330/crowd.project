@@ -12,5 +12,6 @@ const config: Config = {
     authToken: process.env.DATABASE_AUTH_TOKEN,
   },
 };
+//
 
 export default config;

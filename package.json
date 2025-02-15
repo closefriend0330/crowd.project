@@ -2,6 +2,7 @@
   "name": "coworking.party",
   "version": "0.1.0",
   "private": true,
+  
   "scripts": {
     "dev": "concurrently -c auto -t 'HH:mm:ss.SSS' -p '[{name} {time}]' pnpm:dev:*",
     "dev-lite": "concurrently -c auto -t 'HH:mm:ss.SSS' -p '[{name} {time}]' pnpm:dev:next pnpm:dev:db:turso",

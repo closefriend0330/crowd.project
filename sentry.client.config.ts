@@ -8,4 +8,5 @@ Sentry.init({
   debug: false,
   replaysOnErrorSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
+  ///jhbjkhjghjgjh
 });
