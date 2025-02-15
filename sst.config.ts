@@ -31,6 +31,8 @@ export default $config({
       throw new Error('Missing Twitch credentials: https://dev.twitch.tv/console/apps');
     }
 
+    /////nnnvbvv
+
     if (!process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && !$dev) {
       console.warn('Warning; NEXT_PUBLIC_GOOGLE_ANALYTICS_ID is not set for non dev environment');
     }

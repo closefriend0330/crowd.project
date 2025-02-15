@@ -19,6 +19,7 @@ Make a POST request to `https://coworking-party-party.jschuur.partykit.dev/party
     "status": "gaming"
 }
 ```
+//////
 
 Until the API key is exposed on the site under your [profile settings](https://github.com/jschuur/coworking.party/issues/6), track down Joost and ask him for yours (seems safe, right?).
 
