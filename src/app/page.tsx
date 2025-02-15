@@ -18,7 +18,7 @@ export default async function Home() {
     cookies().get('__Secure-authjs.session-token')?.value ||
     cookies().get('authjs.session-token')?.value ||
     '';
-
+//return
   return (
     <div>
       <Confetti />
