@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import type { Config } from 'drizzle-kit';
-
+//start
 const config: Config = {
   schema: './src/db/schema.ts',
   out: './db/migrations',
