@@ -8,6 +8,12 @@ import VisibilityEvents from '@/components/Site/VisibilityEvents';
 
 import { auth } from '@/auth';
 
+
+
+
+
+
+
 export default async function Home() {
   const session = await auth();
 
